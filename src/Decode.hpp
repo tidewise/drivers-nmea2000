@@ -1,0 +1,37 @@
+#ifndef NMEA2000_DECODE_HPP
+#define NMEA2000_DECODE_HPP
+
+#include <cstdint>
+
+namespace nmea2000 {
+    namespace decode {
+        inline std::uint64_t decode64(std::uint8_t const* byte) {
+            return static_cast<std::uint64_t>(byte[7]) << 56 |
+                   static_cast<std::uint64_t>(byte[6]) << 48 |
+                   static_cast<std::uint64_t>(byte[5]) << 40 |
+                   static_cast<std::uint64_t>(byte[4]) << 32 |
+                   static_cast<std::uint64_t>(byte[3]) << 24 |
+                   static_cast<std::uint64_t>(byte[2]) << 16 |
+                   static_cast<std::uint64_t>(byte[1]) << 8 |
+                   static_cast<std::uint64_t>(byte[0]) << 0;
+        }
+
+        inline std::uint32_t decode32(std::uint8_t const* byte) {
+            return static_cast<std::uint32_t>(byte[3]) << 24 |
+                   static_cast<std::uint32_t>(byte[2]) << 16 |
+                   static_cast<std::uint32_t>(byte[1]) << 8 |
+                   static_cast<std::uint32_t>(byte[0]) << 0;
+        }
+
+        inline std::uint16_t decode16(std::uint8_t const* byte) {
+            return static_cast<std::uint16_t>(byte[1]) << 8 |
+                   static_cast<std::uint16_t>(byte[0]) << 0;
+        }
+
+        inline std::uint8_t decode8(std::uint8_t const* byte) {
+            return byte[0];
+        }
+    };
+}
+
+#endif
