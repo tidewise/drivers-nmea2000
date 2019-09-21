@@ -4,14 +4,8 @@
 using namespace nmea2000::decode;
 using namespace nmea2000::pgns;
 
-<% definitions.each do |pgn| %>
-<% existing_structs = Set.new %>
-<%     struct_basename = struct_name = Codegen.pgn_name_to_cxx(pgn.name) %>
-<%     struct_name_i = 0 %>
-<%     until existing_structs.add?(struct_name) %>
-<%         struct_name = "#{struct_basename}#{struct_name_i += 1}" %>
-<%     end %>
-<%= struct_name %> <%= struct_name %>::fromMessage(Message const& message) {
+<% definitions.each do |cxx_name, pgn| %>
+<%= cxx_name %> <%= cxx_name %>::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
@@ -19,7 +13,7 @@ using namespace nmea2000::pgns;
         throw std::invalid_argument("unexpected payload size");
     }
 
-    <%= struct_name %> result;
+    <%= cxx_name %> result;
 
 <%
         Codegen.pgn_fields_to_cxx(pgn).each do |field, field_type, field_name|

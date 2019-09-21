@@ -5,13 +5,13 @@
 
 namespace nmea2000 {
     namespace pgns {
-<%      definitions.each do |pgn| %>
-<%      struct_name = Codegen.pgn_name_to_cxx(pgn.name) %>
-        struct <%= struct_name %> {
+<%      existing_structs = Set.new %>
+<%      definitions.each do |cxx_name, pgn| %>
+        struct <%= cxx_name %> {
             static const int BYTE_LENGTH = <%= pgn.byte_length %>;
             static const int ID = <%= pgn.id %>;
 
-            <%= struct_name %> fromMessage(Message const& message);
+            <%= cxx_name %> fromMessage(Message const& message);
 
 <%          Codegen.pgn_enums_to_cxx(pgn).each do |enum_name, enum_fields| %>
             enum <%= enum_name %> {

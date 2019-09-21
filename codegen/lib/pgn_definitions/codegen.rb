@@ -40,6 +40,7 @@ module PGNDefinitions
         end
 
         def self.pgn_fields_to_cxx(pgn)
+            used_names = Set.new
             pgn.each_field.map do |field|
                 unless field.supported?
                     puts "Skipping unsupported field #{field.name} in #{pgn.name}"
@@ -47,12 +48,27 @@ module PGNDefinitions
                 end
 
                 cxx_type = pgn_field_cxx_type(field)
-                [field, cxx_type, make_name_snake_case(field.name)]
+                name = basename = make_name_snake_case(field.name)
+                name_i = 0
+                name = "#{basename}#{name_i += 1}" until used_names.add?(name)
+
+                [field, cxx_type, name]
             end.compact
         end
 
+        def self.library_to_cxx(library)
+            usable_pgns = library.each_pgn.find_all(&:byte_length_present?)
+            existing_names = Set.new
+            usable_pgns.map do |pgn|
+                basename = name = pgn_name_to_cxx(pgn.name)
+                name_i = 0
+                name = "#{basename}#{name_i += 1}" until existing_names.add?(name)
+                [name, pgn]
+            end
+        end
+
         def self.generate_pgns_hpp(library)
-            definitions = library.each_pgn.find_all(&:byte_length_present?)
+            definitions = library_to_cxx(library)
 
             template = File.read(File.expand_path('PGNs.hpp.erb', __dir__))
             erb = ERB.new(template, nil, '>')
@@ -61,7 +77,7 @@ module PGNDefinitions
         end
 
         def self.generate_pgns_cpp(library)
-            definitions = library.each_pgn.find_all(&:byte_length_present?)
+            definitions = library_to_cxx(library)
 
             template = File.read(File.expand_path('PGNs.cpp.erb', __dir__))
             erb = ERB.new(template, nil, '>')
