@@ -54,6 +54,10 @@ module PGNDefinitions
             @xml.name == 'EnumField'
         end
 
+        def scale
+            Float(@xml.text('Scale') || 1)
+        end
+
         def each_enum_value
             return enum_for(__method__) unless block_given?
 

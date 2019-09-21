@@ -22,10 +22,18 @@ using namespace nmea2000::pgns;
             relative_bit_offset = field.relative_bit_offset
             byte_length_in_bits = field.byte_length * 8;
 %>
-<%          if field.unsigned? %>
+<%          if field.unsigned? && !field.float? %>
     result.<%= field_name %> = decode<%= byte_length_in_bits %>(
         &message.payload[<%= byte_offset %>]
     ) >> <%= relative_bit_offset %>;
+<%          elsif field.float? %>
+    auto <%= field_name %>_raw = decode<%= byte_length_in_bits %>(
+        &message.payload[<%= byte_offset %>]
+    );
+<%              integer_field_type = "#{'u' if field.unsigned?}int#{byte_length_in_bits}_t" %>
+    <%= integer_field_type %> <%= field_name %>_iraw =
+        reinterpret_cast<<%= integer_field_type %> const&>(<%= field_name %>_raw);
+    result.<%= field_name %> = <%= field_name %>_iraw * <%= field.scale %>;
 <%          else %>
     auto <%= field_name %>_raw = decode<%= byte_length_in_bits %>(
         &message.payload[<%= byte_offset %>]

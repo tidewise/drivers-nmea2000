@@ -84,6 +84,18 @@ module PGNDefinitions
             end
         end
 
+        describe 'scale' do
+            it 'returns the scale as float' do
+                field = make_field('<DblField Name="Bla"><Scale>0.01</Scale></DblField>')
+                assert_in_delta 0.01, field.scale, 1e-6
+            end
+
+            it 'returns 1 as default' do
+                field = make_field('<DblField Name="Bla" />')
+                assert_in_delta 1, field.scale, 1e-6
+            end
+        end
+
         describe 'each_enum_value' do
             it 'enumerates the enum values' do
                 field = make_field(<<~END_OF_FIELD)
