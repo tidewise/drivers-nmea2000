@@ -1695,7 +1695,7 @@
           <BitOffset>0</BitOffset>
           <BitLength>8</BitLength>
         </InstanceField>
-        <EnumField Name="Switch">
+        <EnumField Name="Switch State">
           <BitOffset>8</BitOffset>
           <BitLength>2</BitLength>
           <EnumValues>
