@@ -13,16 +13,6 @@ namespace nmea2000 {
 
             <%= cxx_name %> fromMessage(Message const& message);
 
-<%          Codegen.pgn_enums_to_cxx(pgn).each do |enum_name, enum_fields| %>
-            enum <%= enum_name %> {
-                <%= enum_fields
-                    .map { |field_name, field_value| "#{field_name} = #{field_value}" }
-                    .join(",\n" + '    ' * 4)
-                %>
-
-            };
-<%          end %>
-
 <%          Codegen.pgn_fields_to_cxx(pgn).each do |field, field_type, field_name| %>
             <%= field_type %> <%= field_name %>;
 <%          end %>

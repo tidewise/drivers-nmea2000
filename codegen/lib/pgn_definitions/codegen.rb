@@ -21,20 +21,9 @@ module PGNDefinitions
             make_name_camel_case(name)
         end
 
-        def self.pgn_enums_to_cxx(pgn)
-            pgn.each_enum_field.map do |field|
-                values = field.each_enum_value.map do |value_name, value|
-                    [make_enum_value_upper_camel_case(value_name),
-                     value]
-                end
-                [make_name_camel_case(field.name), values]
-            end
-        end
-
         def self.pgn_field_cxx_type(field)
             return 'float' if field.float?
-            return make_name_camel_case(field.name) if field.enum?
-            raise ArgumentError, 'unsupported field' unless field.integer?
+            raise ArgumentError, 'unsupported field' unless field.integer? || field.enum?
 
             "#{'u' if field.unsigned?}int#{field.byte_length * 8}_t"
         end

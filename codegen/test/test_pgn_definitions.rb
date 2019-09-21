@@ -44,8 +44,13 @@ module PGNDefinitions
                 assert field.unsigned?
             end
 
-            it 'returns false for if the field is neither' do
+            it 'returns true if the field is an EnumField' do
                 field = make_field('<EnumField Name="Bla" />')
+                assert field.unsigned?
+            end
+
+            it 'returns false for if the field is neither' do
+                field = make_field('<IntField Name="Bla" />')
                 refute field.unsigned?
             end
         end
