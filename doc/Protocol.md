@@ -46,3 +46,23 @@ sequence index, but won't repeat the sequence length.
 | 0, bit 5 | 3 bits      | Sequence Identifier |
 | 1 | up to 7      | Message bytes |
 
+## Actisense
+
+| Offset | Length (bytes) | Interpretation         |
+|--------|----------------|------------------------|
+| 0      | 1              | ESCAPE (=0x10)         |
+| 1      | 1              | START_OF_TEXT (=0x02)  |
+| 2      | 1              | N2K_MESSAGE_RECEIVED (=0x93)  |
+| 3      | 1              | Message length (bytes 4 to CRC incl.) |
+| 4      | 1              | Priority |
+| 5      | 1              | PGN LSB |
+| 6      | 1              | PGN Middle byte |
+| 7      | 1              | PGN MSB |
+| 8      | 1              | Destination |
+| 9      | 1              | Source |
+| 10     | 4              | Timestamp |
+| 14     | 1              | Payload length (L) |
+| 15     | L              | Payload |
+| 15+L   | 1              | Checksum |
+| 15+L+1 | 1              | ESCAPE (=0x10)         |
+| 15+L+2 | 1              | END_OF_TEXT (=0x03)  |
