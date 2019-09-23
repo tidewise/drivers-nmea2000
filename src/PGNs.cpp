@@ -4,6 +4,9 @@
 using namespace nmea2000::decode;
 using namespace nmea2000::pgns;
 
+const int ISOAcknowledgement::BYTE_LENGTH;
+const int ISOAcknowledgement::ID;
+
 ISOAcknowledgement ISOAcknowledgement::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -14,20 +17,23 @@ ISOAcknowledgement ISOAcknowledgement::fromMessage(Message const& message) {
 
     ISOAcknowledgement result;
 
-    result.control = decode8(
+    result.control = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.group_function = decode8(
+    ) >> 0) & 0xff;
+    result.group_function = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.reserved = decode32(
+    ) >> 0) & 0xff;
+    result.reserved = (decode32(
         &message.payload[2]
-    ) >> 0;
-    result.pgn = decode32(
+    ) >> 0) & 0xffffff;
+    result.pgn = (decode32(
         &message.payload[5]
-    ) >> 0;
+    ) >> 0) & 0xffffff;
     return result;
 }
+const int ISORequest::BYTE_LENGTH;
+const int ISORequest::ID;
+
 ISORequest ISORequest::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -38,11 +44,14 @@ ISORequest ISORequest::fromMessage(Message const& message) {
 
     ISORequest result;
 
-    result.pgn = decode32(
+    result.pgn = (decode32(
         &message.payload[0]
-    ) >> 0;
+    ) >> 0) & 0xffffff;
     return result;
 }
+const int ISOAddressClaim::BYTE_LENGTH;
+const int ISOAddressClaim::ID;
+
 ISOAddressClaim ISOAddressClaim::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -53,20 +62,23 @@ ISOAddressClaim ISOAddressClaim::fromMessage(Message const& message) {
 
     ISOAddressClaim result;
 
-    result.device_function = decode8(
+    result.device_function = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.device_class = decode8(
+    ) >> 0) & 0xff;
+    result.device_class = (decode8(
         &message.payload[6]
-    ) >> 1;
-    result.industry_group = decode8(
+    ) >> 1) & 0x7f;
+    result.industry_group = (decode8(
         &message.payload[7]
-    ) >> 4;
-    result.iso_self_configurable = decode8(
+    ) >> 4) & 0x7;
+    result.iso_self_configurable = (decode8(
         &message.payload[7]
-    ) >> 7;
+    ) >> 7) & 0x1;
     return result;
 }
+const int ISOCommandedAddress::BYTE_LENGTH;
+const int ISOCommandedAddress::ID;
+
 ISOCommandedAddress ISOCommandedAddress::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -77,29 +89,32 @@ ISOCommandedAddress ISOCommandedAddress::fromMessage(Message const& message) {
 
     ISOCommandedAddress result;
 
-    result.manufacturer_code = decode16(
+    result.manufacturer_code = (decode16(
         &message.payload[2]
-    ) >> 5;
-    result.device_function = decode8(
+    ) >> 5) & 0x7ff;
+    result.device_function = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.reserved = decode8(
+    ) >> 0) & 0xff;
+    result.reserved = (decode8(
         &message.payload[6]
-    ) >> 0;
-    result.device_class = decode8(
+    ) >> 0) & 0x1;
+    result.device_class = (decode8(
         &message.payload[6]
-    ) >> 1;
-    result.industry_code = decode8(
+    ) >> 1) & 0x7f;
+    result.industry_code = (decode8(
         &message.payload[7]
-    ) >> 4;
-    result.iso_self_configurable = decode8(
+    ) >> 4) & 0x7;
+    result.iso_self_configurable = (decode8(
         &message.payload[7]
-    ) >> 7;
-    result.new_source_address = decode8(
+    ) >> 7) & 0x1;
+    result.new_source_address = (decode8(
         &message.payload[8]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int LowranceTemperature::BYTE_LENGTH;
+const int LowranceTemperature::ID;
+
 LowranceTemperature LowranceTemperature::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -110,15 +125,15 @@ LowranceTemperature LowranceTemperature::fromMessage(Message const& message) {
 
     LowranceTemperature result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
-    result.temperature_source = decode8(
+    ) >> 5) & 0x7;
+    result.temperature_source = (decode8(
         &message.payload[2]
-    ) >> 4;
+    ) >> 4) & 0xf;
     auto actual_temperature_raw = decode16(
         &message.payload[3]
     );
@@ -127,6 +142,9 @@ LowranceTemperature LowranceTemperature::fromMessage(Message const& message) {
     result.actual_temperature = actual_temperature_iraw * 0.01;
     return result;
 }
+const int AirmarBootStateRequest::BYTE_LENGTH;
+const int AirmarBootStateRequest::ID;
+
 AirmarBootStateRequest AirmarBootStateRequest::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -137,14 +155,17 @@ AirmarBootStateRequest AirmarBootStateRequest::fromMessage(Message const& messag
 
     AirmarBootStateRequest result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     return result;
 }
+const int AirmarAccessLevel::BYTE_LENGTH;
+const int AirmarAccessLevel::ID;
+
 AirmarAccessLevel AirmarAccessLevel::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -155,21 +176,21 @@ AirmarAccessLevel AirmarAccessLevel::fromMessage(Message const& message) {
 
     AirmarAccessLevel result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
-    result.format_code = decode8(
+    ) >> 5) & 0x7;
+    result.format_code = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.access_level = decode8(
+    ) >> 0) & 0x7;
+    result.access_level = (decode8(
         &message.payload[2]
-    ) >> 3;
-    result.reserved1 = decode8(
+    ) >> 3) & 0x7;
+    result.reserved1 = (decode8(
         &message.payload[2]
-    ) >> 6;
+    ) >> 6) & 0x3;
     auto access_seed_key_raw = decode32(
         &message.payload[3]
     );
@@ -178,6 +199,9 @@ AirmarAccessLevel AirmarAccessLevel::fromMessage(Message const& message) {
     );
     return result;
 }
+const int SimnetTrimTabSensorCalibration::BYTE_LENGTH;
+const int SimnetTrimTabSensorCalibration::ID;
+
 SimnetTrimTabSensorCalibration SimnetTrimTabSensorCalibration::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -188,14 +212,17 @@ SimnetTrimTabSensorCalibration SimnetTrimTabSensorCalibration::fromMessage(Messa
 
     SimnetTrimTabSensorCalibration result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     return result;
 }
+const int SimnetPaddleWheelSpeedConfiguration::BYTE_LENGTH;
+const int SimnetPaddleWheelSpeedConfiguration::ID;
+
 SimnetPaddleWheelSpeedConfiguration SimnetPaddleWheelSpeedConfiguration::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -206,14 +233,17 @@ SimnetPaddleWheelSpeedConfiguration SimnetPaddleWheelSpeedConfiguration::fromMes
 
     SimnetPaddleWheelSpeedConfiguration result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     return result;
 }
+const int SimnetClearFluidLevelWarnings::BYTE_LENGTH;
+const int SimnetClearFluidLevelWarnings::ID;
+
 SimnetClearFluidLevelWarnings SimnetClearFluidLevelWarnings::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -224,14 +254,17 @@ SimnetClearFluidLevelWarnings SimnetClearFluidLevelWarnings::fromMessage(Message
 
     SimnetClearFluidLevelWarnings result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     return result;
 }
+const int SimnetLGC2000Configuration::BYTE_LENGTH;
+const int SimnetLGC2000Configuration::ID;
+
 SimnetLGC2000Configuration SimnetLGC2000Configuration::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -242,14 +275,17 @@ SimnetLGC2000Configuration SimnetLGC2000Configuration::fromMessage(Message const
 
     SimnetLGC2000Configuration result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     return result;
 }
+const int SimnetReprogramStatus::BYTE_LENGTH;
+const int SimnetReprogramStatus::ID;
+
 SimnetReprogramStatus SimnetReprogramStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -260,14 +296,17 @@ SimnetReprogramStatus SimnetReprogramStatus::fromMessage(Message const& message)
 
     SimnetReprogramStatus result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     return result;
 }
+const int SimnetAutopilotMode::BYTE_LENGTH;
+const int SimnetAutopilotMode::ID;
+
 SimnetAutopilotMode SimnetAutopilotMode::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -278,14 +317,17 @@ SimnetAutopilotMode SimnetAutopilotMode::fromMessage(Message const& message) {
 
     SimnetAutopilotMode result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     return result;
 }
+const int AirmarDepthQualityFactor::BYTE_LENGTH;
+const int AirmarDepthQualityFactor::ID;
+
 AirmarDepthQualityFactor AirmarDepthQualityFactor::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -296,20 +338,23 @@ AirmarDepthQualityFactor AirmarDepthQualityFactor::fromMessage(Message const& me
 
     AirmarDepthQualityFactor result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
-    result.sid = decode8(
+    ) >> 5) & 0x7;
+    result.sid = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.depth_quality_factor = decode8(
+    ) >> 0) & 0xff;
+    result.depth_quality_factor = (decode8(
         &message.payload[3]
-    ) >> 0;
+    ) >> 0) & 0xf;
     return result;
 }
+const int AirmarDeviceInformation::BYTE_LENGTH;
+const int AirmarDeviceInformation::ID;
+
 AirmarDeviceInformation AirmarDeviceInformation::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -320,15 +365,15 @@ AirmarDeviceInformation AirmarDeviceInformation::fromMessage(Message const& mess
 
     AirmarDeviceInformation result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
-    result.sid = decode8(
+    ) >> 5) & 0x7;
+    result.sid = (decode8(
         &message.payload[2]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto internal_device_temperature_raw = decode16(
         &message.payload[3]
     );
@@ -341,11 +386,14 @@ AirmarDeviceInformation AirmarDeviceInformation::fromMessage(Message const& mess
     int16_t supply_voltage_iraw =
         reinterpret_cast<int16_t const&>(supply_voltage_raw);
     result.supply_voltage = supply_voltage_iraw * 0.01;
-    result.reserved1 = decode8(
+    result.reserved1 = (decode8(
         &message.payload[7]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int SimnetAutopilotMode1::BYTE_LENGTH;
+const int SimnetAutopilotMode1::ID;
+
 SimnetAutopilotMode1 SimnetAutopilotMode1::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -356,14 +404,17 @@ SimnetAutopilotMode1 SimnetAutopilotMode1::fromMessage(Message const& message) {
 
     SimnetAutopilotMode1 result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     return result;
 }
+const int NMEAAcknowledgeGroupFunction::BYTE_LENGTH;
+const int NMEAAcknowledgeGroupFunction::ID;
+
 NMEAAcknowledgeGroupFunction NMEAAcknowledgeGroupFunction::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -380,18 +431,18 @@ NMEAAcknowledgeGroupFunction NMEAAcknowledgeGroupFunction::fromMessage(Message c
     result.function_code = reinterpret_cast<int8_t const&>(
         function_code_raw
     );
-    result.pgn = decode32(
+    result.pgn = (decode32(
         &message.payload[1]
-    ) >> 0;
-    result.pgn_error_code = decode8(
+    ) >> 0) & 0xffffff;
+    result.pgn_error_code = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.transmission_interval_priority_error_code = decode8(
+    ) >> 0) & 0xf;
+    result.transmission_interval_priority_error_code = (decode8(
         &message.payload[4]
-    ) >> 4;
-    result.number_of_commanded_parameters = decode8(
+    ) >> 4) & 0xf;
+    result.number_of_commanded_parameters = (decode8(
         &message.payload[5]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto parameter_error_raw = decode8(
         &message.payload[6]
     );
@@ -400,6 +451,9 @@ NMEAAcknowledgeGroupFunction NMEAAcknowledgeGroupFunction::fromMessage(Message c
     );
     return result;
 }
+const int MaretronSlaveResponse::BYTE_LENGTH;
+const int MaretronSlaveResponse::ID;
+
 MaretronSlaveResponse MaretronSlaveResponse::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -410,26 +464,29 @@ MaretronSlaveResponse MaretronSlaveResponse::fromMessage(Message const& message)
 
     MaretronSlaveResponse result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
-    result.product_code = decode16(
+    ) >> 5) & 0x7;
+    result.product_code = (decode16(
         &message.payload[2]
-    ) >> 0;
-    result.software_code = decode16(
+    ) >> 0) & 0xffff;
+    result.software_code = (decode16(
         &message.payload[4]
-    ) >> 0;
-    result.command = decode8(
+    ) >> 0) & 0xffff;
+    result.command = (decode8(
         &message.payload[6]
-    ) >> 0;
-    result.status = decode8(
+    ) >> 0) & 0xff;
+    result.status = (decode8(
         &message.payload[7]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int PGNListTransmitAndReceive::BYTE_LENGTH;
+const int PGNListTransmitAndReceive::ID;
+
 PGNListTransmitAndReceive PGNListTransmitAndReceive::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -440,14 +497,17 @@ PGNListTransmitAndReceive PGNListTransmitAndReceive::fromMessage(Message const& 
 
     PGNListTransmitAndReceive result;
 
-    result.function_code = decode8(
+    result.function_code = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.pgn = decode32(
+    ) >> 0) & 0xff;
+    result.pgn = (decode32(
         &message.payload[1]
-    ) >> 0;
+    ) >> 0) & 0xffffff;
     return result;
 }
+const int AirmarAddressableMultiFrame::BYTE_LENGTH;
+const int AirmarAddressableMultiFrame::ID;
+
 AirmarAddressableMultiFrame AirmarAddressableMultiFrame::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -458,12 +518,12 @@ AirmarAddressableMultiFrame AirmarAddressableMultiFrame::fromMessage(Message con
 
     AirmarAddressableMultiFrame result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     auto proprietary_id_raw = decode8(
         &message.payload[2]
     );
@@ -472,6 +532,9 @@ AirmarAddressableMultiFrame AirmarAddressableMultiFrame::fromMessage(Message con
     );
     return result;
 }
+const int SystemTime::BYTE_LENGTH;
+const int SystemTime::ID;
+
 SystemTime SystemTime::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -482,15 +545,15 @@ SystemTime SystemTime::fromMessage(Message const& message) {
 
     SystemTime result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.source = decode8(
+    ) >> 0) & 0xff;
+    result.source = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.date = decode16(
+    ) >> 0) & 0xf;
+    result.date = (decode16(
         &message.payload[2]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto time_raw = decode32(
         &message.payload[4]
     );
@@ -499,6 +562,9 @@ SystemTime SystemTime::fromMessage(Message const& message) {
     result.time = time_iraw * 0.0001;
     return result;
 }
+const int Heartbeat::BYTE_LENGTH;
+const int Heartbeat::ID;
+
 Heartbeat Heartbeat::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -515,11 +581,14 @@ Heartbeat Heartbeat::fromMessage(Message const& message) {
     uint16_t interval_iraw =
         reinterpret_cast<uint16_t const&>(interval_raw);
     result.interval = interval_iraw * 10.0;
-    result.status = decode8(
+    result.status = (decode8(
         &message.payload[2]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int ProductInformation::BYTE_LENGTH;
+const int ProductInformation::ID;
+
 ProductInformation ProductInformation::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -530,20 +599,23 @@ ProductInformation ProductInformation::fromMessage(Message const& message) {
 
     ProductInformation result;
 
-    result.nmea_2000_version = decode16(
+    result.nmea_2000_version = (decode16(
         &message.payload[0]
-    ) >> 0;
-    result.product_code = decode16(
+    ) >> 0) & 0xffff;
+    result.product_code = (decode16(
         &message.payload[2]
-    ) >> 0;
-    result.certification_level = decode8(
+    ) >> 0) & 0xffff;
+    result.certification_level = (decode8(
         &message.payload[132]
-    ) >> 0;
-    result.load_equivalency = decode8(
+    ) >> 0) & 0xff;
+    result.load_equivalency = (decode8(
         &message.payload[133]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int ConfigurationInformation::BYTE_LENGTH;
+const int ConfigurationInformation::ID;
+
 ConfigurationInformation ConfigurationInformation::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -556,6 +628,9 @@ ConfigurationInformation ConfigurationInformation::fromMessage(Message const& me
 
     return result;
 }
+const int HeadingTrackControl::BYTE_LENGTH;
+const int HeadingTrackControl::ID;
+
 HeadingTrackControl HeadingTrackControl::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -566,33 +641,33 @@ HeadingTrackControl HeadingTrackControl::fromMessage(Message const& message) {
 
     HeadingTrackControl result;
 
-    result.rudder_limit_exceeded = decode8(
+    result.rudder_limit_exceeded = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.off_heading_limit_exceeded = decode8(
+    ) >> 0) & 0x3;
+    result.off_heading_limit_exceeded = (decode8(
         &message.payload[0]
-    ) >> 2;
-    result.off_track_limit_exceeded = decode8(
+    ) >> 2) & 0x3;
+    result.off_track_limit_exceeded = (decode8(
         &message.payload[0]
-    ) >> 4;
-    result.override = decode8(
+    ) >> 4) & 0x3;
+    result.override = (decode8(
         &message.payload[0]
-    ) >> 6;
-    result.steering_mode = decode8(
+    ) >> 6) & 0x3;
+    result.steering_mode = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.turn_mode = decode8(
+    ) >> 0) & 0xf;
+    result.turn_mode = (decode8(
         &message.payload[1]
-    ) >> 4;
-    result.heading_reference = decode8(
+    ) >> 4) & 0xf;
+    result.heading_reference = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.reserved = decode8(
+    ) >> 0) & 0x7;
+    result.reserved = (decode8(
         &message.payload[2]
-    ) >> 3;
-    result.commanded_rudder_direction = decode8(
+    ) >> 3) & 0x7;
+    result.commanded_rudder_direction = (decode8(
         &message.payload[2]
-    ) >> 6;
+    ) >> 6) & 0x3;
     auto commanded_rudder_angle_raw = decode16(
         &message.payload[3]
     );
@@ -635,9 +710,9 @@ HeadingTrackControl HeadingTrackControl::fromMessage(Message const& message) {
     int16_t rate_of_turn_order_iraw =
         reinterpret_cast<int16_t const&>(rate_of_turn_order_raw);
     result.rate_of_turn_order = rate_of_turn_order_iraw * 0.005729577951308233;
-    result.off_track_limit = decode16(
+    result.off_track_limit = (decode16(
         &message.payload[17]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto vessel_heading_raw = decode16(
         &message.payload[19]
     );
@@ -646,6 +721,9 @@ HeadingTrackControl HeadingTrackControl::fromMessage(Message const& message) {
     result.vessel_heading = vessel_heading_iraw * 0.005729577951308233;
     return result;
 }
+const int Rudder::BYTE_LENGTH;
+const int Rudder::ID;
+
 Rudder Rudder::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -656,9 +734,9 @@ Rudder Rudder::fromMessage(Message const& message) {
 
     Rudder result;
 
-    result.direction_order = decode8(
+    result.direction_order = (decode8(
         &message.payload[1]
-    ) >> 0;
+    ) >> 0) & 0x7;
     auto angle_order_raw = decode16(
         &message.payload[2]
     );
@@ -671,11 +749,14 @@ Rudder Rudder::fromMessage(Message const& message) {
     int16_t position_iraw =
         reinterpret_cast<int16_t const&>(position_raw);
     result.position = position_iraw * 0.005729577951308233;
-    result.reserved = decode16(
+    result.reserved = (decode16(
         &message.payload[6]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     return result;
 }
+const int VesselHeading::BYTE_LENGTH;
+const int VesselHeading::ID;
+
 VesselHeading VesselHeading::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -686,9 +767,9 @@ VesselHeading VesselHeading::fromMessage(Message const& message) {
 
     VesselHeading result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto heading_raw = decode16(
         &message.payload[1]
     );
@@ -707,14 +788,17 @@ VesselHeading VesselHeading::fromMessage(Message const& message) {
     int16_t variation_iraw =
         reinterpret_cast<int16_t const&>(variation_raw);
     result.variation = variation_iraw * 0.005729577951308233;
-    result.reference = decode8(
+    result.reference = (decode8(
         &message.payload[7]
-    ) >> 0;
-    result.reserved = decode8(
+    ) >> 0) & 0x3;
+    result.reserved = (decode8(
         &message.payload[7]
-    ) >> 2;
+    ) >> 2) & 0x3f;
     return result;
 }
+const int RateOfTurn::BYTE_LENGTH;
+const int RateOfTurn::ID;
+
 RateOfTurn RateOfTurn::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -725,9 +809,9 @@ RateOfTurn RateOfTurn::fromMessage(Message const& message) {
 
     RateOfTurn result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto rate_raw = decode32(
         &message.payload[1]
     );
@@ -736,6 +820,9 @@ RateOfTurn RateOfTurn::fromMessage(Message const& message) {
     result.rate = rate_iraw * 1.0;
     return result;
 }
+const int Attitude::BYTE_LENGTH;
+const int Attitude::ID;
+
 Attitude Attitude::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -746,9 +833,9 @@ Attitude Attitude::fromMessage(Message const& message) {
 
     Attitude result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto yaw_raw = decode16(
         &message.payload[1]
     );
@@ -769,6 +856,9 @@ Attitude Attitude::fromMessage(Message const& message) {
     result.roll = roll_iraw * 0.005729577951308233;
     return result;
 }
+const int MagneticVariation::BYTE_LENGTH;
+const int MagneticVariation::ID;
+
 MagneticVariation MagneticVariation::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -779,15 +869,15 @@ MagneticVariation MagneticVariation::fromMessage(Message const& message) {
 
     MagneticVariation result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.source = decode8(
+    ) >> 0) & 0xff;
+    result.source = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.age_of_service = decode16(
+    ) >> 0) & 0xf;
+    result.age_of_service = (decode16(
         &message.payload[2]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto variation_raw = decode16(
         &message.payload[4]
     );
@@ -796,6 +886,9 @@ MagneticVariation MagneticVariation::fromMessage(Message const& message) {
     result.variation = variation_iraw * 0.005729577951308233;
     return result;
 }
+const int EngineParametersRapidUpdate::BYTE_LENGTH;
+const int EngineParametersRapidUpdate::ID;
+
 EngineParametersRapidUpdate EngineParametersRapidUpdate::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -812,20 +905,23 @@ EngineParametersRapidUpdate EngineParametersRapidUpdate::fromMessage(Message con
     uint16_t engine_speed_iraw =
         reinterpret_cast<uint16_t const&>(engine_speed_raw);
     result.engine_speed = engine_speed_iraw * 0.25;
-    result.engine_boost_pressure = decode16(
+    result.engine_boost_pressure = (decode16(
         &message.payload[3]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto engine_tilt_trim_raw = decode8(
         &message.payload[5]
     );
     result.engine_tilt_trim = reinterpret_cast<int8_t const&>(
         engine_tilt_trim_raw
     );
-    result.reserved = decode16(
+    result.reserved = (decode16(
         &message.payload[6]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     return result;
 }
+const int EngineParametersDynamic::BYTE_LENGTH;
+const int EngineParametersDynamic::ID;
+
 EngineParametersDynamic EngineParametersDynamic::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -836,9 +932,9 @@ EngineParametersDynamic EngineParametersDynamic::fromMessage(Message const& mess
 
     EngineParametersDynamic result;
 
-    result.oil_pressure = decode16(
+    result.oil_pressure = (decode16(
         &message.payload[1]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto oil_temperature_raw = decode16(
         &message.payload[3]
     );
@@ -863,18 +959,18 @@ EngineParametersDynamic EngineParametersDynamic::fromMessage(Message const& mess
     int16_t fuel_rate_iraw =
         reinterpret_cast<int16_t const&>(fuel_rate_raw);
     result.fuel_rate = fuel_rate_iraw * 0.1;
-    result.total_engine_hours = decode32(
+    result.total_engine_hours = (decode32(
         &message.payload[11]
-    ) >> 0;
-    result.coolant_pressure = decode16(
+    ) >> 0) & 0xffffffff;
+    result.coolant_pressure = (decode16(
         &message.payload[15]
-    ) >> 0;
-    result.fuel_pressure = decode16(
+    ) >> 0) & 0xffff;
+    result.fuel_pressure = (decode16(
         &message.payload[17]
-    ) >> 0;
-    result.reserved = decode8(
+    ) >> 0) & 0xffff;
+    result.reserved = (decode8(
         &message.payload[19]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto discrete_status_1_raw = decode16(
         &message.payload[20]
     );
@@ -901,6 +997,9 @@ EngineParametersDynamic EngineParametersDynamic::fromMessage(Message const& mess
     );
     return result;
 }
+const int TransmissionParametersDynamic::BYTE_LENGTH;
+const int TransmissionParametersDynamic::ID;
+
 TransmissionParametersDynamic TransmissionParametersDynamic::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -911,15 +1010,15 @@ TransmissionParametersDynamic TransmissionParametersDynamic::fromMessage(Message
 
     TransmissionParametersDynamic result;
 
-    result.transmission_gear = decode8(
+    result.transmission_gear = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.reserved = decode8(
+    ) >> 0) & 0x3;
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 2;
-    result.oil_pressure = decode16(
+    ) >> 2) & 0x3f;
+    result.oil_pressure = (decode16(
         &message.payload[2]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto oil_temperature_raw = decode16(
         &message.payload[4]
     );
@@ -934,6 +1033,9 @@ TransmissionParametersDynamic TransmissionParametersDynamic::fromMessage(Message
     );
     return result;
 }
+const int TripParametersVessel::BYTE_LENGTH;
+const int TripParametersVessel::ID;
+
 TripParametersVessel TripParametersVessel::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -956,9 +1058,9 @@ TripParametersVessel TripParametersVessel::fromMessage(Message const& message) {
     int32_t distance_to_empty_iraw =
         reinterpret_cast<int32_t const&>(distance_to_empty_raw);
     result.distance_to_empty = distance_to_empty_iraw * 0.01;
-    result.estimated_fuel_remaining = decode16(
+    result.estimated_fuel_remaining = (decode16(
         &message.payload[8]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto trip_run_time_raw = decode32(
         &message.payload[10]
     );
@@ -967,6 +1069,9 @@ TripParametersVessel TripParametersVessel::fromMessage(Message const& message) {
     result.trip_run_time = trip_run_time_iraw * 0.001;
     return result;
 }
+const int TripParametersEngine::BYTE_LENGTH;
+const int TripParametersEngine::ID;
+
 TripParametersEngine TripParametersEngine::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -977,9 +1082,9 @@ TripParametersEngine TripParametersEngine::fromMessage(Message const& message) {
 
     TripParametersEngine result;
 
-    result.trip_fuel_used = decode16(
+    result.trip_fuel_used = (decode16(
         &message.payload[1]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto fuel_rate_average_raw = decode16(
         &message.payload[3]
     );
@@ -1000,6 +1105,9 @@ TripParametersEngine TripParametersEngine::fromMessage(Message const& message) {
     result.instantaneous_fuel_economy = instantaneous_fuel_economy_iraw * 0.1;
     return result;
 }
+const int EngineParametersStatic::BYTE_LENGTH;
+const int EngineParametersStatic::ID;
+
 EngineParametersStatic EngineParametersStatic::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1010,17 +1118,20 @@ EngineParametersStatic EngineParametersStatic::fromMessage(Message const& messag
 
     EngineParametersStatic result;
 
-    result.rated_engine_speed = decode16(
+    result.rated_engine_speed = (decode16(
         &message.payload[1]
-    ) >> 0;
-    result.vin = decode8(
+    ) >> 0) & 0xffff;
+    result.vin = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result.software_id = decode16(
+    ) >> 0) & 0xff;
+    result.software_id = (decode16(
         &message.payload[4]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     return result;
 }
+const int BinarySwitchBankStatus::BYTE_LENGTH;
+const int BinarySwitchBankStatus::ID;
+
 BinarySwitchBankStatus BinarySwitchBankStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1031,11 +1142,14 @@ BinarySwitchBankStatus BinarySwitchBankStatus::fromMessage(Message const& messag
 
     BinarySwitchBankStatus result;
 
-    result.indicator = decode8(
+    result.indicator = (decode8(
         &message.payload[1]
-    ) >> 0;
+    ) >> 0) & 0x3;
     return result;
 }
+const int SwitchBankControl::BYTE_LENGTH;
+const int SwitchBankControl::ID;
+
 SwitchBankControl SwitchBankControl::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1046,11 +1160,14 @@ SwitchBankControl SwitchBankControl::fromMessage(Message const& message) {
 
     SwitchBankControl result;
 
-    result.switch_state = decode8(
+    result.switch_state = (decode8(
         &message.payload[1]
-    ) >> 0;
+    ) >> 0) & 0x3;
     return result;
 }
+const int ACInputStatus::BYTE_LENGTH;
+const int ACInputStatus::ID;
+
 ACInputStatus ACInputStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1061,18 +1178,18 @@ ACInputStatus ACInputStatus::fromMessage(Message const& message) {
 
     ACInputStatus result;
 
-    result.number_of_lines = decode8(
+    result.number_of_lines = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.line = decode8(
+    ) >> 0) & 0xff;
+    result.line = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.acceptability = decode8(
+    ) >> 0) & 0x3;
+    result.acceptability = (decode8(
         &message.payload[2]
-    ) >> 2;
-    result.reserved = decode8(
+    ) >> 2) & 0x3;
+    result.reserved = (decode8(
         &message.payload[2]
-    ) >> 4;
+    ) >> 4) & 0xf;
     auto voltage_raw = decode16(
         &message.payload[3]
     );
@@ -1117,6 +1234,9 @@ ACInputStatus ACInputStatus::fromMessage(Message const& message) {
     result.power_factor = power_factor_iraw * 0.01;
     return result;
 }
+const int ACOutputStatus::BYTE_LENGTH;
+const int ACOutputStatus::ID;
+
 ACOutputStatus ACOutputStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1127,18 +1247,18 @@ ACOutputStatus ACOutputStatus::fromMessage(Message const& message) {
 
     ACOutputStatus result;
 
-    result.number_of_lines = decode8(
+    result.number_of_lines = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.line = decode8(
+    ) >> 0) & 0xff;
+    result.line = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.waveform = decode8(
+    ) >> 0) & 0x3;
+    result.waveform = (decode8(
         &message.payload[2]
-    ) >> 2;
-    result.reserved = decode8(
+    ) >> 2) & 0x7;
+    result.reserved = (decode8(
         &message.payload[2]
-    ) >> 5;
+    ) >> 5) & 0x7;
     auto voltage_raw = decode16(
         &message.payload[3]
     );
@@ -1183,6 +1303,9 @@ ACOutputStatus ACOutputStatus::fromMessage(Message const& message) {
     result.power_factor = power_factor_iraw * 0.01;
     return result;
 }
+const int FluidLevel::BYTE_LENGTH;
+const int FluidLevel::ID;
+
 FluidLevel FluidLevel::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1193,9 +1316,9 @@ FluidLevel FluidLevel::fromMessage(Message const& message) {
 
     FluidLevel result;
 
-    result.type = decode8(
+    result.type = (decode8(
         &message.payload[0]
-    ) >> 4;
+    ) >> 4) & 0xf;
     auto level_raw = decode16(
         &message.payload[1]
     );
@@ -1208,11 +1331,14 @@ FluidLevel FluidLevel::fromMessage(Message const& message) {
     int32_t capacity_iraw =
         reinterpret_cast<int32_t const&>(capacity_raw);
     result.capacity = capacity_iraw * 0.1;
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[7]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int DCDetailedStatus::BYTE_LENGTH;
+const int DCDetailedStatus::ID;
+
 DCDetailedStatus DCDetailedStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1223,21 +1349,21 @@ DCDetailedStatus DCDetailedStatus::fromMessage(Message const& message) {
 
     DCDetailedStatus result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.dc_type = decode8(
+    ) >> 0) & 0xff;
+    result.dc_type = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.state_of_charge = decode8(
+    ) >> 0) & 0xff;
+    result.state_of_charge = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result.state_of_health = decode8(
+    ) >> 0) & 0xff;
+    result.state_of_health = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.time_remaining = decode16(
+    ) >> 0) & 0xff;
+    result.time_remaining = (decode16(
         &message.payload[5]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto ripple_voltage_raw = decode16(
         &message.payload[7]
     );
@@ -1246,6 +1372,9 @@ DCDetailedStatus DCDetailedStatus::fromMessage(Message const& message) {
     result.ripple_voltage = ripple_voltage_iraw * 0.001;
     return result;
 }
+const int ChargerStatus::BYTE_LENGTH;
+const int ChargerStatus::ID;
+
 ChargerStatus ChargerStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1256,26 +1385,29 @@ ChargerStatus ChargerStatus::fromMessage(Message const& message) {
 
     ChargerStatus result;
 
-    result.operating_state = decode8(
+    result.operating_state = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.charge_mode = decode8(
+    ) >> 0) & 0xff;
+    result.charge_mode = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result.charger_enable_disable = decode8(
+    ) >> 0) & 0xff;
+    result.charger_enable_disable = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.equalization_pending = decode8(
+    ) >> 0) & 0x3;
+    result.equalization_pending = (decode8(
         &message.payload[4]
-    ) >> 2;
-    result.reserved = decode8(
+    ) >> 2) & 0x3;
+    result.reserved = (decode8(
         &message.payload[4]
-    ) >> 4;
-    result.equalization_time_remaining = decode16(
+    ) >> 4) & 0xf;
+    result.equalization_time_remaining = (decode16(
         &message.payload[5]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     return result;
 }
+const int BatteryStatus::BYTE_LENGTH;
+const int BatteryStatus::ID;
+
 BatteryStatus BatteryStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1304,11 +1436,14 @@ BatteryStatus BatteryStatus::fromMessage(Message const& message) {
     uint16_t temperature_iraw =
         reinterpret_cast<uint16_t const&>(temperature_raw);
     result.temperature = temperature_iraw * 0.01;
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[7]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int InverterStatus::BYTE_LENGTH;
+const int InverterStatus::ID;
+
 InverterStatus InverterStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1319,14 +1454,17 @@ InverterStatus InverterStatus::fromMessage(Message const& message) {
 
     InverterStatus result;
 
-    result.operating_state = decode8(
+    result.operating_state = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result.inverter = decode8(
+    ) >> 0) & 0xf;
+    result.inverter = (decode8(
         &message.payload[3]
-    ) >> 4;
+    ) >> 4) & 0x3;
     return result;
 }
+const int ChargerConfigurationStatus::BYTE_LENGTH;
+const int ChargerConfigurationStatus::ID;
+
 ChargerConfigurationStatus ChargerConfigurationStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1337,41 +1475,44 @@ ChargerConfigurationStatus ChargerConfigurationStatus::fromMessage(Message const
 
     ChargerConfigurationStatus result;
 
-    result.charger_enable_disable = decode8(
+    result.charger_enable_disable = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.reserved = decode8(
+    ) >> 0) & 0x3;
+    result.reserved = (decode8(
         &message.payload[2]
-    ) >> 2;
+    ) >> 2) & 0x3f;
     auto charge_current_limit_raw = decode16(
         &message.payload[3]
     );
     int16_t charge_current_limit_iraw =
         reinterpret_cast<int16_t const&>(charge_current_limit_raw);
     result.charge_current_limit = charge_current_limit_iraw * 0.1;
-    result.charging_algorithm = decode8(
+    result.charging_algorithm = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.charger_mode = decode8(
+    ) >> 0) & 0xff;
+    result.charger_mode = (decode8(
         &message.payload[6]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto estimated_temperature_raw = decode16(
         &message.payload[7]
     );
     uint16_t estimated_temperature_iraw =
         reinterpret_cast<uint16_t const&>(estimated_temperature_raw);
     result.estimated_temperature = estimated_temperature_iraw * 0.01;
-    result.equalize_one_time_enable_disable = decode8(
+    result.equalize_one_time_enable_disable = (decode8(
         &message.payload[9]
-    ) >> 0;
-    result.over_charge_enable_disable = decode8(
+    ) >> 0) & 0xf;
+    result.over_charge_enable_disable = (decode8(
         &message.payload[9]
-    ) >> 4;
-    result.equalize_time = decode16(
+    ) >> 4) & 0xf;
+    result.equalize_time = (decode16(
         &message.payload[10]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     return result;
 }
+const int InverterConfigurationStatus::BYTE_LENGTH;
+const int InverterConfigurationStatus::ID;
+
 InverterConfigurationStatus InverterConfigurationStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1382,23 +1523,26 @@ InverterConfigurationStatus InverterConfigurationStatus::fromMessage(Message con
 
     InverterConfigurationStatus result;
 
-    result.inverter_enable_disable = decode8(
+    result.inverter_enable_disable = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result.inverter_mode = decode8(
+    ) >> 0) & 0x3;
+    result.inverter_mode = (decode8(
         &message.payload[3]
-    ) >> 2;
-    result.load_sense_enable_disable = decode8(
+    ) >> 2) & 0xff;
+    result.load_sense_enable_disable = (decode8(
         &message.payload[4]
-    ) >> 2;
-    result.load_sense_power_threshold = decode8(
+    ) >> 2) & 0xff;
+    result.load_sense_power_threshold = (decode8(
         &message.payload[5]
-    ) >> 2;
-    result.load_sense_interval = decode8(
+    ) >> 2) & 0xff;
+    result.load_sense_interval = (decode8(
         &message.payload[6]
-    ) >> 2;
+    ) >> 2) & 0xff;
     return result;
 }
+const int AGSConfigurationStatus::BYTE_LENGTH;
+const int AGSConfigurationStatus::ID;
+
 AGSConfigurationStatus AGSConfigurationStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1409,11 +1553,14 @@ AGSConfigurationStatus AGSConfigurationStatus::fromMessage(Message const& messag
 
     AGSConfigurationStatus result;
 
-    result.ags_mode = decode8(
+    result.ags_mode = (decode8(
         &message.payload[2]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int BatteryConfigurationStatus::BYTE_LENGTH;
+const int BatteryConfigurationStatus::ID;
+
 BatteryConfigurationStatus BatteryConfigurationStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1424,35 +1571,38 @@ BatteryConfigurationStatus BatteryConfigurationStatus::fromMessage(Message const
 
     BatteryConfigurationStatus result;
 
-    result.battery_type = decode8(
+    result.battery_type = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.supports_equalization = decode8(
+    ) >> 0) & 0xf;
+    result.supports_equalization = (decode8(
         &message.payload[1]
-    ) >> 4;
-    result.reserved = decode8(
+    ) >> 4) & 0x3;
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 6;
-    result.nominal_voltage = decode8(
+    ) >> 6) & 0x3;
+    result.nominal_voltage = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.chemistry = decode8(
+    ) >> 0) & 0xf;
+    result.chemistry = (decode8(
         &message.payload[2]
-    ) >> 4;
-    result.capacity = decode16(
+    ) >> 4) & 0xf;
+    result.capacity = (decode16(
         &message.payload[3]
-    ) >> 0;
-    result.temperature_coefficient = decode8(
+    ) >> 0) & 0xffff;
+    result.temperature_coefficient = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.peukert_exponent = decode8(
+    ) >> 0) & 0xff;
+    result.peukert_exponent = (decode8(
         &message.payload[6]
-    ) >> 0;
-    result.charge_efficiency_factor = decode8(
+    ) >> 0) & 0xff;
+    result.charge_efficiency_factor = (decode8(
         &message.payload[7]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int AGSStatus::BYTE_LENGTH;
+const int AGSStatus::ID;
+
 AGSStatus AGSStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1463,20 +1613,23 @@ AGSStatus AGSStatus::fromMessage(Message const& message) {
 
     AGSStatus result;
 
-    result.ags_operating_state = decode8(
+    result.ags_operating_state = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.generator_state = decode8(
+    ) >> 0) & 0xff;
+    result.generator_state = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result.generator_on_reason = decode8(
+    ) >> 0) & 0xff;
+    result.generator_on_reason = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.generator_off_reason = decode8(
+    ) >> 0) & 0xff;
+    result.generator_off_reason = (decode8(
         &message.payload[5]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int Speed::BYTE_LENGTH;
+const int Speed::ID;
+
 Speed Speed::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1487,9 +1640,9 @@ Speed Speed::fromMessage(Message const& message) {
 
     Speed result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto speed_water_referenced_raw = decode16(
         &message.payload[1]
     );
@@ -1502,14 +1655,17 @@ Speed Speed::fromMessage(Message const& message) {
     int16_t speed_ground_referenced_iraw =
         reinterpret_cast<int16_t const&>(speed_ground_referenced_raw);
     result.speed_ground_referenced = speed_ground_referenced_iraw * 0.01;
-    result.speed_water_referenced_type = decode8(
+    result.speed_water_referenced_type = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.reserved = decode16(
+    ) >> 0) & 0xff;
+    result.reserved = (decode16(
         &message.payload[6]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     return result;
 }
+const int WaterDepth::BYTE_LENGTH;
+const int WaterDepth::ID;
+
 WaterDepth WaterDepth::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1520,9 +1676,9 @@ WaterDepth WaterDepth::fromMessage(Message const& message) {
 
     WaterDepth result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto depth_raw = decode32(
         &message.payload[1]
     );
@@ -1543,6 +1699,9 @@ WaterDepth WaterDepth::fromMessage(Message const& message) {
     result.offset1 = offset1_iraw * 10.0;
     return result;
 }
+const int DistanceLog::BYTE_LENGTH;
+const int DistanceLog::ID;
+
 DistanceLog DistanceLog::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1553,23 +1712,26 @@ DistanceLog DistanceLog::fromMessage(Message const& message) {
 
     DistanceLog result;
 
-    result.date = decode16(
+    result.date = (decode16(
         &message.payload[0]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto time_raw = decode32(
         &message.payload[2]
     );
     uint32_t time_iraw =
         reinterpret_cast<uint32_t const&>(time_raw);
     result.time = time_iraw * 0.0001;
-    result.log = decode32(
+    result.log = (decode32(
         &message.payload[6]
-    ) >> 0;
-    result.trip_log = decode32(
+    ) >> 0) & 0xffffffff;
+    result.trip_log = (decode32(
         &message.payload[10]
-    ) >> 0;
+    ) >> 0) & 0xffffffff;
     return result;
 }
+const int TrackedTargetData::BYTE_LENGTH;
+const int TrackedTargetData::ID;
+
 TrackedTargetData TrackedTargetData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1580,27 +1742,27 @@ TrackedTargetData TrackedTargetData::fromMessage(Message const& message) {
 
     TrackedTargetData result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.target_id_number = decode8(
+    ) >> 0) & 0xff;
+    result.target_id_number = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.track_status = decode8(
+    ) >> 0) & 0xff;
+    result.track_status = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.reported_target = decode8(
+    ) >> 0) & 0x3;
+    result.reported_target = (decode8(
         &message.payload[2]
-    ) >> 2;
-    result.target_acquisition = decode8(
+    ) >> 2) & 0x1;
+    result.target_acquisition = (decode8(
         &message.payload[2]
-    ) >> 3;
-    result.bearing_reference = decode8(
+    ) >> 3) & 0x1;
+    result.bearing_reference = (decode8(
         &message.payload[2]
-    ) >> 4;
-    result.reserved = decode8(
+    ) >> 4) & 0x3;
+    result.reserved = (decode8(
         &message.payload[2]
-    ) >> 6;
+    ) >> 6) & 0x3;
     auto bearing_raw = decode16(
         &message.payload[3]
     );
@@ -1645,6 +1807,9 @@ TrackedTargetData TrackedTargetData::fromMessage(Message const& message) {
     result.utc_of_fix = utc_of_fix_iraw * 0.0001;
     return result;
 }
+const int PositionRapidUpdate::BYTE_LENGTH;
+const int PositionRapidUpdate::ID;
+
 PositionRapidUpdate PositionRapidUpdate::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1669,6 +1834,9 @@ PositionRapidUpdate PositionRapidUpdate::fromMessage(Message const& message) {
     result.longitude = longitude_iraw * 1.0e-07;
     return result;
 }
+const int COGSOGRapidUpdate::BYTE_LENGTH;
+const int COGSOGRapidUpdate::ID;
+
 COGSOGRapidUpdate COGSOGRapidUpdate::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1679,12 +1847,12 @@ COGSOGRapidUpdate COGSOGRapidUpdate::fromMessage(Message const& message) {
 
     COGSOGRapidUpdate result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.cog_reference = decode8(
+    ) >> 0) & 0xff;
+    result.cog_reference = (decode8(
         &message.payload[1]
-    ) >> 0;
+    ) >> 0) & 0x3;
     auto cog_raw = decode16(
         &message.payload[2]
     );
@@ -1699,6 +1867,9 @@ COGSOGRapidUpdate COGSOGRapidUpdate::fromMessage(Message const& message) {
     result.sog = sog_iraw * 0.01;
     return result;
 }
+const int PositionDeltaRapidUpdate::BYTE_LENGTH;
+const int PositionDeltaRapidUpdate::ID;
+
 PositionDeltaRapidUpdate PositionDeltaRapidUpdate::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1709,20 +1880,23 @@ PositionDeltaRapidUpdate PositionDeltaRapidUpdate::fromMessage(Message const& me
 
     PositionDeltaRapidUpdate result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.time_delta = decode16(
+    ) >> 0) & 0xff;
+    result.time_delta = (decode16(
         &message.payload[1]
-    ) >> 0;
-    result.latitude_delta = decode16(
+    ) >> 0) & 0xffff;
+    result.latitude_delta = (decode16(
         &message.payload[3]
-    ) >> 0;
-    result.longitude_delta = decode16(
+    ) >> 0) & 0xffff;
+    result.longitude_delta = (decode16(
         &message.payload[5]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     return result;
 }
+const int AltitudeDeltaRapidUpdate::BYTE_LENGTH;
+const int AltitudeDeltaRapidUpdate::ID;
+
 AltitudeDeltaRapidUpdate AltitudeDeltaRapidUpdate::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1733,29 +1907,32 @@ AltitudeDeltaRapidUpdate AltitudeDeltaRapidUpdate::fromMessage(Message const& me
 
     AltitudeDeltaRapidUpdate result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.time_delta = decode16(
+    ) >> 0) & 0xff;
+    result.time_delta = (decode16(
         &message.payload[1]
-    ) >> 0;
-    result.gnss_quality = decode8(
+    ) >> 0) & 0xffff;
+    result.gnss_quality = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result.direction = decode8(
+    ) >> 0) & 0x3;
+    result.direction = (decode8(
         &message.payload[3]
-    ) >> 2;
+    ) >> 2) & 0x3;
     auto course_over_ground_raw = decode32(
         &message.payload[4]
     );
     uint32_t course_over_ground_iraw =
         reinterpret_cast<uint32_t const&>(course_over_ground_raw);
     result.course_over_ground = course_over_ground_iraw * 0.005729577951308233;
-    result.altitude_delta = decode16(
+    result.altitude_delta = (decode16(
         &message.payload[8]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     return result;
 }
+const int GNSSPositionData::BYTE_LENGTH;
+const int GNSSPositionData::ID;
+
 GNSSPositionData GNSSPositionData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1766,12 +1943,12 @@ GNSSPositionData GNSSPositionData::fromMessage(Message const& message) {
 
     GNSSPositionData result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.date = decode16(
+    ) >> 0) & 0xff;
+    result.date = (decode16(
         &message.payload[1]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto time_raw = decode32(
         &message.payload[3]
     );
@@ -1796,18 +1973,18 @@ GNSSPositionData GNSSPositionData::fromMessage(Message const& message) {
     int64_t altitude_iraw =
         reinterpret_cast<int64_t const&>(altitude_raw);
     result.altitude = altitude_iraw * 1.0e-06;
-    result.gnss_type = decode8(
+    result.gnss_type = (decode8(
         &message.payload[31]
-    ) >> 0;
-    result.method = decode8(
+    ) >> 0) & 0xf;
+    result.method = (decode8(
         &message.payload[31]
-    ) >> 4;
-    result.integrity = decode8(
+    ) >> 4) & 0xf;
+    result.integrity = (decode8(
         &message.payload[32]
-    ) >> 0;
-    result.number_of_svs = decode8(
+    ) >> 0) & 0x3;
+    result.number_of_svs = (decode8(
         &message.payload[33]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto hdop_raw = decode16(
         &message.payload[34]
     );
@@ -1826,15 +2003,15 @@ GNSSPositionData GNSSPositionData::fromMessage(Message const& message) {
     int16_t geoidal_separation_iraw =
         reinterpret_cast<int16_t const&>(geoidal_separation_raw);
     result.geoidal_separation = geoidal_separation_iraw * 0.01;
-    result.reference_stations = decode8(
+    result.reference_stations = (decode8(
         &message.payload[40]
-    ) >> 0;
-    result.reference_station_type = decode8(
+    ) >> 0) & 0xff;
+    result.reference_station_type = (decode8(
         &message.payload[41]
-    ) >> 0;
-    result.reference_station_id = decode16(
+    ) >> 0) & 0xf;
+    result.reference_station_id = (decode16(
         &message.payload[41]
-    ) >> 4;
+    ) >> 4) & 0xfff;
     auto age_of_dgnss_corrections_raw = decode16(
         &message.payload[43]
     );
@@ -1843,6 +2020,9 @@ GNSSPositionData GNSSPositionData::fromMessage(Message const& message) {
     result.age_of_dgnss_corrections = age_of_dgnss_corrections_iraw * 0.01;
     return result;
 }
+const int TimeDate::BYTE_LENGTH;
+const int TimeDate::ID;
+
 TimeDate TimeDate::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1853,9 +2033,9 @@ TimeDate TimeDate::fromMessage(Message const& message) {
 
     TimeDate result;
 
-    result.date = decode16(
+    result.date = (decode16(
         &message.payload[0]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto time_raw = decode32(
         &message.payload[2]
     );
@@ -1870,6 +2050,9 @@ TimeDate TimeDate::fromMessage(Message const& message) {
     );
     return result;
 }
+const int AISClassAPositionReport::BYTE_LENGTH;
+const int AISClassAPositionReport::ID;
+
 AISClassAPositionReport AISClassAPositionReport::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1880,12 +2063,12 @@ AISClassAPositionReport AISClassAPositionReport::fromMessage(Message const& mess
 
     AISClassAPositionReport result;
 
-    result.message_id = decode8(
+    result.message_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[0]
-    ) >> 6;
+    ) >> 6) & 0x3;
     auto user_id_raw = decode32(
         &message.payload[1]
     );
@@ -1904,15 +2087,15 @@ AISClassAPositionReport AISClassAPositionReport::fromMessage(Message const& mess
     int32_t latitude_iraw =
         reinterpret_cast<int32_t const&>(latitude_raw);
     result.latitude = latitude_iraw * 1.0e-07;
-    result.position_accuracy = decode8(
+    result.position_accuracy = (decode8(
         &message.payload[13]
-    ) >> 0;
-    result.raim = decode8(
+    ) >> 0) & 0x1;
+    result.raim = (decode8(
         &message.payload[13]
-    ) >> 1;
-    result.time_stamp = decode8(
+    ) >> 1) & 0x1;
+    result.time_stamp = (decode8(
         &message.payload[13]
-    ) >> 2;
+    ) >> 2) & 0x3f;
     auto cog_raw = decode16(
         &message.payload[14]
     );
@@ -1925,9 +2108,9 @@ AISClassAPositionReport AISClassAPositionReport::fromMessage(Message const& mess
     uint16_t sog_iraw =
         reinterpret_cast<uint16_t const&>(sog_raw);
     result.sog = sog_iraw * 0.01;
-    result.ais_transceiver_information = decode8(
+    result.ais_transceiver_information = (decode8(
         &message.payload[20]
-    ) >> 3;
+    ) >> 3) & 0x1f;
     auto heading_raw = decode16(
         &message.payload[21]
     );
@@ -1940,17 +2123,20 @@ AISClassAPositionReport AISClassAPositionReport::fromMessage(Message const& mess
     uint16_t rate_of_turn_iraw =
         reinterpret_cast<uint16_t const&>(rate_of_turn_raw);
     result.rate_of_turn = rate_of_turn_iraw * 0.005729577951308233;
-    result.nav_status = decode8(
+    result.nav_status = (decode8(
         &message.payload[25]
-    ) >> 0;
-    result.reserved_for_regional_applications = decode8(
+    ) >> 0) & 0xff;
+    result.reserved_for_regional_applications = (decode8(
         &message.payload[26]
-    ) >> 0;
-    result.spare = decode8(
+    ) >> 0) & 0xff;
+    result.spare = (decode8(
         &message.payload[27]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int AISClassBPositionReport::BYTE_LENGTH;
+const int AISClassBPositionReport::ID;
+
 AISClassBPositionReport AISClassBPositionReport::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -1961,12 +2147,12 @@ AISClassBPositionReport AISClassBPositionReport::fromMessage(Message const& mess
 
     AISClassBPositionReport result;
 
-    result.message_id = decode8(
+    result.message_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[0]
-    ) >> 6;
+    ) >> 6) & 0x3;
     auto user_id_raw = decode32(
         &message.payload[1]
     );
@@ -1985,15 +2171,15 @@ AISClassBPositionReport AISClassBPositionReport::fromMessage(Message const& mess
     int32_t latitude_iraw =
         reinterpret_cast<int32_t const&>(latitude_raw);
     result.latitude = latitude_iraw * 1.0e-07;
-    result.position_accuracy = decode8(
+    result.position_accuracy = (decode8(
         &message.payload[13]
-    ) >> 0;
-    result.raim = decode8(
+    ) >> 0) & 0x1;
+    result.raim = (decode8(
         &message.payload[13]
-    ) >> 1;
-    result.time_stamp = decode8(
+    ) >> 1) & 0x1;
+    result.time_stamp = (decode8(
         &message.payload[13]
-    ) >> 2;
+    ) >> 2) & 0x3f;
     auto cog_raw = decode16(
         &message.payload[14]
     );
@@ -2006,44 +2192,47 @@ AISClassBPositionReport AISClassBPositionReport::fromMessage(Message const& mess
     uint16_t sog_iraw =
         reinterpret_cast<uint16_t const&>(sog_raw);
     result.sog = sog_iraw * 0.01;
-    result.ais_transceiver_information = decode8(
+    result.ais_transceiver_information = (decode8(
         &message.payload[20]
-    ) >> 3;
+    ) >> 3) & 0x1f;
     auto heading_raw = decode16(
         &message.payload[21]
     );
     uint16_t heading_iraw =
         reinterpret_cast<uint16_t const&>(heading_raw);
     result.heading = heading_iraw * 0.005729577951308233;
-    result.regional_application = decode8(
+    result.regional_application = (decode8(
         &message.payload[23]
-    ) >> 0;
-    result.regional_application1 = decode8(
+    ) >> 0) & 0xff;
+    result.regional_application1 = (decode8(
         &message.payload[24]
-    ) >> 0;
-    result.unit_type = decode8(
+    ) >> 0) & 0x3;
+    result.unit_type = (decode8(
         &message.payload[24]
-    ) >> 2;
-    result.integrated_display = decode8(
+    ) >> 2) & 0x1;
+    result.integrated_display = (decode8(
         &message.payload[24]
-    ) >> 3;
-    result.dsc = decode8(
+    ) >> 3) & 0x1;
+    result.dsc = (decode8(
         &message.payload[24]
-    ) >> 4;
-    result.band = decode8(
+    ) >> 4) & 0x1;
+    result.band = (decode8(
         &message.payload[24]
-    ) >> 5;
-    result.can_handle_msg_22 = decode8(
+    ) >> 5) & 0x1;
+    result.can_handle_msg_22 = (decode8(
         &message.payload[24]
-    ) >> 6;
-    result.ais_mode = decode8(
+    ) >> 6) & 0x1;
+    result.ais_mode = (decode8(
         &message.payload[24]
-    ) >> 7;
-    result.ais_communication_state = decode8(
+    ) >> 7) & 0x1;
+    result.ais_communication_state = (decode8(
         &message.payload[25]
-    ) >> 0;
+    ) >> 0) & 0x1;
     return result;
 }
+const int AISClassBExtendedPositionReport::BYTE_LENGTH;
+const int AISClassBExtendedPositionReport::ID;
+
 AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -2054,12 +2243,12 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
 
     AISClassBExtendedPositionReport result;
 
-    result.message_id = decode8(
+    result.message_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[0]
-    ) >> 6;
+    ) >> 6) & 0x3;
     auto user_id_raw = decode32(
         &message.payload[1]
     );
@@ -2078,15 +2267,15 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     int32_t latitude_iraw =
         reinterpret_cast<int32_t const&>(latitude_raw);
     result.latitude = latitude_iraw * 1.0e-07;
-    result.position_accuracy = decode8(
+    result.position_accuracy = (decode8(
         &message.payload[13]
-    ) >> 0;
-    result.ais_raim_flag = decode8(
+    ) >> 0) & 0x1;
+    result.ais_raim_flag = (decode8(
         &message.payload[13]
-    ) >> 1;
-    result.time_stamp = decode8(
+    ) >> 1) & 0x1;
+    result.time_stamp = (decode8(
         &message.payload[13]
-    ) >> 2;
+    ) >> 2) & 0x3f;
     auto cog_raw = decode16(
         &message.payload[14]
     );
@@ -2099,24 +2288,24 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     uint16_t sog_iraw =
         reinterpret_cast<uint16_t const&>(sog_raw);
     result.sog = sog_iraw * 0.01;
-    result.regional_application = decode8(
+    result.regional_application = (decode8(
         &message.payload[18]
-    ) >> 0;
-    result.regional_application1 = decode8(
+    ) >> 0) & 0xff;
+    result.regional_application1 = (decode8(
         &message.payload[19]
-    ) >> 0;
-    result.type_of_ship = decode8(
+    ) >> 0) & 0xf;
+    result.type_of_ship = (decode8(
         &message.payload[20]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto true_heading_raw = decode16(
         &message.payload[21]
     );
     uint16_t true_heading_iraw =
         reinterpret_cast<uint16_t const&>(true_heading_raw);
     result.true_heading = true_heading_iraw * 0.005729577951308233;
-    result.gnss_type = decode8(
+    result.gnss_type = (decode8(
         &message.payload[23]
-    ) >> 4;
+    ) >> 4) & 0xf;
     auto length_raw = decode16(
         &message.payload[24]
     );
@@ -2141,17 +2330,20 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     int16_t position_reference_from_bow_iraw =
         reinterpret_cast<int16_t const&>(position_reference_from_bow_raw);
     result.position_reference_from_bow = position_reference_from_bow_iraw * 0.1;
-    result.dte = decode8(
+    result.dte = (decode8(
         &message.payload[52]
-    ) >> 0;
-    result.ais_mode = decode8(
+    ) >> 0) & 0x1;
+    result.ais_mode = (decode8(
         &message.payload[52]
-    ) >> 1;
-    result.ais_transceiver_information = decode8(
+    ) >> 1) & 0x1;
+    result.ais_transceiver_information = (decode8(
         &message.payload[52]
-    ) >> 6;
+    ) >> 6) & 0x1f;
     return result;
 }
+const int Datum::BYTE_LENGTH;
+const int Datum::ID;
+
 Datum Datum::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -2182,6 +2374,9 @@ Datum Datum::fromMessage(Message const& message) {
     result.delta_altitude = delta_altitude_iraw * 1.0;
     return result;
 }
+const int UserDatum::BYTE_LENGTH;
+const int UserDatum::ID;
+
 UserDatum UserDatum::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -2248,6 +2443,9 @@ UserDatum UserDatum::fromMessage(Message const& message) {
     result.ellipsoid_flattening_inverse = ellipsoid_flattening_inverse_iraw * 1.0;
     return result;
 }
+const int CrossTrackError::BYTE_LENGTH;
+const int CrossTrackError::ID;
+
 CrossTrackError CrossTrackError::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -2258,15 +2456,15 @@ CrossTrackError CrossTrackError::fromMessage(Message const& message) {
 
     CrossTrackError result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.xte_mode = decode8(
+    ) >> 0) & 0xff;
+    result.xte_mode = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.navigation_terminated = decode8(
+    ) >> 0) & 0xf;
+    result.navigation_terminated = (decode8(
         &message.payload[1]
-    ) >> 6;
+    ) >> 6) & 0x3;
     auto xte_raw = decode32(
         &message.payload[2]
     );
@@ -2275,6 +2473,9 @@ CrossTrackError CrossTrackError::fromMessage(Message const& message) {
     result.xte = xte_iraw * 0.01;
     return result;
 }
+const int NavigationData::BYTE_LENGTH;
+const int NavigationData::ID;
+
 NavigationData NavigationData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -2285,36 +2486,36 @@ NavigationData NavigationData::fromMessage(Message const& message) {
 
     NavigationData result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto distance_to_waypoint_raw = decode32(
         &message.payload[1]
     );
     int32_t distance_to_waypoint_iraw =
         reinterpret_cast<int32_t const&>(distance_to_waypoint_raw);
     result.distance_to_waypoint = distance_to_waypoint_iraw * 0.01;
-    result.course_bearing_reference = decode8(
+    result.course_bearing_reference = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.perpendicular_crossed = decode8(
+    ) >> 0) & 0x3;
+    result.perpendicular_crossed = (decode8(
         &message.payload[5]
-    ) >> 2;
-    result.arrival_circle_entered = decode8(
+    ) >> 2) & 0x3;
+    result.arrival_circle_entered = (decode8(
         &message.payload[5]
-    ) >> 4;
-    result.calculation_type = decode8(
+    ) >> 4) & 0x3;
+    result.calculation_type = (decode8(
         &message.payload[5]
-    ) >> 6;
+    ) >> 6) & 0x3;
     auto eta_time_raw = decode32(
         &message.payload[6]
     );
     uint32_t eta_time_iraw =
         reinterpret_cast<uint32_t const&>(eta_time_raw);
     result.eta_time = eta_time_iraw * 0.0001;
-    result.eta_date = decode16(
+    result.eta_date = (decode16(
         &message.payload[10]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto bearing_origin_to_destination_waypoint_raw = decode16(
         &message.payload[12]
     );
@@ -2327,12 +2528,12 @@ NavigationData NavigationData::fromMessage(Message const& message) {
     uint16_t bearing_position_to_destination_waypoint_iraw =
         reinterpret_cast<uint16_t const&>(bearing_position_to_destination_waypoint_raw);
     result.bearing_position_to_destination_waypoint = bearing_position_to_destination_waypoint_iraw * 0.005729577951308233;
-    result.origin_waypoint_number = decode32(
+    result.origin_waypoint_number = (decode32(
         &message.payload[16]
-    ) >> 0;
-    result.destination_waypoint_number = decode32(
+    ) >> 0) & 0xffffffff;
+    result.destination_waypoint_number = (decode32(
         &message.payload[20]
-    ) >> 0;
+    ) >> 0) & 0xffffffff;
     auto destination_latitude_raw = decode32(
         &message.payload[24]
     );
@@ -2353,6 +2554,9 @@ NavigationData NavigationData::fromMessage(Message const& message) {
     result.waypoint_closing_velocity = waypoint_closing_velocity_iraw * 0.01;
     return result;
 }
+const int NavigationRouteWPInformation::BYTE_LENGTH;
+const int NavigationRouteWPInformation::ID;
+
 NavigationRouteWPInformation NavigationRouteWPInformation::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -2363,27 +2567,27 @@ NavigationRouteWPInformation NavigationRouteWPInformation::fromMessage(Message c
 
     NavigationRouteWPInformation result;
 
-    result.start_rpsnumber = decode16(
+    result.start_rpsnumber = (decode16(
         &message.payload[0]
-    ) >> 0;
-    result.nitems = decode16(
+    ) >> 0) & 0xffff;
+    result.nitems = (decode16(
         &message.payload[2]
-    ) >> 0;
-    result.database_id = decode16(
+    ) >> 0) & 0xffff;
+    result.database_id = (decode16(
         &message.payload[4]
-    ) >> 0;
-    result.route_id = decode16(
+    ) >> 0) & 0xffff;
+    result.route_id = (decode16(
         &message.payload[6]
-    ) >> 0;
-    result.navigation_direction_in_route = decode8(
+    ) >> 0) & 0xffff;
+    result.navigation_direction_in_route = (decode8(
         &message.payload[8]
-    ) >> 0;
-    result.supplementary_route_wp_data_available = decode8(
+    ) >> 0) & 0x3;
+    result.supplementary_route_wp_data_available = (decode8(
         &message.payload[8]
-    ) >> 2;
-    result.wp_id = decode16(
+    ) >> 2) & 0x3;
+    result.wp_id = (decode16(
         &message.payload[265]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto wp_latitude_raw = decode32(
         &message.payload[522]
     );
@@ -2398,6 +2602,9 @@ NavigationRouteWPInformation NavigationRouteWPInformation::fromMessage(Message c
     result.wp_longitude = wp_longitude_iraw * 1.0e-07;
     return result;
 }
+const int SetDriftRapidUpdate::BYTE_LENGTH;
+const int SetDriftRapidUpdate::ID;
+
 SetDriftRapidUpdate SetDriftRapidUpdate::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -2408,12 +2615,12 @@ SetDriftRapidUpdate SetDriftRapidUpdate::fromMessage(Message const& message) {
 
     SetDriftRapidUpdate result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.set_reference = decode8(
+    ) >> 0) & 0xff;
+    result.set_reference = (decode8(
         &message.payload[1]
-    ) >> 0;
+    ) >> 0) & 0x3;
     auto set_raw = decode16(
         &message.payload[2]
     );
@@ -2428,6 +2635,9 @@ SetDriftRapidUpdate SetDriftRapidUpdate::fromMessage(Message const& message) {
     result.drift = drift_iraw * 0.01;
     return result;
 }
+const int NavigationRouteTimeToFromMark::BYTE_LENGTH;
+const int NavigationRouteTimeToFromMark::ID;
+
 NavigationRouteTimeToFromMark NavigationRouteTimeToFromMark::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -2438,23 +2648,26 @@ NavigationRouteTimeToFromMark NavigationRouteTimeToFromMark::fromMessage(Message
 
     NavigationRouteTimeToFromMark result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto time_to_mark_raw = decode32(
         &message.payload[1]
     );
     int32_t time_to_mark_iraw =
         reinterpret_cast<int32_t const&>(time_to_mark_raw);
     result.time_to_mark = time_to_mark_iraw * 0.001;
-    result.mark_type = decode8(
+    result.mark_type = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.mark_id = decode32(
+    ) >> 0) & 0xf;
+    result.mark_id = (decode32(
         &message.payload[6]
-    ) >> 0;
+    ) >> 0) & 0xffffffff;
     return result;
 }
+const int BearingAndDistanceBetweenTwoMarks::BYTE_LENGTH;
+const int BearingAndDistanceBetweenTwoMarks::ID;
+
 BearingAndDistanceBetweenTwoMarks BearingAndDistanceBetweenTwoMarks::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -2465,15 +2678,15 @@ BearingAndDistanceBetweenTwoMarks BearingAndDistanceBetweenTwoMarks::fromMessage
 
     BearingAndDistanceBetweenTwoMarks result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.bearing_reference = decode8(
+    ) >> 0) & 0xff;
+    result.bearing_reference = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.calculation_type = decode8(
+    ) >> 0) & 0xf;
+    result.calculation_type = (decode8(
         &message.payload[1]
-    ) >> 4;
+    ) >> 4) & 0x3;
     auto bearing_origin_to_destination_raw = decode16(
         &message.payload[2]
     );
@@ -2486,20 +2699,23 @@ BearingAndDistanceBetweenTwoMarks BearingAndDistanceBetweenTwoMarks::fromMessage
     int32_t distance_iraw =
         reinterpret_cast<int32_t const&>(distance_raw);
     result.distance = distance_iraw * 0.01;
-    result.origin_mark_type = decode8(
+    result.origin_mark_type = (decode8(
         &message.payload[8]
-    ) >> 0;
-    result.destination_mark_type = decode8(
+    ) >> 0) & 0xf;
+    result.destination_mark_type = (decode8(
         &message.payload[8]
-    ) >> 4;
-    result.origin_mark_id = decode32(
+    ) >> 4) & 0xf;
+    result.origin_mark_id = (decode32(
         &message.payload[9]
-    ) >> 0;
-    result.destination_mark_id = decode32(
+    ) >> 0) & 0xffffffff;
+    result.destination_mark_id = (decode32(
         &message.payload[13]
-    ) >> 0;
+    ) >> 0) & 0xffffffff;
     return result;
 }
+const int GNSSControlStatus::BYTE_LENGTH;
+const int GNSSControlStatus::ID;
+
 GNSSControlStatus GNSSControlStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -2510,9 +2726,9 @@ GNSSControlStatus GNSSControlStatus::fromMessage(Message const& message) {
 
     GNSSControlStatus result;
 
-    result.sv_elevation_mask = decode16(
+    result.sv_elevation_mask = (decode16(
         &message.payload[0]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto pdop_mask_raw = decode16(
         &message.payload[2]
     );
@@ -2531,29 +2747,32 @@ GNSSControlStatus GNSSControlStatus::fromMessage(Message const& message) {
     int16_t snr_mask_iraw =
         reinterpret_cast<int16_t const&>(snr_mask_raw);
     result.snr_mask = snr_mask_iraw * 0.01;
-    result.gnss_mode_desired_ = decode8(
+    result.gnss_mode_desired_ = (decode8(
         &message.payload[8]
-    ) >> 0;
-    result.dgnss_mode_desired_ = decode8(
+    ) >> 0) & 0x7;
+    result.dgnss_mode_desired_ = (decode8(
         &message.payload[8]
-    ) >> 3;
-    result.position_velocity_filter = decode8(
+    ) >> 3) & 0x7;
+    result.position_velocity_filter = (decode8(
         &message.payload[8]
-    ) >> 6;
-    result.max_correction_age = decode16(
+    ) >> 6) & 0x3;
+    result.max_correction_age = (decode16(
         &message.payload[9]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto antenna_altitude_for_2d_mode_raw = decode16(
         &message.payload[11]
     );
     int16_t antenna_altitude_for_2d_mode_iraw =
         reinterpret_cast<int16_t const&>(antenna_altitude_for_2d_mode_raw);
     result.antenna_altitude_for_2d_mode = antenna_altitude_for_2d_mode_iraw * 0.01;
-    result.use_antenna_altitude_for_2d_mode = decode8(
+    result.use_antenna_altitude_for_2d_mode = (decode8(
         &message.payload[13]
-    ) >> 0;
+    ) >> 0) & 0x3;
     return result;
 }
+const int GNSSDOPs::BYTE_LENGTH;
+const int GNSSDOPs::ID;
+
 GNSSDOPs GNSSDOPs::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -2564,15 +2783,15 @@ GNSSDOPs GNSSDOPs::fromMessage(Message const& message) {
 
     GNSSDOPs result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.desired_mode = decode8(
+    ) >> 0) & 0xff;
+    result.desired_mode = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.actual_mode = decode8(
+    ) >> 0) & 0x7;
+    result.actual_mode = (decode8(
         &message.payload[1]
-    ) >> 3;
+    ) >> 3) & 0x7;
     auto hdop_raw = decode16(
         &message.payload[2]
     );
@@ -2593,6 +2812,9 @@ GNSSDOPs GNSSDOPs::fromMessage(Message const& message) {
     result.tdop = tdop_iraw * 0.01;
     return result;
 }
+const int GNSSSatsInView::BYTE_LENGTH;
+const int GNSSSatsInView::ID;
+
 GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -2603,18 +2825,18 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
 
     GNSSSatsInView result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.mode = decode8(
+    ) >> 0) & 0xff;
+    result.mode = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.sats_in_view = decode8(
+    ) >> 0) & 0x3;
+    result.sats_in_view = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.sat_number = decode8(
+    ) >> 0) & 0xff;
+    result.sat_number = (decode8(
         &message.payload[3]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto elevation_raw = decode16(
         &message.payload[4]
     );
@@ -2633,15 +2855,15 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     int16_t snr_iraw =
         reinterpret_cast<int16_t const&>(snr_raw);
     result.snr = snr_iraw * 0.01;
-    result.range_residuals = decode32(
+    result.range_residuals = (decode32(
         &message.payload[10]
-    ) >> 0;
-    result.status = decode8(
+    ) >> 0) & 0xffffffff;
+    result.status = (decode8(
         &message.payload[14]
-    ) >> 0;
-    result.sat_number1 = decode8(
+    ) >> 0) & 0xf;
+    result.sat_number1 = (decode8(
         &message.payload[15]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto elevation1_raw = decode16(
         &message.payload[16]
     );
@@ -2660,15 +2882,15 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     int16_t snr1_iraw =
         reinterpret_cast<int16_t const&>(snr1_raw);
     result.snr1 = snr1_iraw * 0.01;
-    result.range_residuals1 = decode32(
+    result.range_residuals1 = (decode32(
         &message.payload[22]
-    ) >> 0;
-    result.status1 = decode8(
+    ) >> 0) & 0xffffffff;
+    result.status1 = (decode8(
         &message.payload[26]
-    ) >> 0;
-    result.sat_number2 = decode8(
+    ) >> 0) & 0xf;
+    result.sat_number2 = (decode8(
         &message.payload[27]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto elevation2_raw = decode16(
         &message.payload[28]
     );
@@ -2687,15 +2909,15 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     int16_t snr2_iraw =
         reinterpret_cast<int16_t const&>(snr2_raw);
     result.snr2 = snr2_iraw * 0.01;
-    result.range_residuals2 = decode32(
+    result.range_residuals2 = (decode32(
         &message.payload[34]
-    ) >> 0;
-    result.status2 = decode8(
+    ) >> 0) & 0xffffffff;
+    result.status2 = (decode8(
         &message.payload[38]
-    ) >> 0;
-    result.sat_number3 = decode8(
+    ) >> 0) & 0xf;
+    result.sat_number3 = (decode8(
         &message.payload[39]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto elevation3_raw = decode16(
         &message.payload[40]
     );
@@ -2714,15 +2936,15 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     int16_t snr3_iraw =
         reinterpret_cast<int16_t const&>(snr3_raw);
     result.snr3 = snr3_iraw * 0.01;
-    result.range_residuals3 = decode32(
+    result.range_residuals3 = (decode32(
         &message.payload[46]
-    ) >> 0;
-    result.status3 = decode8(
+    ) >> 0) & 0xffffffff;
+    result.status3 = (decode8(
         &message.payload[50]
-    ) >> 0;
-    result.sat_number4 = decode8(
+    ) >> 0) & 0xf;
+    result.sat_number4 = (decode8(
         &message.payload[51]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto elevation4_raw = decode16(
         &message.payload[52]
     );
@@ -2741,15 +2963,15 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     int16_t snr4_iraw =
         reinterpret_cast<int16_t const&>(snr4_raw);
     result.snr4 = snr4_iraw * 0.01;
-    result.range_residuals4 = decode32(
+    result.range_residuals4 = (decode32(
         &message.payload[58]
-    ) >> 0;
-    result.status4 = decode8(
+    ) >> 0) & 0xffffffff;
+    result.status4 = (decode8(
         &message.payload[62]
-    ) >> 0;
-    result.sat_number5 = decode8(
+    ) >> 0) & 0xf;
+    result.sat_number5 = (decode8(
         &message.payload[63]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto elevation5_raw = decode16(
         &message.payload[64]
     );
@@ -2768,15 +2990,15 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     int16_t snr5_iraw =
         reinterpret_cast<int16_t const&>(snr5_raw);
     result.snr5 = snr5_iraw * 0.01;
-    result.range_residuals5 = decode32(
+    result.range_residuals5 = (decode32(
         &message.payload[70]
-    ) >> 0;
-    result.status5 = decode8(
+    ) >> 0) & 0xffffffff;
+    result.status5 = (decode8(
         &message.payload[74]
-    ) >> 0;
-    result.sat_number6 = decode8(
+    ) >> 0) & 0xf;
+    result.sat_number6 = (decode8(
         &message.payload[75]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto elevation6_raw = decode16(
         &message.payload[76]
     );
@@ -2795,15 +3017,15 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     int16_t snr6_iraw =
         reinterpret_cast<int16_t const&>(snr6_raw);
     result.snr6 = snr6_iraw * 0.01;
-    result.range_residuals6 = decode32(
+    result.range_residuals6 = (decode32(
         &message.payload[82]
-    ) >> 0;
-    result.status6 = decode8(
+    ) >> 0) & 0xffffffff;
+    result.status6 = (decode8(
         &message.payload[86]
-    ) >> 0;
-    result.sat_number7 = decode8(
+    ) >> 0) & 0xf;
+    result.sat_number7 = (decode8(
         &message.payload[87]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto elevation7_raw = decode16(
         &message.payload[88]
     );
@@ -2822,15 +3044,15 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     int16_t snr7_iraw =
         reinterpret_cast<int16_t const&>(snr7_raw);
     result.snr7 = snr7_iraw * 0.01;
-    result.range_residuals7 = decode32(
+    result.range_residuals7 = (decode32(
         &message.payload[94]
-    ) >> 0;
-    result.status7 = decode8(
+    ) >> 0) & 0xffffffff;
+    result.status7 = (decode8(
         &message.payload[98]
-    ) >> 0;
-    result.sat_number8 = decode8(
+    ) >> 0) & 0xf;
+    result.sat_number8 = (decode8(
         &message.payload[99]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto elevation8_raw = decode16(
         &message.payload[100]
     );
@@ -2849,15 +3071,15 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     int16_t snr8_iraw =
         reinterpret_cast<int16_t const&>(snr8_raw);
     result.snr8 = snr8_iraw * 0.01;
-    result.range_residuals8 = decode32(
+    result.range_residuals8 = (decode32(
         &message.payload[106]
-    ) >> 0;
-    result.status8 = decode8(
+    ) >> 0) & 0xffffffff;
+    result.status8 = (decode8(
         &message.payload[110]
-    ) >> 0;
-    result.sat_number9 = decode8(
+    ) >> 0) & 0xf;
+    result.sat_number9 = (decode8(
         &message.payload[111]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto elevation9_raw = decode16(
         &message.payload[112]
     );
@@ -2876,15 +3098,15 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     int16_t snr9_iraw =
         reinterpret_cast<int16_t const&>(snr9_raw);
     result.snr9 = snr9_iraw * 0.01;
-    result.range_residuals9 = decode32(
+    result.range_residuals9 = (decode32(
         &message.payload[118]
-    ) >> 0;
-    result.status9 = decode8(
+    ) >> 0) & 0xffffffff;
+    result.status9 = (decode8(
         &message.payload[122]
-    ) >> 0;
-    result.sat_number10 = decode8(
+    ) >> 0) & 0xf;
+    result.sat_number10 = (decode8(
         &message.payload[123]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto elevation10_raw = decode16(
         &message.payload[124]
     );
@@ -2903,15 +3125,15 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     int16_t snr10_iraw =
         reinterpret_cast<int16_t const&>(snr10_raw);
     result.snr10 = snr10_iraw * 0.01;
-    result.range_residuals10 = decode32(
+    result.range_residuals10 = (decode32(
         &message.payload[130]
-    ) >> 0;
-    result.status10 = decode8(
+    ) >> 0) & 0xffffffff;
+    result.status10 = (decode8(
         &message.payload[134]
-    ) >> 0;
-    result.sat_number11 = decode8(
+    ) >> 0) & 0xf;
+    result.sat_number11 = (decode8(
         &message.payload[135]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto elevation11_raw = decode16(
         &message.payload[136]
     );
@@ -2930,15 +3152,15 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     int16_t snr11_iraw =
         reinterpret_cast<int16_t const&>(snr11_raw);
     result.snr11 = snr11_iraw * 0.01;
-    result.range_residuals11 = decode32(
+    result.range_residuals11 = (decode32(
         &message.payload[142]
-    ) >> 0;
-    result.status11 = decode8(
+    ) >> 0) & 0xffffffff;
+    result.status11 = (decode8(
         &message.payload[146]
-    ) >> 0;
-    result.sat_number12 = decode8(
+    ) >> 0) & 0xf;
+    result.sat_number12 = (decode8(
         &message.payload[147]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto elevation12_raw = decode16(
         &message.payload[148]
     );
@@ -2957,15 +3179,15 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     int16_t snr12_iraw =
         reinterpret_cast<int16_t const&>(snr12_raw);
     result.snr12 = snr12_iraw * 0.01;
-    result.range_residuals12 = decode32(
+    result.range_residuals12 = (decode32(
         &message.payload[154]
-    ) >> 0;
-    result.status12 = decode8(
+    ) >> 0) & 0xffffffff;
+    result.status12 = (decode8(
         &message.payload[158]
-    ) >> 0;
-    result.sat_number13 = decode8(
+    ) >> 0) & 0xf;
+    result.sat_number13 = (decode8(
         &message.payload[159]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto elevation13_raw = decode16(
         &message.payload[160]
     );
@@ -2984,15 +3206,15 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     int16_t snr13_iraw =
         reinterpret_cast<int16_t const&>(snr13_raw);
     result.snr13 = snr13_iraw * 0.01;
-    result.range_residuals13 = decode32(
+    result.range_residuals13 = (decode32(
         &message.payload[166]
-    ) >> 0;
-    result.status13 = decode8(
+    ) >> 0) & 0xffffffff;
+    result.status13 = (decode8(
         &message.payload[170]
-    ) >> 0;
-    result.sat_number14 = decode8(
+    ) >> 0) & 0xf;
+    result.sat_number14 = (decode8(
         &message.payload[171]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto elevation14_raw = decode16(
         &message.payload[172]
     );
@@ -3011,15 +3233,15 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     int16_t snr14_iraw =
         reinterpret_cast<int16_t const&>(snr14_raw);
     result.snr14 = snr14_iraw * 0.01;
-    result.range_residuals14 = decode32(
+    result.range_residuals14 = (decode32(
         &message.payload[178]
-    ) >> 0;
-    result.status14 = decode8(
+    ) >> 0) & 0xffffffff;
+    result.status14 = (decode8(
         &message.payload[182]
-    ) >> 0;
-    result.sat_number15 = decode8(
+    ) >> 0) & 0xf;
+    result.sat_number15 = (decode8(
         &message.payload[183]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto elevation15_raw = decode16(
         &message.payload[184]
     );
@@ -3038,15 +3260,15 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     int16_t snr15_iraw =
         reinterpret_cast<int16_t const&>(snr15_raw);
     result.snr15 = snr15_iraw * 0.01;
-    result.range_residuals15 = decode32(
+    result.range_residuals15 = (decode32(
         &message.payload[190]
-    ) >> 0;
-    result.status15 = decode8(
+    ) >> 0) & 0xffffffff;
+    result.status15 = (decode8(
         &message.payload[194]
-    ) >> 0;
-    result.sat_number16 = decode8(
+    ) >> 0) & 0xf;
+    result.sat_number16 = (decode8(
         &message.payload[195]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto elevation16_raw = decode16(
         &message.payload[196]
     );
@@ -3065,15 +3287,15 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     int16_t snr16_iraw =
         reinterpret_cast<int16_t const&>(snr16_raw);
     result.snr16 = snr16_iraw * 0.01;
-    result.range_residuals16 = decode32(
+    result.range_residuals16 = (decode32(
         &message.payload[202]
-    ) >> 0;
-    result.status16 = decode8(
+    ) >> 0) & 0xffffffff;
+    result.status16 = (decode8(
         &message.payload[206]
-    ) >> 0;
-    result.sat_number17 = decode8(
+    ) >> 0) & 0xf;
+    result.sat_number17 = (decode8(
         &message.payload[207]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto elevation17_raw = decode16(
         &message.payload[208]
     );
@@ -3092,14 +3314,17 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     int16_t snr17_iraw =
         reinterpret_cast<int16_t const&>(snr17_raw);
     result.snr17 = snr17_iraw * 0.01;
-    result.range_residuals17 = decode32(
+    result.range_residuals17 = (decode32(
         &message.payload[214]
-    ) >> 0;
-    result.status17 = decode8(
+    ) >> 0) & 0xffffffff;
+    result.status17 = (decode8(
         &message.payload[218]
-    ) >> 0;
+    ) >> 0) & 0xf;
     return result;
 }
+const int GPSAlmanacData::BYTE_LENGTH;
+const int GPSAlmanacData::ID;
+
 GPSAlmanacData GPSAlmanacData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3110,47 +3335,50 @@ GPSAlmanacData GPSAlmanacData::fromMessage(Message const& message) {
 
     GPSAlmanacData result;
 
-    result.prn = decode8(
+    result.prn = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.gps_week_number = decode8(
+    ) >> 0) & 0xff;
+    result.gps_week_number = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.sv_health_bits = decode8(
+    ) >> 0) & 0xff;
+    result.sv_health_bits = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.eccentricity = decode8(
+    ) >> 0) & 0xff;
+    result.eccentricity = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result.almanac_reference_time = decode8(
+    ) >> 0) & 0xff;
+    result.almanac_reference_time = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.inclination_angle = decode8(
+    ) >> 0) & 0xff;
+    result.inclination_angle = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.right_of_right_ascension = decode8(
+    ) >> 0) & 0xff;
+    result.right_of_right_ascension = (decode8(
         &message.payload[6]
-    ) >> 0;
-    result.root_of_semi_major_axis = decode8(
+    ) >> 0) & 0xff;
+    result.root_of_semi_major_axis = (decode8(
         &message.payload[7]
-    ) >> 0;
-    result.argument_of_perigee = decode8(
+    ) >> 0) & 0xff;
+    result.argument_of_perigee = (decode8(
         &message.payload[8]
-    ) >> 0;
-    result.longitude_of_ascension_node = decode8(
+    ) >> 0) & 0xff;
+    result.longitude_of_ascension_node = (decode8(
         &message.payload[9]
-    ) >> 0;
-    result.mean_anomaly = decode8(
+    ) >> 0) & 0xff;
+    result.mean_anomaly = (decode8(
         &message.payload[10]
-    ) >> 0;
-    result.clock_parameter_1 = decode8(
+    ) >> 0) & 0xff;
+    result.clock_parameter_1 = (decode8(
         &message.payload[11]
-    ) >> 0;
-    result.clock_parameter_2 = decode8(
+    ) >> 0) & 0xff;
+    result.clock_parameter_2 = (decode8(
         &message.payload[12]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int GNSSPseudorangeNoiseStatistics::BYTE_LENGTH;
+const int GNSSPseudorangeNoiseStatistics::ID;
+
 GNSSPseudorangeNoiseStatistics GNSSPseudorangeNoiseStatistics::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3161,32 +3389,35 @@ GNSSPseudorangeNoiseStatistics GNSSPseudorangeNoiseStatistics::fromMessage(Messa
 
     GNSSPseudorangeNoiseStatistics result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.rms_of_position_uncertainty = decode16(
+    ) >> 0) & 0xff;
+    result.rms_of_position_uncertainty = (decode16(
         &message.payload[1]
-    ) >> 0;
-    result.std_of_major_axis = decode8(
+    ) >> 0) & 0xffff;
+    result.std_of_major_axis = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result.std_of_minor_axis = decode8(
+    ) >> 0) & 0xff;
+    result.std_of_minor_axis = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.orientation_of_major_axis = decode8(
+    ) >> 0) & 0xff;
+    result.orientation_of_major_axis = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.std_of_lat_error = decode8(
+    ) >> 0) & 0xff;
+    result.std_of_lat_error = (decode8(
         &message.payload[6]
-    ) >> 0;
-    result.std_of_lon_error = decode8(
+    ) >> 0) & 0xff;
+    result.std_of_lon_error = (decode8(
         &message.payload[7]
-    ) >> 0;
-    result.std_of_alt_error = decode8(
+    ) >> 0) & 0xff;
+    result.std_of_alt_error = (decode8(
         &message.payload[8]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int GNSSRAIMOutput::BYTE_LENGTH;
+const int GNSSRAIMOutput::ID;
+
 GNSSRAIMOutput GNSSRAIMOutput::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3197,35 +3428,38 @@ GNSSRAIMOutput GNSSRAIMOutput::fromMessage(Message const& message) {
 
     GNSSRAIMOutput result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.integrity_flag = decode8(
+    ) >> 0) & 0xff;
+    result.integrity_flag = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.latitude_expected_error = decode8(
+    ) >> 0) & 0xf;
+    result.latitude_expected_error = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.longitude_expected_error = decode8(
+    ) >> 0) & 0xff;
+    result.longitude_expected_error = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result.altitude_expected_error = decode8(
+    ) >> 0) & 0xff;
+    result.altitude_expected_error = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.sv_id_of_most_likely_failed_sat = decode8(
+    ) >> 0) & 0xff;
+    result.sv_id_of_most_likely_failed_sat = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.probability_of_missed_detection = decode8(
+    ) >> 0) & 0xff;
+    result.probability_of_missed_detection = (decode8(
         &message.payload[6]
-    ) >> 0;
-    result.estimate_of_pseudorange_bias = decode8(
+    ) >> 0) & 0xff;
+    result.estimate_of_pseudorange_bias = (decode8(
         &message.payload[7]
-    ) >> 0;
-    result.std_deviation_of_bias = decode8(
+    ) >> 0) & 0xff;
+    result.std_deviation_of_bias = (decode8(
         &message.payload[8]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int GNSSRAIMSettings::BYTE_LENGTH;
+const int GNSSRAIMSettings::ID;
+
 GNSSRAIMSettings GNSSRAIMSettings::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3236,20 +3470,23 @@ GNSSRAIMSettings GNSSRAIMSettings::fromMessage(Message const& message) {
 
     GNSSRAIMSettings result;
 
-    result.radial_position_error_maximum_threshold = decode8(
+    result.radial_position_error_maximum_threshold = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.probability_of_false_alarm = decode8(
+    ) >> 0) & 0xff;
+    result.probability_of_false_alarm = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.probability_of_missed_detection = decode8(
+    ) >> 0) & 0xff;
+    result.probability_of_missed_detection = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.pseudorange_residual_filtering_time_constant = decode8(
+    ) >> 0) & 0xff;
+    result.pseudorange_residual_filtering_time_constant = (decode8(
         &message.payload[3]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int GNSSPseudorangeErrorStatistics::BYTE_LENGTH;
+const int GNSSPseudorangeErrorStatistics::ID;
+
 GNSSPseudorangeErrorStatistics GNSSPseudorangeErrorStatistics::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3260,32 +3497,35 @@ GNSSPseudorangeErrorStatistics GNSSPseudorangeErrorStatistics::fromMessage(Messa
 
     GNSSPseudorangeErrorStatistics result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.rms_std_dev_of_range_inputs = decode16(
+    ) >> 0) & 0xff;
+    result.rms_std_dev_of_range_inputs = (decode16(
         &message.payload[1]
-    ) >> 0;
-    result.std_dev_of_major_error_ellipse = decode8(
+    ) >> 0) & 0xffff;
+    result.std_dev_of_major_error_ellipse = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result.std_dev_of_minor_error_ellipse = decode8(
+    ) >> 0) & 0xff;
+    result.std_dev_of_minor_error_ellipse = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.orientation_of_error_ellipse = decode8(
+    ) >> 0) & 0xff;
+    result.orientation_of_error_ellipse = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.std_dev_lat_error = decode8(
+    ) >> 0) & 0xff;
+    result.std_dev_lat_error = (decode8(
         &message.payload[6]
-    ) >> 0;
-    result.std_dev_lon_error = decode8(
+    ) >> 0) & 0xff;
+    result.std_dev_lon_error = (decode8(
         &message.payload[7]
-    ) >> 0;
-    result.std_dev_alt_error = decode8(
+    ) >> 0) & 0xff;
+    result.std_dev_alt_error = (decode8(
         &message.payload[8]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int DGNSSCorrections::BYTE_LENGTH;
+const int DGNSSCorrections::ID;
+
 DGNSSCorrections DGNSSCorrections::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3296,41 +3536,44 @@ DGNSSCorrections DGNSSCorrections::fromMessage(Message const& message) {
 
     DGNSSCorrections result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.reference_station_id = decode16(
+    ) >> 0) & 0xff;
+    result.reference_station_id = (decode16(
         &message.payload[1]
-    ) >> 0;
-    result.reference_station_type = decode16(
+    ) >> 0) & 0xffff;
+    result.reference_station_type = (decode16(
         &message.payload[3]
-    ) >> 0;
-    result.time_of_corrections = decode8(
+    ) >> 0) & 0xffff;
+    result.time_of_corrections = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.station_health = decode8(
+    ) >> 0) & 0xff;
+    result.station_health = (decode8(
         &message.payload[6]
-    ) >> 0;
-    result.reserved_bits = decode8(
+    ) >> 0) & 0xff;
+    result.reserved_bits = (decode8(
         &message.payload[7]
-    ) >> 0;
-    result.satellite_id = decode8(
+    ) >> 0) & 0xff;
+    result.satellite_id = (decode8(
         &message.payload[8]
-    ) >> 0;
-    result.prc = decode8(
+    ) >> 0) & 0xff;
+    result.prc = (decode8(
         &message.payload[9]
-    ) >> 0;
-    result.rrc = decode8(
+    ) >> 0) & 0xff;
+    result.rrc = (decode8(
         &message.payload[10]
-    ) >> 0;
-    result.udre = decode8(
+    ) >> 0) & 0xff;
+    result.udre = (decode8(
         &message.payload[11]
-    ) >> 0;
-    result.iod = decode8(
+    ) >> 0) & 0xff;
+    result.iod = (decode8(
         &message.payload[12]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int GNSSDifferentialCorrectionReceiverInterface::BYTE_LENGTH;
+const int GNSSDifferentialCorrectionReceiverInterface::ID;
+
 GNSSDifferentialCorrectionReceiverInterface GNSSDifferentialCorrectionReceiverInterface::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3341,26 +3584,29 @@ GNSSDifferentialCorrectionReceiverInterface GNSSDifferentialCorrectionReceiverIn
 
     GNSSDifferentialCorrectionReceiverInterface result;
 
-    result.channel = decode8(
+    result.channel = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.frequency = decode8(
+    ) >> 0) & 0xff;
+    result.frequency = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.serial_interface_bit_rate = decode8(
+    ) >> 0) & 0xff;
+    result.serial_interface_bit_rate = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.serial_interface_detection_mode = decode8(
+    ) >> 0) & 0xff;
+    result.serial_interface_detection_mode = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result.differential_source = decode8(
+    ) >> 0) & 0xff;
+    result.differential_source = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.differential_operation_mode = decode8(
+    ) >> 0) & 0xff;
+    result.differential_operation_mode = (decode8(
         &message.payload[5]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int GNSSDifferentialCorrectionReceiverSignal::BYTE_LENGTH;
+const int GNSSDifferentialCorrectionReceiverSignal::ID;
+
 GNSSDifferentialCorrectionReceiverSignal GNSSDifferentialCorrectionReceiverSignal::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3371,50 +3617,53 @@ GNSSDifferentialCorrectionReceiverSignal GNSSDifferentialCorrectionReceiverSigna
 
     GNSSDifferentialCorrectionReceiverSignal result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.channel = decode8(
+    ) >> 0) & 0xff;
+    result.channel = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.signal_strength = decode8(
+    ) >> 0) & 0xff;
+    result.signal_strength = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.signal_snr = decode8(
+    ) >> 0) & 0xff;
+    result.signal_snr = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result.frequency = decode8(
+    ) >> 0) & 0xff;
+    result.frequency = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.station_type = decode8(
+    ) >> 0) & 0xff;
+    result.station_type = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.station_id = decode8(
+    ) >> 0) & 0xff;
+    result.station_id = (decode8(
         &message.payload[6]
-    ) >> 0;
-    result.differential_signal_bit_rate = decode8(
+    ) >> 0) & 0xff;
+    result.differential_signal_bit_rate = (decode8(
         &message.payload[7]
-    ) >> 0;
-    result.differential_signal_detection_mode = decode8(
+    ) >> 0) & 0xff;
+    result.differential_signal_detection_mode = (decode8(
         &message.payload[8]
-    ) >> 0;
-    result.used_as_correction_source = decode8(
+    ) >> 0) & 0xff;
+    result.used_as_correction_source = (decode8(
         &message.payload[9]
-    ) >> 0;
-    result.reserved = decode8(
+    ) >> 0) & 0xff;
+    result.reserved = (decode8(
         &message.payload[10]
-    ) >> 0;
-    result.differential_source = decode8(
+    ) >> 0) & 0xff;
+    result.differential_source = (decode8(
         &message.payload[11]
-    ) >> 0;
-    result.time_since_last_sat_differential_sync = decode8(
+    ) >> 0) & 0xff;
+    result.time_since_last_sat_differential_sync = (decode8(
         &message.payload[12]
-    ) >> 0;
-    result.satellite_service_id_no_ = decode8(
+    ) >> 0) & 0xff;
+    result.satellite_service_id_no_ = (decode8(
         &message.payload[13]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int GLONASSAlmanacData::BYTE_LENGTH;
+const int GLONASSAlmanacData::ID;
+
 GLONASSAlmanacData GLONASSAlmanacData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3425,47 +3674,50 @@ GLONASSAlmanacData GLONASSAlmanacData::fromMessage(Message const& message) {
 
     GLONASSAlmanacData result;
 
-    result.prn = decode8(
+    result.prn = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.na = decode8(
+    ) >> 0) & 0xff;
+    result.na = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.cna = decode8(
+    ) >> 0) & 0xff;
+    result.cna = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.hna = decode8(
+    ) >> 0) & 0xff;
+    result.hna = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result._epsilon_na = decode8(
+    ) >> 0) & 0xff;
+    result._epsilon_na = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result._deltatna_dot = decode8(
+    ) >> 0) & 0xff;
+    result._deltatna_dot = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result._omega_na = decode8(
+    ) >> 0) & 0xff;
+    result._omega_na = (decode8(
         &message.payload[6]
-    ) >> 0;
-    result._delta_tna = decode8(
+    ) >> 0) & 0xff;
+    result._delta_tna = (decode8(
         &message.payload[7]
-    ) >> 0;
-    result.tna = decode8(
+    ) >> 0) & 0xff;
+    result.tna = (decode8(
         &message.payload[8]
-    ) >> 0;
-    result._lambda_na = decode8(
+    ) >> 0) & 0xff;
+    result._lambda_na = (decode8(
         &message.payload[9]
-    ) >> 0;
-    result._delta_ina = decode8(
+    ) >> 0) & 0xff;
+    result._delta_ina = (decode8(
         &message.payload[10]
-    ) >> 0;
-    result.tca = decode8(
+    ) >> 0) & 0xff;
+    result.tca = (decode8(
         &message.payload[11]
-    ) >> 0;
-    result.tna1 = decode8(
+    ) >> 0) & 0xff;
+    result.tna1 = (decode8(
         &message.payload[12]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int AISDGNSSBroadcastBinaryMessage::BYTE_LENGTH;
+const int AISDGNSSBroadcastBinaryMessage::ID;
+
 AISDGNSSBroadcastBinaryMessage AISDGNSSBroadcastBinaryMessage::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3476,41 +3728,44 @@ AISDGNSSBroadcastBinaryMessage AISDGNSSBroadcastBinaryMessage::fromMessage(Messa
 
     AISDGNSSBroadcastBinaryMessage result;
 
-    result.message_id = decode8(
+    result.message_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0xff;
+    result.repeat_indicator = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.source_id = decode8(
+    ) >> 0) & 0xff;
+    result.source_id = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.nmea_2000_reserved = decode8(
+    ) >> 0) & 0xff;
+    result.nmea_2000_reserved = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result.ais_tranceiver_information = decode8(
+    ) >> 0) & 0xff;
+    result.ais_tranceiver_information = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.spare = decode8(
+    ) >> 0) & 0xff;
+    result.spare = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.longitude = decode8(
+    ) >> 0) & 0xff;
+    result.longitude = (decode8(
         &message.payload[6]
-    ) >> 0;
-    result.latitude = decode8(
+    ) >> 0) & 0xff;
+    result.latitude = (decode8(
         &message.payload[7]
-    ) >> 0;
-    result.nmea_2000_reserved1 = decode8(
+    ) >> 0) & 0xff;
+    result.nmea_2000_reserved1 = (decode8(
         &message.payload[8]
-    ) >> 0;
-    result.spare1 = decode8(
+    ) >> 0) & 0xff;
+    result.spare1 = (decode8(
         &message.payload[9]
-    ) >> 0;
-    result.number_of_bits_in_binary_data_field = decode8(
+    ) >> 0) & 0xff;
+    result.number_of_bits_in_binary_data_field = (decode8(
         &message.payload[10]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int AISUTCAndDateReport::BYTE_LENGTH;
+const int AISUTCAndDateReport::ID;
+
 AISUTCAndDateReport AISUTCAndDateReport::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3521,12 +3776,12 @@ AISUTCAndDateReport AISUTCAndDateReport::fromMessage(Message const& message) {
 
     AISUTCAndDateReport result;
 
-    result.message_id = decode8(
+    result.message_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[0]
-    ) >> 6;
+    ) >> 6) & 0x3;
     auto user_id_raw = decode32(
         &message.payload[1]
     );
@@ -3545,29 +3800,32 @@ AISUTCAndDateReport AISUTCAndDateReport::fromMessage(Message const& message) {
     int32_t latitude_iraw =
         reinterpret_cast<int32_t const&>(latitude_raw);
     result.latitude = latitude_iraw * 1.0e-07;
-    result.position_accuracy = decode8(
+    result.position_accuracy = (decode8(
         &message.payload[13]
-    ) >> 0;
-    result.raim = decode8(
+    ) >> 0) & 0x1;
+    result.raim = (decode8(
         &message.payload[13]
-    ) >> 1;
+    ) >> 1) & 0x1;
     auto position_time_raw = decode32(
         &message.payload[14]
     );
     uint32_t position_time_iraw =
         reinterpret_cast<uint32_t const&>(position_time_raw);
     result.position_time = position_time_iraw * 0.0001;
-    result.ais_transceiver_information = decode8(
+    result.ais_transceiver_information = (decode8(
         &message.payload[20]
-    ) >> 3;
-    result.position_date = decode16(
+    ) >> 3) & 0x1f;
+    result.position_date = (decode16(
         &message.payload[21]
-    ) >> 0;
-    result.gnss_type = decode8(
+    ) >> 0) & 0xffff;
+    result.gnss_type = (decode8(
         &message.payload[23]
-    ) >> 4;
+    ) >> 4) & 0xf;
     return result;
 }
+const int AISClassAStaticAndVoyageRelatedData::BYTE_LENGTH;
+const int AISClassAStaticAndVoyageRelatedData::ID;
+
 AISClassAStaticAndVoyageRelatedData AISClassAStaticAndVoyageRelatedData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3578,12 +3836,12 @@ AISClassAStaticAndVoyageRelatedData AISClassAStaticAndVoyageRelatedData::fromMes
 
     AISClassAStaticAndVoyageRelatedData result;
 
-    result.message_id = decode8(
+    result.message_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[0]
-    ) >> 6;
+    ) >> 6) & 0x3;
     auto user_id_raw = decode32(
         &message.payload[1]
     );
@@ -3596,9 +3854,9 @@ AISClassAStaticAndVoyageRelatedData AISClassAStaticAndVoyageRelatedData::fromMes
     result.imo_number = reinterpret_cast<int32_t const&>(
         imo_number_raw
     );
-    result.type_of_ship = decode8(
+    result.type_of_ship = (decode8(
         &message.payload[36]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto length_raw = decode16(
         &message.payload[37]
     );
@@ -3623,9 +3881,9 @@ AISClassAStaticAndVoyageRelatedData AISClassAStaticAndVoyageRelatedData::fromMes
     int16_t position_reference_from_bow_iraw =
         reinterpret_cast<int16_t const&>(position_reference_from_bow_raw);
     result.position_reference_from_bow = position_reference_from_bow_iraw * 0.1;
-    result.eta_date = decode16(
+    result.eta_date = (decode16(
         &message.payload[45]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto eta_time_raw = decode32(
         &message.payload[47]
     );
@@ -3638,20 +3896,23 @@ AISClassAStaticAndVoyageRelatedData AISClassAStaticAndVoyageRelatedData::fromMes
     int16_t draft_iraw =
         reinterpret_cast<int16_t const&>(draft_raw);
     result.draft = draft_iraw * 0.01;
-    result.ais_version_indicator = decode8(
+    result.ais_version_indicator = (decode8(
         &message.payload[73]
-    ) >> 0;
-    result.gnss_type = decode8(
+    ) >> 0) & 0x3;
+    result.gnss_type = (decode8(
         &message.payload[73]
-    ) >> 2;
-    result.dte = decode8(
+    ) >> 2) & 0xf;
+    result.dte = (decode8(
         &message.payload[73]
-    ) >> 6;
-    result.ais_transceiver_information = decode8(
+    ) >> 6) & 0x1;
+    result.ais_transceiver_information = (decode8(
         &message.payload[74]
-    ) >> 0;
+    ) >> 0) & 0x1f;
     return result;
 }
+const int AISAddressedBinaryMessage::BYTE_LENGTH;
+const int AISAddressedBinaryMessage::ID;
+
 AISAddressedBinaryMessage AISAddressedBinaryMessage::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3662,33 +3923,33 @@ AISAddressedBinaryMessage AISAddressedBinaryMessage::fromMessage(Message const& 
 
     AISAddressedBinaryMessage result;
 
-    result.message_id = decode8(
+    result.message_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[0]
-    ) >> 6;
+    ) >> 6) & 0x3;
     auto source_id_raw = decode32(
         &message.payload[1]
     );
     result.source_id = reinterpret_cast<int32_t const&>(
         source_id_raw
     );
-    result.ais_transceiver_information = decode8(
+    result.ais_transceiver_information = (decode8(
         &message.payload[5]
-    ) >> 1;
-    result.sequence_number = decode8(
+    ) >> 1) & 0x1f;
+    result.sequence_number = (decode8(
         &message.payload[5]
-    ) >> 6;
+    ) >> 6) & 0x3;
     auto destination_id_raw = decode32(
         &message.payload[6]
     );
     result.destination_id = reinterpret_cast<int32_t const&>(
         destination_id_raw
     );
-    result.retransmit_flag = decode8(
+    result.retransmit_flag = (decode8(
         &message.payload[10]
-    ) >> 6;
+    ) >> 6) & 0x1;
     auto number_of_bits_in_binary_data_field_raw = decode16(
         &message.payload[11]
     );
@@ -3697,6 +3958,9 @@ AISAddressedBinaryMessage AISAddressedBinaryMessage::fromMessage(Message const& 
     );
     return result;
 }
+const int AISAcknowledge::BYTE_LENGTH;
+const int AISAcknowledge::ID;
+
 AISAcknowledge AISAcknowledge::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3707,23 +3971,26 @@ AISAcknowledge AISAcknowledge::fromMessage(Message const& message) {
 
     AISAcknowledge result;
 
-    result.message_id = decode8(
+    result.message_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[0]
-    ) >> 6;
-    result.source_id = decode32(
+    ) >> 6) & 0x3;
+    result.source_id = (decode32(
         &message.payload[1]
-    ) >> 0;
-    result.ais_transceiver_information = decode8(
+    ) >> 0) & 0xffffffff;
+    result.ais_transceiver_information = (decode8(
         &message.payload[5]
-    ) >> 1;
-    result.destination_id_number1 = decode32(
+    ) >> 1) & 0x1f;
+    result.destination_id_number1 = (decode32(
         &message.payload[6]
-    ) >> 0;
+    ) >> 0) & 0xffffffff;
     return result;
 }
+const int AISBinaryBroadcastMessage::BYTE_LENGTH;
+const int AISBinaryBroadcastMessage::ID;
+
 AISBinaryBroadcastMessage AISBinaryBroadcastMessage::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3734,23 +4001,26 @@ AISBinaryBroadcastMessage AISBinaryBroadcastMessage::fromMessage(Message const& 
 
     AISBinaryBroadcastMessage result;
 
-    result.message_id = decode8(
+    result.message_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[0]
-    ) >> 6;
-    result.source_id = decode32(
+    ) >> 6) & 0x3;
+    result.source_id = (decode32(
         &message.payload[1]
-    ) >> 0;
-    result.ais_transceiver_information = decode8(
+    ) >> 0) & 0xffffffff;
+    result.ais_transceiver_information = (decode8(
         &message.payload[5]
-    ) >> 1;
-    result.number_of_bits_in_binary_data_field = decode16(
+    ) >> 1) & 0x1f;
+    result.number_of_bits_in_binary_data_field = (decode16(
         &message.payload[6]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     return result;
 }
+const int AISSARAircraftPositionReport::BYTE_LENGTH;
+const int AISSARAircraftPositionReport::ID;
+
 AISSARAircraftPositionReport AISSARAircraftPositionReport::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3761,12 +4031,12 @@ AISSARAircraftPositionReport AISSARAircraftPositionReport::fromMessage(Message c
 
     AISSARAircraftPositionReport result;
 
-    result.message_id = decode8(
+    result.message_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[0]
-    ) >> 6;
+    ) >> 6) & 0x3;
     auto user_id_raw = decode32(
         &message.payload[1]
     );
@@ -3785,15 +4055,15 @@ AISSARAircraftPositionReport AISSARAircraftPositionReport::fromMessage(Message c
     int32_t latitude_iraw =
         reinterpret_cast<int32_t const&>(latitude_raw);
     result.latitude = latitude_iraw * 1.0e-07;
-    result.position_accuracy = decode8(
+    result.position_accuracy = (decode8(
         &message.payload[13]
-    ) >> 0;
-    result.raim = decode8(
+    ) >> 0) & 0x1;
+    result.raim = (decode8(
         &message.payload[13]
-    ) >> 1;
-    result.time_stamp = decode8(
+    ) >> 1) & 0x1;
+    result.time_stamp = (decode8(
         &message.payload[13]
-    ) >> 2;
+    ) >> 2) & 0x3f;
     auto cog_raw = decode16(
         &message.payload[14]
     );
@@ -3806,23 +4076,26 @@ AISSARAircraftPositionReport AISSARAircraftPositionReport::fromMessage(Message c
     uint16_t sog_iraw =
         reinterpret_cast<uint16_t const&>(sog_raw);
     result.sog = sog_iraw * 0.1;
-    result.ais_transceiver_information = decode8(
+    result.ais_transceiver_information = (decode8(
         &message.payload[20]
-    ) >> 3;
+    ) >> 3) & 0x1f;
     auto altitude_raw = decode64(
         &message.payload[21]
     );
     int64_t altitude_iraw =
         reinterpret_cast<int64_t const&>(altitude_raw);
     result.altitude = altitude_iraw * 1.0;
-    result.reserved_for_regional_applications = decode8(
+    result.reserved_for_regional_applications = (decode8(
         &message.payload[29]
-    ) >> 0;
-    result.dte = decode8(
+    ) >> 0) & 0xff;
+    result.dte = (decode8(
         &message.payload[30]
-    ) >> 0;
+    ) >> 0) & 0x1;
     return result;
 }
+const int RadioFrequencyModePower::BYTE_LENGTH;
+const int RadioFrequencyModePower::ID;
+
 RadioFrequencyModePower RadioFrequencyModePower::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3845,20 +4118,23 @@ RadioFrequencyModePower RadioFrequencyModePower::fromMessage(Message const& mess
     int32_t tx_frequency_iraw =
         reinterpret_cast<int32_t const&>(tx_frequency_raw);
     result.tx_frequency = tx_frequency_iraw * 10.0;
-    result.radio_channel = decode8(
+    result.radio_channel = (decode8(
         &message.payload[8]
-    ) >> 0;
-    result.tx_power = decode8(
+    ) >> 0) & 0xff;
+    result.tx_power = (decode8(
         &message.payload[9]
-    ) >> 0;
-    result.mode = decode8(
+    ) >> 0) & 0xff;
+    result.mode = (decode8(
         &message.payload[10]
-    ) >> 0;
-    result.channel_bandwidth = decode8(
+    ) >> 0) & 0xff;
+    result.channel_bandwidth = (decode8(
         &message.payload[11]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int AISUTCDateInquiry::BYTE_LENGTH;
+const int AISUTCDateInquiry::ID;
+
 AISUTCDateInquiry AISUTCDateInquiry::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3869,23 +4145,26 @@ AISUTCDateInquiry AISUTCDateInquiry::fromMessage(Message const& message) {
 
     AISUTCDateInquiry result;
 
-    result.message_id = decode8(
+    result.message_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[0]
-    ) >> 6;
-    result.source_id = decode32(
+    ) >> 6) & 0x3;
+    result.source_id = (decode32(
         &message.payload[1]
-    ) >> 0;
-    result.ais_transceiver_information = decode8(
+    ) >> 0) & 0x3fffffff;
+    result.ais_transceiver_information = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.destination_id = decode32(
+    ) >> 0) & 0x1f;
+    result.destination_id = (decode32(
         &message.payload[6]
-    ) >> 0;
+    ) >> 0) & 0x3fffffff;
     return result;
 }
+const int AISAddressedSafetyRelatedMessage::BYTE_LENGTH;
+const int AISAddressedSafetyRelatedMessage::ID;
+
 AISAddressedSafetyRelatedMessage AISAddressedSafetyRelatedMessage::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3896,29 +4175,32 @@ AISAddressedSafetyRelatedMessage AISAddressedSafetyRelatedMessage::fromMessage(M
 
     AISAddressedSafetyRelatedMessage result;
 
-    result.message_id = decode8(
+    result.message_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[0]
-    ) >> 6;
-    result.source_id = decode32(
+    ) >> 6) & 0x3;
+    result.source_id = (decode32(
         &message.payload[1]
-    ) >> 0;
-    result.ais_transceiver_information = decode8(
+    ) >> 0) & 0xffffffff;
+    result.ais_transceiver_information = (decode8(
         &message.payload[5]
-    ) >> 1;
-    result.sequence_number = decode8(
+    ) >> 1) & 0x1f;
+    result.sequence_number = (decode8(
         &message.payload[5]
-    ) >> 6;
-    result.destination_id = decode32(
+    ) >> 6) & 0x3;
+    result.destination_id = (decode32(
         &message.payload[6]
-    ) >> 0;
-    result.retransmit_flag = decode8(
+    ) >> 0) & 0xffffffff;
+    result.retransmit_flag = (decode8(
         &message.payload[10]
-    ) >> 6;
+    ) >> 6) & 0x1;
     return result;
 }
+const int AISSafetyRelatedBroadcastMessage::BYTE_LENGTH;
+const int AISSafetyRelatedBroadcastMessage::ID;
+
 AISSafetyRelatedBroadcastMessage AISSafetyRelatedBroadcastMessage::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3929,17 +4211,20 @@ AISSafetyRelatedBroadcastMessage AISSafetyRelatedBroadcastMessage::fromMessage(M
 
     AISSafetyRelatedBroadcastMessage result;
 
-    result.message_id = decode8(
+    result.message_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[0]
-    ) >> 6;
-    result.ais_transceiver_information = decode8(
+    ) >> 6) & 0x3;
+    result.ais_transceiver_information = (decode8(
         &message.payload[5]
-    ) >> 0;
+    ) >> 0) & 0x1f;
     return result;
 }
+const int AISInterrogation::BYTE_LENGTH;
+const int AISInterrogation::ID;
+
 AISInterrogation AISInterrogation::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3950,15 +4235,15 @@ AISInterrogation AISInterrogation::fromMessage(Message const& message) {
 
     AISInterrogation result;
 
-    result.message_id = decode8(
+    result.message_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[0]
-    ) >> 6;
-    result.ais_transceiver_information = decode8(
+    ) >> 6) & 0x3;
+    result.ais_transceiver_information = (decode8(
         &message.payload[5]
-    ) >> 0;
+    ) >> 0) & 0x1f;
     auto message_id_a_raw = decode8(
         &message.payload[10]
     );
@@ -3973,6 +4258,9 @@ AISInterrogation AISInterrogation::fromMessage(Message const& message) {
     );
     return result;
 }
+const int AISAssignmentModeCommand::BYTE_LENGTH;
+const int AISAssignmentModeCommand::ID;
+
 AISAssignmentModeCommand AISAssignmentModeCommand::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -3983,21 +4271,21 @@ AISAssignmentModeCommand AISAssignmentModeCommand::fromMessage(Message const& me
 
     AISAssignmentModeCommand result;
 
-    result.message_id = decode8(
+    result.message_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[0]
-    ) >> 6;
+    ) >> 6) & 0x3;
     auto source_id_raw = decode32(
         &message.payload[1]
     );
     result.source_id = reinterpret_cast<int32_t const&>(
         source_id_raw
     );
-    result.ais_transceiver_information = decode8(
+    result.ais_transceiver_information = (decode8(
         &message.payload[5]
-    ) >> 1;
+    ) >> 1) & 0x1f;
     auto destination_id_raw = decode32(
         &message.payload[6]
     );
@@ -4018,6 +4306,9 @@ AISAssignmentModeCommand AISAssignmentModeCommand::fromMessage(Message const& me
     );
     return result;
 }
+const int AISDataLinkManagementMessage::BYTE_LENGTH;
+const int AISDataLinkManagementMessage::ID;
+
 AISDataLinkManagementMessage AISDataLinkManagementMessage::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4028,17 +4319,20 @@ AISDataLinkManagementMessage AISDataLinkManagementMessage::fromMessage(Message c
 
     AISDataLinkManagementMessage result;
 
-    result.message_id = decode8(
+    result.message_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[0]
-    ) >> 6;
-    result.ais_transceiver_information = decode8(
+    ) >> 6) & 0x3;
+    result.ais_transceiver_information = (decode8(
         &message.payload[5]
-    ) >> 0;
+    ) >> 0) & 0x1f;
     return result;
 }
+const int AISChannelManagement::BYTE_LENGTH;
+const int AISChannelManagement::ID;
+
 AISChannelManagement AISChannelManagement::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4049,24 +4343,24 @@ AISChannelManagement AISChannelManagement::fromMessage(Message const& message) {
 
     AISChannelManagement result;
 
-    result.message_id = decode8(
+    result.message_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[0]
-    ) >> 6;
-    result.ais_transceiver_information = decode8(
+    ) >> 6) & 0x3;
+    result.ais_transceiver_information = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.channel_a = decode8(
+    ) >> 0) & 0x1f;
+    result.channel_a = (decode8(
         &message.payload[6]
-    ) >> 0;
-    result.channel_b = decode8(
+    ) >> 0) & 0x7f;
+    result.channel_b = (decode8(
         &message.payload[6]
-    ) >> 7;
-    result.power = decode8(
+    ) >> 7) & 0x7f;
+    result.power = (decode8(
         &message.payload[8]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto tx_rx_mode_raw = decode8(
         &message.payload[9]
     );
@@ -4097,14 +4391,17 @@ AISChannelManagement AISChannelManagement::fromMessage(Message const& message) {
     int32_t south_west_latitude_corner_2_iraw =
         reinterpret_cast<int32_t const&>(south_west_latitude_corner_2_raw);
     result.south_west_latitude_corner_2 = south_west_latitude_corner_2_iraw * 1.0e-07;
-    result.addressed_or_broadcast_message_indicator = decode8(
+    result.addressed_or_broadcast_message_indicator = (decode8(
         &message.payload[26]
-    ) >> 6;
-    result.transitional_zone_size = decode8(
+    ) >> 6) & 0x3;
+    result.transitional_zone_size = (decode8(
         &message.payload[29]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int AISClassBGroupAssignment::BYTE_LENGTH;
+const int AISClassBGroupAssignment::ID;
+
 AISClassBGroupAssignment AISClassBGroupAssignment::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4115,12 +4412,12 @@ AISClassBGroupAssignment AISClassBGroupAssignment::fromMessage(Message const& me
 
     AISClassBGroupAssignment result;
 
-    result.message_id = decode8(
+    result.message_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[0]
-    ) >> 6;
+    ) >> 6) & 0x3;
     auto north_east_longitude_corner_1_raw = decode32(
         &message.payload[6]
     );
@@ -4145,20 +4442,23 @@ AISClassBGroupAssignment AISClassBGroupAssignment::fromMessage(Message const& me
     int32_t south_west_latitude_corner_2_iraw =
         reinterpret_cast<int32_t const&>(south_west_latitude_corner_2_raw);
     result.south_west_latitude_corner_2 = south_west_latitude_corner_2_iraw * 1.0e-07;
-    result.station_type = decode8(
+    result.station_type = (decode8(
         &message.payload[22]
-    ) >> 0;
-    result.ship_and_cargo_filter = decode8(
+    ) >> 0) & 0xff;
+    result.ship_and_cargo_filter = (decode8(
         &message.payload[23]
-    ) >> 2;
-    result.reporting_interval = decode16(
+    ) >> 2) & 0x3f;
+    result.reporting_interval = (decode16(
         &message.payload[24]
-    ) >> 2;
-    result.quiet_time = decode16(
+    ) >> 2) & 0xffff;
+    result.quiet_time = (decode16(
         &message.payload[26]
-    ) >> 2;
+    ) >> 2) & 0xffff;
     return result;
 }
+const int DSCCallInformation::BYTE_LENGTH;
+const int DSCCallInformation::ID;
+
 DSCCallInformation DSCCallInformation::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4169,30 +4469,30 @@ DSCCallInformation DSCCallInformation::fromMessage(Message const& message) {
 
     DSCCallInformation result;
 
-    result.dsc_format_symbol = decode8(
+    result.dsc_format_symbol = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.dsc_category_symbol = decode8(
+    ) >> 0) & 0xff;
+    result.dsc_category_symbol = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.dsc_message_address = decode8(
+    ) >> 0) & 0xff;
+    result.dsc_message_address = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.nature_of_distress_or_1st_telecommand = decode8(
+    ) >> 0) & 0xff;
+    result.nature_of_distress_or_1st_telecommand = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result.subsequent_communication_mode_or_2nd_telecommand = decode8(
+    ) >> 0) & 0xff;
+    result.subsequent_communication_mode_or_2nd_telecommand = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.proposed_rx_frequency_channel = decode8(
+    ) >> 0) & 0xff;
+    result.proposed_rx_frequency_channel = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.proposed_tx_frequency_channel = decode8(
+    ) >> 0) & 0xff;
+    result.proposed_tx_frequency_channel = (decode8(
         &message.payload[6]
-    ) >> 0;
-    result.telephone_number = decode8(
+    ) >> 0) & 0xff;
+    result.telephone_number = (decode8(
         &message.payload[7]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto latitude_of_vessel_reported_raw = decode32(
         &message.payload[8]
     );
@@ -4217,38 +4517,41 @@ DSCCallInformation DSCCallInformation::fromMessage(Message const& message) {
     result.user_id_of_ship_in_distress = reinterpret_cast<int32_t const&>(
         user_id_of_ship_in_distress_raw
     );
-    result.dsc_eos_symbol = decode8(
+    result.dsc_eos_symbol = (decode8(
         &message.payload[24]
-    ) >> 0;
-    result.expansion_enabled = decode8(
+    ) >> 0) & 0xff;
+    result.expansion_enabled = (decode8(
         &message.payload[25]
-    ) >> 0;
-    result.calling_rx_frequency_channel = decode8(
+    ) >> 0) & 0xff;
+    result.calling_rx_frequency_channel = (decode8(
         &message.payload[26]
-    ) >> 0;
-    result.calling_tx_frequency_channel = decode8(
+    ) >> 0) & 0xff;
+    result.calling_tx_frequency_channel = (decode8(
         &message.payload[27]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto time_of_receipt_raw = decode32(
         &message.payload[28]
     );
     uint32_t time_of_receipt_iraw =
         reinterpret_cast<uint32_t const&>(time_of_receipt_raw);
     result.time_of_receipt = time_of_receipt_iraw * 0.0001;
-    result.date_of_receipt = decode16(
+    result.date_of_receipt = (decode16(
         &message.payload[32]
-    ) >> 0;
-    result.dsc_equipment_assigned_message_id = decode8(
+    ) >> 0) & 0xffff;
+    result.dsc_equipment_assigned_message_id = (decode8(
         &message.payload[34]
-    ) >> 0;
-    result.dsc_expansion_field_symbol = decode8(
+    ) >> 0) & 0xff;
+    result.dsc_expansion_field_symbol = (decode8(
         &message.payload[35]
-    ) >> 0;
-    result.dsc_expansion_field_data = decode8(
+    ) >> 0) & 0xff;
+    result.dsc_expansion_field_data = (decode8(
         &message.payload[36]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int AISClassBStaticDataMsg24PartA::BYTE_LENGTH;
+const int AISClassBStaticDataMsg24PartA::ID;
+
 AISClassBStaticDataMsg24PartA AISClassBStaticDataMsg24PartA::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4259,12 +4562,12 @@ AISClassBStaticDataMsg24PartA AISClassBStaticDataMsg24PartA::fromMessage(Message
 
     AISClassBStaticDataMsg24PartA result;
 
-    result.message_id = decode8(
+    result.message_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[0]
-    ) >> 6;
+    ) >> 6) & 0x3;
     auto user_id_raw = decode32(
         &message.payload[1]
     );
@@ -4273,6 +4576,9 @@ AISClassBStaticDataMsg24PartA AISClassBStaticDataMsg24PartA::fromMessage(Message
     );
     return result;
 }
+const int AISClassBStaticDataMsg24PartB::BYTE_LENGTH;
+const int AISClassBStaticDataMsg24PartB::ID;
+
 AISClassBStaticDataMsg24PartB AISClassBStaticDataMsg24PartB::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4283,21 +4589,21 @@ AISClassBStaticDataMsg24PartB AISClassBStaticDataMsg24PartB::fromMessage(Message
 
     AISClassBStaticDataMsg24PartB result;
 
-    result.message_id = decode8(
+    result.message_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[0]
-    ) >> 6;
+    ) >> 6) & 0x3;
     auto user_id_raw = decode32(
         &message.payload[1]
     );
     result.user_id = reinterpret_cast<int32_t const&>(
         user_id_raw
     );
-    result.type_of_ship = decode8(
+    result.type_of_ship = (decode8(
         &message.payload[5]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto length_raw = decode16(
         &message.payload[20]
     );
@@ -4330,6 +4636,9 @@ AISClassBStaticDataMsg24PartB AISClassBStaticDataMsg24PartB::fromMessage(Message
     );
     return result;
 }
+const int RouteAndWPServiceDatabaseList::BYTE_LENGTH;
+const int RouteAndWPServiceDatabaseList::ID;
+
 RouteAndWPServiceDatabaseList RouteAndWPServiceDatabaseList::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4340,41 +4649,44 @@ RouteAndWPServiceDatabaseList RouteAndWPServiceDatabaseList::fromMessage(Message
 
     RouteAndWPServiceDatabaseList result;
 
-    result.start_database_id = decode8(
+    result.start_database_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.nitems = decode8(
+    ) >> 0) & 0xff;
+    result.nitems = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.number_of_databases_available = decode8(
+    ) >> 0) & 0xff;
+    result.number_of_databases_available = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.database_id = decode8(
+    ) >> 0) & 0xff;
+    result.database_id = (decode8(
         &message.payload[3]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto database_timestamp_raw = decode32(
         &message.payload[12]
     );
     uint32_t database_timestamp_iraw =
         reinterpret_cast<uint32_t const&>(database_timestamp_raw);
     result.database_timestamp = database_timestamp_iraw * 0.0001;
-    result.database_datestamp = decode16(
+    result.database_datestamp = (decode16(
         &message.payload[16]
-    ) >> 0;
-    result.wp_position_resolution = decode8(
+    ) >> 0) & 0xffff;
+    result.wp_position_resolution = (decode8(
         &message.payload[18]
-    ) >> 0;
-    result.number_of_routes_in_database = decode16(
+    ) >> 0) & 0x3f;
+    result.number_of_routes_in_database = (decode16(
         &message.payload[19]
-    ) >> 0;
-    result.number_of_wps_in_database = decode16(
+    ) >> 0) & 0xffff;
+    result.number_of_wps_in_database = (decode16(
         &message.payload[21]
-    ) >> 0;
-    result.number_of_bytes_in_database = decode16(
+    ) >> 0) & 0xffff;
+    result.number_of_bytes_in_database = (decode16(
         &message.payload[23]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     return result;
 }
+const int RouteAndWPServiceRouteList::BYTE_LENGTH;
+const int RouteAndWPServiceRouteList::ID;
+
 RouteAndWPServiceRouteList RouteAndWPServiceRouteList::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4385,29 +4697,32 @@ RouteAndWPServiceRouteList RouteAndWPServiceRouteList::fromMessage(Message const
 
     RouteAndWPServiceRouteList result;
 
-    result.start_route_id = decode8(
+    result.start_route_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.nitems = decode8(
+    ) >> 0) & 0xff;
+    result.nitems = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.number_of_routes_in_database = decode8(
+    ) >> 0) & 0xff;
+    result.number_of_routes_in_database = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.database_id = decode8(
+    ) >> 0) & 0xff;
+    result.database_id = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result.route_id = decode8(
+    ) >> 0) & 0xff;
+    result.route_id = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.wp_identification_method = decode8(
+    ) >> 0) & 0xff;
+    result.wp_identification_method = (decode8(
         &message.payload[13]
-    ) >> 4;
-    result.route_status = decode8(
+    ) >> 4) & 0x3;
+    result.route_status = (decode8(
         &message.payload[13]
-    ) >> 6;
+    ) >> 6) & 0x3;
     return result;
 }
+const int RouteAndWPServiceRouteWPListAttributes::BYTE_LENGTH;
+const int RouteAndWPServiceRouteWPListAttributes::ID;
+
 RouteAndWPServiceRouteWPListAttributes RouteAndWPServiceRouteWPListAttributes::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4418,44 +4733,47 @@ RouteAndWPServiceRouteWPListAttributes RouteAndWPServiceRouteWPListAttributes::f
 
     RouteAndWPServiceRouteWPListAttributes result;
 
-    result.database_id = decode8(
+    result.database_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.route_id = decode8(
+    ) >> 0) & 0xff;
+    result.route_id = (decode8(
         &message.payload[1]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto route_wp_list_timestamp_raw = decode32(
         &message.payload[10]
     );
     uint32_t route_wp_list_timestamp_iraw =
         reinterpret_cast<uint32_t const&>(route_wp_list_timestamp_raw);
     result.route_wp_list_timestamp = route_wp_list_timestamp_iraw * 0.0001;
-    result.route_wp_list_datestamp = decode16(
+    result.route_wp_list_datestamp = (decode16(
         &message.payload[14]
-    ) >> 0;
-    result.change_at_last_timestamp = decode8(
+    ) >> 0) & 0xffff;
+    result.change_at_last_timestamp = (decode8(
         &message.payload[16]
-    ) >> 0;
-    result.number_of_wps_in_the_route_wp_list = decode16(
+    ) >> 0) & 0xff;
+    result.number_of_wps_in_the_route_wp_list = (decode16(
         &message.payload[17]
-    ) >> 0;
-    result.critical_supplementary_parameters = decode8(
+    ) >> 0) & 0xffff;
+    result.critical_supplementary_parameters = (decode8(
         &message.payload[19]
-    ) >> 0;
-    result.navigation_method = decode8(
+    ) >> 0) & 0xff;
+    result.navigation_method = (decode8(
         &message.payload[20]
-    ) >> 0;
-    result.wp_identification_method = decode8(
+    ) >> 0) & 0x3;
+    result.wp_identification_method = (decode8(
         &message.payload[20]
-    ) >> 2;
-    result.route_status = decode8(
+    ) >> 2) & 0x3;
+    result.route_status = (decode8(
         &message.payload[20]
-    ) >> 4;
-    result.xte_limit_for_the_route = decode16(
+    ) >> 4) & 0x3;
+    result.xte_limit_for_the_route = (decode16(
         &message.payload[20]
-    ) >> 6;
+    ) >> 6) & 0xffff;
     return result;
 }
+const int RouteAndWPServiceRouteWPNamePosition::BYTE_LENGTH;
+const int RouteAndWPServiceRouteWPNamePosition::ID;
+
 RouteAndWPServiceRouteWPNamePosition RouteAndWPServiceRouteWPNamePosition::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4466,24 +4784,24 @@ RouteAndWPServiceRouteWPNamePosition RouteAndWPServiceRouteWPNamePosition::fromM
 
     RouteAndWPServiceRouteWPNamePosition result;
 
-    result.start_rpsnumber = decode8(
+    result.start_rpsnumber = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.nitems = decode8(
+    ) >> 0) & 0xff;
+    result.nitems = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.number_of_wps_in_the_route_wp_list = decode16(
+    ) >> 0) & 0xff;
+    result.number_of_wps_in_the_route_wp_list = (decode16(
         &message.payload[2]
-    ) >> 0;
-    result.database_id = decode8(
+    ) >> 0) & 0xffff;
+    result.database_id = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.route_id = decode8(
+    ) >> 0) & 0xff;
+    result.route_id = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.wp_id = decode8(
+    ) >> 0) & 0xff;
+    result.wp_id = (decode8(
         &message.payload[6]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto wp_latitude_raw = decode32(
         &message.payload[15]
     );
@@ -4498,6 +4816,9 @@ RouteAndWPServiceRouteWPNamePosition RouteAndWPServiceRouteWPNamePosition::fromM
     result.wp_longitude = wp_longitude_iraw * 1.0e-07;
     return result;
 }
+const int RouteAndWPServiceRouteWPName::BYTE_LENGTH;
+const int RouteAndWPServiceRouteWPName::ID;
+
 RouteAndWPServiceRouteWPName RouteAndWPServiceRouteWPName::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4508,26 +4829,29 @@ RouteAndWPServiceRouteWPName RouteAndWPServiceRouteWPName::fromMessage(Message c
 
     RouteAndWPServiceRouteWPName result;
 
-    result.start_rpsnumber = decode8(
+    result.start_rpsnumber = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.nitems = decode8(
+    ) >> 0) & 0xff;
+    result.nitems = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.number_of_wps_in_the_route_wp_list = decode16(
+    ) >> 0) & 0xff;
+    result.number_of_wps_in_the_route_wp_list = (decode16(
         &message.payload[2]
-    ) >> 0;
-    result.database_id = decode8(
+    ) >> 0) & 0xffff;
+    result.database_id = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.route_id = decode8(
+    ) >> 0) & 0xff;
+    result.route_id = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.wp_id = decode8(
+    ) >> 0) & 0xff;
+    result.wp_id = (decode8(
         &message.payload[6]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int RouteAndWPServiceXTELimitNavigationMethod::BYTE_LENGTH;
+const int RouteAndWPServiceXTELimitNavigationMethod::ID;
+
 RouteAndWPServiceXTELimitNavigationMethod RouteAndWPServiceXTELimitNavigationMethod::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4538,32 +4862,35 @@ RouteAndWPServiceXTELimitNavigationMethod RouteAndWPServiceXTELimitNavigationMet
 
     RouteAndWPServiceXTELimitNavigationMethod result;
 
-    result.start_rpsnumber = decode8(
+    result.start_rpsnumber = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.nitems = decode8(
+    ) >> 0) & 0xff;
+    result.nitems = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.number_of_wps_with_a_specific_xte_limit_or_nav_method = decode16(
+    ) >> 0) & 0xff;
+    result.number_of_wps_with_a_specific_xte_limit_or_nav_method = (decode16(
         &message.payload[2]
-    ) >> 0;
-    result.database_id = decode8(
+    ) >> 0) & 0xffff;
+    result.database_id = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.route_id = decode8(
+    ) >> 0) & 0xff;
+    result.route_id = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.rpsnumber = decode8(
+    ) >> 0) & 0xff;
+    result.rpsnumber = (decode8(
         &message.payload[6]
-    ) >> 0;
-    result.xte_limit_in_the_leg_after_wp = decode16(
+    ) >> 0) & 0xff;
+    result.xte_limit_in_the_leg_after_wp = (decode16(
         &message.payload[7]
-    ) >> 0;
-    result.nav_method_in_the_leg_after_wp = decode8(
+    ) >> 0) & 0xffff;
+    result.nav_method_in_the_leg_after_wp = (decode8(
         &message.payload[9]
-    ) >> 0;
+    ) >> 0) & 0xf;
     return result;
 }
+const int RouteAndWPServiceWPComment::BYTE_LENGTH;
+const int RouteAndWPServiceWPComment::ID;
+
 RouteAndWPServiceWPComment RouteAndWPServiceWPComment::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4574,26 +4901,29 @@ RouteAndWPServiceWPComment RouteAndWPServiceWPComment::fromMessage(Message const
 
     RouteAndWPServiceWPComment result;
 
-    result.start_id = decode8(
+    result.start_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.nitems = decode8(
+    ) >> 0) & 0xff;
+    result.nitems = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.number_of_wps_with_comments = decode16(
+    ) >> 0) & 0xff;
+    result.number_of_wps_with_comments = (decode16(
         &message.payload[2]
-    ) >> 0;
-    result.database_id = decode8(
+    ) >> 0) & 0xffff;
+    result.database_id = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.route_id = decode8(
+    ) >> 0) & 0xff;
+    result.route_id = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.wp_id_rpsnumber = decode8(
+    ) >> 0) & 0xff;
+    result.wp_id_rpsnumber = (decode8(
         &message.payload[6]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int RouteAndWPServiceRouteComment::BYTE_LENGTH;
+const int RouteAndWPServiceRouteComment::ID;
+
 RouteAndWPServiceRouteComment RouteAndWPServiceRouteComment::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4604,23 +4934,26 @@ RouteAndWPServiceRouteComment RouteAndWPServiceRouteComment::fromMessage(Message
 
     RouteAndWPServiceRouteComment result;
 
-    result.start_route_id = decode8(
+    result.start_route_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.nitems = decode8(
+    ) >> 0) & 0xff;
+    result.nitems = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.number_of_routes_with_comments = decode16(
+    ) >> 0) & 0xff;
+    result.number_of_routes_with_comments = (decode16(
         &message.payload[2]
-    ) >> 0;
-    result.database_id = decode8(
+    ) >> 0) & 0xffff;
+    result.database_id = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.route_id = decode8(
+    ) >> 0) & 0xff;
+    result.route_id = (decode8(
         &message.payload[5]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int RouteAndWPServiceDatabaseComment::BYTE_LENGTH;
+const int RouteAndWPServiceDatabaseComment::ID;
+
 RouteAndWPServiceDatabaseComment RouteAndWPServiceDatabaseComment::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4631,20 +4964,23 @@ RouteAndWPServiceDatabaseComment RouteAndWPServiceDatabaseComment::fromMessage(M
 
     RouteAndWPServiceDatabaseComment result;
 
-    result.start_database_id = decode8(
+    result.start_database_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.nitems = decode8(
+    ) >> 0) & 0xff;
+    result.nitems = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.number_of_databases_with_comments = decode16(
+    ) >> 0) & 0xff;
+    result.number_of_databases_with_comments = (decode16(
         &message.payload[2]
-    ) >> 0;
-    result.database_id = decode8(
+    ) >> 0) & 0xffff;
+    result.database_id = (decode8(
         &message.payload[4]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int RouteAndWPServiceRadiusOfTurn::BYTE_LENGTH;
+const int RouteAndWPServiceRadiusOfTurn::ID;
+
 RouteAndWPServiceRadiusOfTurn RouteAndWPServiceRadiusOfTurn::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4655,29 +4991,32 @@ RouteAndWPServiceRadiusOfTurn RouteAndWPServiceRadiusOfTurn::fromMessage(Message
 
     RouteAndWPServiceRadiusOfTurn result;
 
-    result.start_rpsnumber = decode8(
+    result.start_rpsnumber = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.nitems = decode8(
+    ) >> 0) & 0xff;
+    result.nitems = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.number_of_wps_with_a_specific_radius_of_turn = decode16(
+    ) >> 0) & 0xff;
+    result.number_of_wps_with_a_specific_radius_of_turn = (decode16(
         &message.payload[2]
-    ) >> 0;
-    result.database_id = decode8(
+    ) >> 0) & 0xffff;
+    result.database_id = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.route_id = decode8(
+    ) >> 0) & 0xff;
+    result.route_id = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.rpsnumber = decode8(
+    ) >> 0) & 0xff;
+    result.rpsnumber = (decode8(
         &message.payload[6]
-    ) >> 0;
-    result.radius_of_turn = decode16(
+    ) >> 0) & 0xff;
+    result.radius_of_turn = (decode16(
         &message.payload[7]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     return result;
 }
+const int RouteAndWPServiceWPListWPNamePosition::BYTE_LENGTH;
+const int RouteAndWPServiceWPListWPNamePosition::ID;
+
 RouteAndWPServiceWPListWPNamePosition RouteAndWPServiceWPListWPNamePosition::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4688,24 +5027,24 @@ RouteAndWPServiceWPListWPNamePosition RouteAndWPServiceWPListWPNamePosition::fro
 
     RouteAndWPServiceWPListWPNamePosition result;
 
-    result.start_wp_id = decode8(
+    result.start_wp_id = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.nitems = decode8(
+    ) >> 0) & 0xff;
+    result.nitems = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.number_of_valid_wps_in_the_wp_list = decode16(
+    ) >> 0) & 0xff;
+    result.number_of_valid_wps_in_the_wp_list = (decode16(
         &message.payload[2]
-    ) >> 0;
-    result.database_id = decode8(
+    ) >> 0) & 0xffff;
+    result.database_id = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.reserved = decode8(
+    ) >> 0) & 0xff;
+    result.reserved = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.wp_id = decode8(
+    ) >> 0) & 0xff;
+    result.wp_id = (decode8(
         &message.payload[6]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto wp_latitude_raw = decode32(
         &message.payload[15]
     );
@@ -4720,6 +5059,9 @@ RouteAndWPServiceWPListWPNamePosition RouteAndWPServiceWPListWPNamePosition::fro
     result.wp_longitude = wp_longitude_iraw * 1.0e-07;
     return result;
 }
+const int WindData::BYTE_LENGTH;
+const int WindData::ID;
+
 WindData WindData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4730,9 +5072,9 @@ WindData WindData::fromMessage(Message const& message) {
 
     WindData result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto wind_speed_raw = decode16(
         &message.payload[1]
     );
@@ -4745,14 +5087,17 @@ WindData WindData::fromMessage(Message const& message) {
     uint16_t wind_angle_iraw =
         reinterpret_cast<uint16_t const&>(wind_angle_raw);
     result.wind_angle = wind_angle_iraw * 0.005729577951308233;
-    result.reference = decode8(
+    result.reference = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.reserved = decode32(
+    ) >> 0) & 0x7;
+    result.reserved = (decode32(
         &message.payload[5]
-    ) >> 3;
+    ) >> 3) & 0x7ffff;
     return result;
 }
+const int EnvironmentalParameters::BYTE_LENGTH;
+const int EnvironmentalParameters::ID;
+
 EnvironmentalParameters EnvironmentalParameters::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4763,9 +5108,9 @@ EnvironmentalParameters EnvironmentalParameters::fromMessage(Message const& mess
 
     EnvironmentalParameters result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto water_temperature_raw = decode16(
         &message.payload[1]
     );
@@ -4778,14 +5123,17 @@ EnvironmentalParameters EnvironmentalParameters::fromMessage(Message const& mess
     uint16_t outside_ambient_air_temperature_iraw =
         reinterpret_cast<uint16_t const&>(outside_ambient_air_temperature_raw);
     result.outside_ambient_air_temperature = outside_ambient_air_temperature_iraw * 0.01;
-    result.atmospheric_pressure = decode16(
+    result.atmospheric_pressure = (decode16(
         &message.payload[5]
-    ) >> 0;
-    result.reserved = decode8(
+    ) >> 0) & 0xffff;
+    result.reserved = (decode8(
         &message.payload[7]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int EnvironmentalParameters1::BYTE_LENGTH;
+const int EnvironmentalParameters1::ID;
+
 EnvironmentalParameters1 EnvironmentalParameters1::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4796,15 +5144,15 @@ EnvironmentalParameters1 EnvironmentalParameters1::fromMessage(Message const& me
 
     EnvironmentalParameters1 result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.temperature_instance = decode8(
+    ) >> 0) & 0xff;
+    result.temperature_instance = (decode8(
         &message.payload[1]
-    ) >> 0;
-    result.humidity_instance = decode8(
+    ) >> 0) & 0x3f;
+    result.humidity_instance = (decode8(
         &message.payload[1]
-    ) >> 6;
+    ) >> 6) & 0x3;
     auto temperature_raw = decode16(
         &message.payload[2]
     );
@@ -4817,11 +5165,14 @@ EnvironmentalParameters1 EnvironmentalParameters1::fromMessage(Message const& me
     int16_t humidity_iraw =
         reinterpret_cast<int16_t const&>(humidity_raw);
     result.humidity = humidity_iraw * 0.004;
-    result.atmospheric_pressure = decode16(
+    result.atmospheric_pressure = (decode16(
         &message.payload[6]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     return result;
 }
+const int Temperature::BYTE_LENGTH;
+const int Temperature::ID;
+
 Temperature Temperature::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4832,12 +5183,12 @@ Temperature Temperature::fromMessage(Message const& message) {
 
     Temperature result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.temperature_source = decode8(
+    ) >> 0) & 0xff;
+    result.temperature_source = (decode8(
         &message.payload[2]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto actual_temperature_raw = decode16(
         &message.payload[3]
     );
@@ -4850,11 +5201,14 @@ Temperature Temperature::fromMessage(Message const& message) {
     uint16_t set_temperature_iraw =
         reinterpret_cast<uint16_t const&>(set_temperature_raw);
     result.set_temperature = set_temperature_iraw * 0.01;
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[7]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int Humidity::BYTE_LENGTH;
+const int Humidity::ID;
+
 Humidity Humidity::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4865,23 +5219,26 @@ Humidity Humidity::fromMessage(Message const& message) {
 
     Humidity result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.humidity_source = decode8(
+    ) >> 0) & 0xff;
+    result.humidity_source = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.actual_humidity = decode16(
+    ) >> 0) & 0xff;
+    result.actual_humidity = (decode16(
         &message.payload[3]
-    ) >> 0;
-    result.set_humidity = decode16(
+    ) >> 0) & 0xffff;
+    result.set_humidity = (decode16(
         &message.payload[5]
-    ) >> 0;
-    result.reserved = decode8(
+    ) >> 0) & 0xffff;
+    result.reserved = (decode8(
         &message.payload[7]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int ActualPressure::BYTE_LENGTH;
+const int ActualPressure::ID;
+
 ActualPressure ActualPressure::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4892,12 +5249,12 @@ ActualPressure ActualPressure::fromMessage(Message const& message) {
 
     ActualPressure result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.pressure_source = decode8(
+    ) >> 0) & 0xff;
+    result.pressure_source = (decode8(
         &message.payload[2]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto pressure_raw = decode32(
         &message.payload[3]
     );
@@ -4906,6 +5263,9 @@ ActualPressure ActualPressure::fromMessage(Message const& message) {
     result.pressure = pressure_iraw * 0.1;
     return result;
 }
+const int SetPressure::BYTE_LENGTH;
+const int SetPressure::ID;
+
 SetPressure SetPressure::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4916,17 +5276,20 @@ SetPressure SetPressure::fromMessage(Message const& message) {
 
     SetPressure result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.pressure_source = decode8(
+    ) >> 0) & 0xff;
+    result.pressure_source = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.set_pressure = decode32(
+    ) >> 0) & 0xff;
+    result.set_pressure = (decode32(
         &message.payload[3]
-    ) >> 0;
+    ) >> 0) & 0xffffffff;
     return result;
 }
+const int TemperatureExtendedRange::BYTE_LENGTH;
+const int TemperatureExtendedRange::ID;
+
 TemperatureExtendedRange TemperatureExtendedRange::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4937,12 +5300,12 @@ TemperatureExtendedRange TemperatureExtendedRange::fromMessage(Message const& me
 
     TemperatureExtendedRange result;
 
-    result.sid = decode8(
+    result.sid = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.temperature_source = decode8(
+    ) >> 0) & 0xff;
+    result.temperature_source = (decode8(
         &message.payload[2]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto actual_temperature_raw = decode32(
         &message.payload[3]
     );
@@ -4957,6 +5320,9 @@ TemperatureExtendedRange TemperatureExtendedRange::fromMessage(Message const& me
     result.set_temperature = set_temperature_iraw * 0.1;
     return result;
 }
+const int TideStationData::BYTE_LENGTH;
+const int TideStationData::ID;
+
 TideStationData TideStationData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -4967,15 +5333,15 @@ TideStationData TideStationData::fromMessage(Message const& message) {
 
     TideStationData result;
 
-    result.mode = decode8(
+    result.mode = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.tide_tendency = decode8(
+    ) >> 0) & 0xf;
+    result.tide_tendency = (decode8(
         &message.payload[0]
-    ) >> 4;
-    result.measurement_date = decode16(
+    ) >> 4) & 0x3;
+    result.measurement_date = (decode16(
         &message.payload[1]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto measurement_time_raw = decode32(
         &message.payload[3]
     );
@@ -5008,6 +5374,9 @@ TideStationData TideStationData::fromMessage(Message const& message) {
     result.tide_level_standard_deviation = tide_level_standard_deviation_iraw * 0.01;
     return result;
 }
+const int SalinityStationData::BYTE_LENGTH;
+const int SalinityStationData::ID;
+
 SalinityStationData SalinityStationData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5018,12 +5387,12 @@ SalinityStationData SalinityStationData::fromMessage(Message const& message) {
 
     SalinityStationData result;
 
-    result.mode = decode8(
+    result.mode = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.measurement_date = decode16(
+    ) >> 0) & 0xf;
+    result.measurement_date = (decode16(
         &message.payload[1]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto measurement_time_raw = decode32(
         &message.payload[3]
     );
@@ -5056,6 +5425,9 @@ SalinityStationData SalinityStationData::fromMessage(Message const& message) {
     result.water_temperature = water_temperature_iraw * 0.01;
     return result;
 }
+const int CurrentStationData::BYTE_LENGTH;
+const int CurrentStationData::ID;
+
 CurrentStationData CurrentStationData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5066,12 +5438,12 @@ CurrentStationData CurrentStationData::fromMessage(Message const& message) {
 
     CurrentStationData result;
 
-    result.mode = decode8(
+    result.mode = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.measurement_date = decode16(
+    ) >> 0) & 0xf;
+    result.measurement_date = (decode16(
         &message.payload[1]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto measurement_time_raw = decode32(
         &message.payload[3]
     );
@@ -5116,6 +5488,9 @@ CurrentStationData CurrentStationData::fromMessage(Message const& message) {
     result.water_temperature = water_temperature_iraw * 0.01;
     return result;
 }
+const int MeteorologicalStationData::BYTE_LENGTH;
+const int MeteorologicalStationData::ID;
+
 MeteorologicalStationData MeteorologicalStationData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5126,12 +5501,12 @@ MeteorologicalStationData MeteorologicalStationData::fromMessage(Message const& 
 
     MeteorologicalStationData result;
 
-    result.mode = decode8(
+    result.mode = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.measurement_date = decode16(
+    ) >> 0) & 0xf;
+    result.measurement_date = (decode16(
         &message.payload[1]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto measurement_time_raw = decode32(
         &message.payload[3]
     );
@@ -5162,18 +5537,18 @@ MeteorologicalStationData MeteorologicalStationData::fromMessage(Message const& 
     uint16_t wind_direction_iraw =
         reinterpret_cast<uint16_t const&>(wind_direction_raw);
     result.wind_direction = wind_direction_iraw * 0.005729577951308233;
-    result.wind_reference = decode8(
+    result.wind_reference = (decode8(
         &message.payload[19]
-    ) >> 0;
+    ) >> 0) & 0x7;
     auto wind_gusts_raw = decode16(
         &message.payload[20]
     );
     int16_t wind_gusts_iraw =
         reinterpret_cast<int16_t const&>(wind_gusts_raw);
     result.wind_gusts = wind_gusts_iraw * 0.01;
-    result.atmospheric_pressure = decode16(
+    result.atmospheric_pressure = (decode16(
         &message.payload[22]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto ambient_temperature_raw = decode16(
         &message.payload[24]
     );
@@ -5182,6 +5557,9 @@ MeteorologicalStationData MeteorologicalStationData::fromMessage(Message const& 
     result.ambient_temperature = ambient_temperature_iraw * 0.01;
     return result;
 }
+const int MooredBuoyStationData::BYTE_LENGTH;
+const int MooredBuoyStationData::ID;
+
 MooredBuoyStationData MooredBuoyStationData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5192,12 +5570,12 @@ MooredBuoyStationData MooredBuoyStationData::fromMessage(Message const& message)
 
     MooredBuoyStationData result;
 
-    result.mode = decode8(
+    result.mode = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.measurement_date = decode16(
+    ) >> 0) & 0xf;
+    result.measurement_date = (decode16(
         &message.payload[1]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto measurement_time_raw = decode32(
         &message.payload[3]
     );
@@ -5228,27 +5606,27 @@ MooredBuoyStationData MooredBuoyStationData::fromMessage(Message const& message)
     uint16_t wind_direction_iraw =
         reinterpret_cast<uint16_t const&>(wind_direction_raw);
     result.wind_direction = wind_direction_iraw * 0.005729577951308233;
-    result.wind_reference = decode8(
+    result.wind_reference = (decode8(
         &message.payload[19]
-    ) >> 0;
+    ) >> 0) & 0x7;
     auto wind_gusts_raw = decode16(
         &message.payload[20]
     );
     int16_t wind_gusts_iraw =
         reinterpret_cast<int16_t const&>(wind_gusts_raw);
     result.wind_gusts = wind_gusts_iraw * 0.01;
-    result.wave_height = decode16(
+    result.wave_height = (decode16(
         &message.payload[22]
-    ) >> 0;
-    result.dominant_wave_period = decode16(
+    ) >> 0) & 0xffff;
+    result.dominant_wave_period = (decode16(
         &message.payload[24]
-    ) >> 0;
-    result.atmospheric_pressure = decode16(
+    ) >> 0) & 0xffff;
+    result.atmospheric_pressure = (decode16(
         &message.payload[26]
-    ) >> 0;
-    result.pressure_tendency_rate = decode16(
+    ) >> 0) & 0xffff;
+    result.pressure_tendency_rate = (decode16(
         &message.payload[28]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     auto air_temperature_raw = decode16(
         &message.payload[30]
     );
@@ -5263,6 +5641,9 @@ MooredBuoyStationData MooredBuoyStationData::fromMessage(Message const& message)
     result.water_temperature = water_temperature_iraw * 0.01;
     return result;
 }
+const int SmallCraftStatus::BYTE_LENGTH;
+const int SmallCraftStatus::ID;
+
 SmallCraftStatus SmallCraftStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5273,14 +5654,17 @@ SmallCraftStatus SmallCraftStatus::fromMessage(Message const& message) {
 
     SmallCraftStatus result;
 
-    result.port_trim_tab = decode8(
+    result.port_trim_tab = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.starboard_trim_tab = decode8(
+    ) >> 0) & 0xff;
+    result.starboard_trim_tab = (decode8(
         &message.payload[1]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int DirectionData::BYTE_LENGTH;
+const int DirectionData::ID;
+
 DirectionData DirectionData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5291,15 +5675,15 @@ DirectionData DirectionData::fromMessage(Message const& message) {
 
     DirectionData result;
 
-    result.data_mode = decode8(
+    result.data_mode = (decode8(
         &message.payload[0]
-    ) >> 0;
-    result.cog_reference = decode8(
+    ) >> 0) & 0xf;
+    result.cog_reference = (decode8(
         &message.payload[0]
-    ) >> 4;
-    result.sid = decode8(
+    ) >> 4) & 0x3;
+    result.sid = (decode8(
         &message.payload[1]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto cog_raw = decode16(
         &message.payload[2]
     );
@@ -5338,6 +5722,9 @@ DirectionData DirectionData::fromMessage(Message const& message) {
     result.drift = drift_iraw * 0.01;
     return result;
 }
+const int VesselSpeedComponents::BYTE_LENGTH;
+const int VesselSpeedComponents::ID;
+
 VesselSpeedComponents VesselSpeedComponents::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5386,6 +5773,9 @@ VesselSpeedComponents VesselSpeedComponents::fromMessage(Message const& message)
     result.stern_speed_ground_referenced = stern_speed_ground_referenced_iraw * 0.001;
     return result;
 }
+const int SimradTextMessage::BYTE_LENGTH;
+const int SimradTextMessage::ID;
+
 SimradTextMessage SimradTextMessage::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5396,38 +5786,41 @@ SimradTextMessage SimradTextMessage::fromMessage(Message const& message) {
 
     SimradTextMessage result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     auto product_code_raw = decode16(
         &message.payload[2]
     );
     result.product_code = reinterpret_cast<int16_t const&>(
         product_code_raw
     );
-    result.a = decode8(
+    result.a = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.b = decode8(
+    ) >> 0) & 0xff;
+    result.b = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.c = decode8(
+    ) >> 0) & 0xff;
+    result.c = (decode8(
         &message.payload[6]
-    ) >> 0;
-    result.d = decode8(
+    ) >> 0) & 0xff;
+    result.d = (decode8(
         &message.payload[7]
-    ) >> 0;
-    result.sid = decode8(
+    ) >> 0) & 0xff;
+    result.sid = (decode8(
         &message.payload[8]
-    ) >> 0;
-    result.prio = decode8(
+    ) >> 0) & 0xff;
+    result.prio = (decode8(
         &message.payload[9]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int NavicoProductInformation::BYTE_LENGTH;
+const int NavicoProductInformation::ID;
+
 NavicoProductInformation NavicoProductInformation::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5438,29 +5831,32 @@ NavicoProductInformation NavicoProductInformation::fromMessage(Message const& me
 
     NavicoProductInformation result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     auto product_code_raw = decode16(
         &message.payload[2]
     );
     result.product_code = reinterpret_cast<int16_t const&>(
         product_code_raw
     );
-    result.a = decode8(
+    result.a = (decode8(
         &message.payload[36]
-    ) >> 0;
-    result.b = decode8(
+    ) >> 0) & 0xff;
+    result.b = (decode8(
         &message.payload[37]
-    ) >> 0;
-    result.c = decode8(
+    ) >> 0) & 0xff;
+    result.c = (decode8(
         &message.payload[38]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int SimnetReprogramData::BYTE_LENGTH;
+const int SimnetReprogramData::ID;
+
 SimnetReprogramData SimnetReprogramData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5471,12 +5867,12 @@ SimnetReprogramData SimnetReprogramData::fromMessage(Message const& message) {
 
     SimnetReprogramData result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     auto version_raw = decode16(
         &message.payload[2]
     );
@@ -5491,6 +5887,9 @@ SimnetReprogramData SimnetReprogramData::fromMessage(Message const& message) {
     );
     return result;
 }
+const int SimnetRequestReprogram::BYTE_LENGTH;
+const int SimnetRequestReprogram::ID;
+
 SimnetRequestReprogram SimnetRequestReprogram::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5501,14 +5900,17 @@ SimnetRequestReprogram SimnetRequestReprogram::fromMessage(Message const& messag
 
     SimnetRequestReprogram result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     return result;
 }
+const int SimnetReprogramStatus1::BYTE_LENGTH;
+const int SimnetReprogramStatus1::ID;
+
 SimnetReprogramStatus1 SimnetReprogramStatus1::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5519,23 +5921,26 @@ SimnetReprogramStatus1 SimnetReprogramStatus1::fromMessage(Message const& messag
 
     SimnetReprogramStatus1 result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
-    result.reserved1 = decode8(
+    ) >> 5) & 0x7;
+    result.reserved1 = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.status = decode8(
+    ) >> 0) & 0xff;
+    result.status = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result.reserved2 = decode32(
+    ) >> 0) & 0xff;
+    result.reserved2 = (decode32(
         &message.payload[4]
-    ) >> 0;
+    ) >> 0) & 0xffffff;
     return result;
 }
+const int LowranceUnknown::BYTE_LENGTH;
+const int LowranceUnknown::ID;
+
 LowranceUnknown LowranceUnknown::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5546,32 +5951,35 @@ LowranceUnknown LowranceUnknown::fromMessage(Message const& message) {
 
     LowranceUnknown result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
-    result.a = decode8(
+    ) >> 5) & 0x7;
+    result.a = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.b = decode8(
+    ) >> 0) & 0xff;
+    result.b = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result.c = decode8(
+    ) >> 0) & 0xff;
+    result.c = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.d = decode8(
+    ) >> 0) & 0xff;
+    result.d = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.e = decode16(
+    ) >> 0) & 0xff;
+    result.e = (decode16(
         &message.payload[6]
-    ) >> 0;
-    result.f = decode16(
+    ) >> 0) & 0xffff;
+    result.f = (decode16(
         &message.payload[8]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     return result;
 }
+const int SimnetSetSerialNumber::BYTE_LENGTH;
+const int SimnetSetSerialNumber::ID;
+
 SimnetSetSerialNumber SimnetSetSerialNumber::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5582,14 +5990,17 @@ SimnetSetSerialNumber SimnetSetSerialNumber::fromMessage(Message const& message)
 
     SimnetSetSerialNumber result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     return result;
 }
+const int SuzukiEngineAndStorageDeviceConfig::BYTE_LENGTH;
+const int SuzukiEngineAndStorageDeviceConfig::ID;
+
 SuzukiEngineAndStorageDeviceConfig SuzukiEngineAndStorageDeviceConfig::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5600,14 +6011,17 @@ SuzukiEngineAndStorageDeviceConfig SuzukiEngineAndStorageDeviceConfig::fromMessa
 
     SuzukiEngineAndStorageDeviceConfig result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     return result;
 }
+const int SimnetFuelUsedHighResolution::BYTE_LENGTH;
+const int SimnetFuelUsedHighResolution::ID;
+
 SimnetFuelUsedHighResolution SimnetFuelUsedHighResolution::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5618,14 +6032,17 @@ SimnetFuelUsedHighResolution SimnetFuelUsedHighResolution::fromMessage(Message c
 
     SimnetFuelUsedHighResolution result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     return result;
 }
+const int SimnetEngineAndTankConfiguration::BYTE_LENGTH;
+const int SimnetEngineAndTankConfiguration::ID;
+
 SimnetEngineAndTankConfiguration SimnetEngineAndTankConfiguration::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5636,14 +6053,17 @@ SimnetEngineAndTankConfiguration SimnetEngineAndTankConfiguration::fromMessage(M
 
     SimnetEngineAndTankConfiguration result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     return result;
 }
+const int SimnetSetEngineAndTankConfiguration::BYTE_LENGTH;
+const int SimnetSetEngineAndTankConfiguration::ID;
+
 SimnetSetEngineAndTankConfiguration SimnetSetEngineAndTankConfiguration::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5654,14 +6074,17 @@ SimnetSetEngineAndTankConfiguration SimnetSetEngineAndTankConfiguration::fromMes
 
     SimnetSetEngineAndTankConfiguration result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     return result;
 }
+const int SimnetFluidLevelSensorConfiguration::BYTE_LENGTH;
+const int SimnetFluidLevelSensorConfiguration::ID;
+
 SimnetFluidLevelSensorConfiguration SimnetFluidLevelSensorConfiguration::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5672,44 +6095,47 @@ SimnetFluidLevelSensorConfiguration SimnetFluidLevelSensorConfiguration::fromMes
 
     SimnetFluidLevelSensorConfiguration result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
-    result.c = decode8(
+    ) >> 5) & 0x7;
+    result.c = (decode8(
         &message.payload[2]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto device_raw = decode8(
         &message.payload[3]
     );
     result.device = reinterpret_cast<int8_t const&>(
         device_raw
     );
-    result.f = decode8(
+    result.f = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.tank_type = decode8(
+    ) >> 0) & 0xf;
+    result.tank_type = (decode8(
         &message.payload[5]
-    ) >> 4;
+    ) >> 4) & 0xf;
     auto capacity_raw = decode32(
         &message.payload[6]
     );
     int32_t capacity_iraw =
         reinterpret_cast<int32_t const&>(capacity_raw);
     result.capacity = capacity_iraw * 0.1;
-    result.g = decode8(
+    result.g = (decode8(
         &message.payload[10]
-    ) >> 0;
-    result.h = decode16(
+    ) >> 0) & 0xff;
+    result.h = (decode16(
         &message.payload[11]
-    ) >> 0;
-    result.i = decode8(
+    ) >> 0) & 0xffff;
+    result.i = (decode8(
         &message.payload[13]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int SimnetFuelFlowTurbineConfiguration::BYTE_LENGTH;
+const int SimnetFuelFlowTurbineConfiguration::ID;
+
 SimnetFuelFlowTurbineConfiguration SimnetFuelFlowTurbineConfiguration::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5720,14 +6146,17 @@ SimnetFuelFlowTurbineConfiguration SimnetFuelFlowTurbineConfiguration::fromMessa
 
     SimnetFuelFlowTurbineConfiguration result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     return result;
 }
+const int SimnetFluidLevelWarning::BYTE_LENGTH;
+const int SimnetFluidLevelWarning::ID;
+
 SimnetFluidLevelWarning SimnetFluidLevelWarning::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5738,14 +6167,17 @@ SimnetFluidLevelWarning SimnetFluidLevelWarning::fromMessage(Message const& mess
 
     SimnetFluidLevelWarning result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     return result;
 }
+const int SimnetPressureSensorConfiguration::BYTE_LENGTH;
+const int SimnetPressureSensorConfiguration::ID;
+
 SimnetPressureSensorConfiguration SimnetPressureSensorConfiguration::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5756,14 +6188,17 @@ SimnetPressureSensorConfiguration SimnetPressureSensorConfiguration::fromMessage
 
     SimnetPressureSensorConfiguration result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     return result;
 }
+const int SimnetDataUserGroupConfiguration::BYTE_LENGTH;
+const int SimnetDataUserGroupConfiguration::ID;
+
 SimnetDataUserGroupConfiguration SimnetDataUserGroupConfiguration::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5774,14 +6209,17 @@ SimnetDataUserGroupConfiguration SimnetDataUserGroupConfiguration::fromMessage(M
 
     SimnetDataUserGroupConfiguration result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     return result;
 }
+const int SimnetAISClassBStaticDataMsg24PartA::BYTE_LENGTH;
+const int SimnetAISClassBStaticDataMsg24PartA::ID;
+
 SimnetAISClassBStaticDataMsg24PartA SimnetAISClassBStaticDataMsg24PartA::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5792,24 +6230,24 @@ SimnetAISClassBStaticDataMsg24PartA SimnetAISClassBStaticDataMsg24PartA::fromMes
 
     SimnetAISClassBStaticDataMsg24PartA result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
-    result.message_id = decode8(
+    ) >> 5) & 0x7;
+    result.message_id = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[2]
-    ) >> 6;
-    result.d = decode8(
+    ) >> 6) & 0x3;
+    result.d = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result.e = decode8(
+    ) >> 0) & 0xff;
+    result.e = (decode8(
         &message.payload[4]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto user_id_raw = decode32(
         &message.payload[5]
     );
@@ -5818,6 +6256,9 @@ SimnetAISClassBStaticDataMsg24PartA SimnetAISClassBStaticDataMsg24PartA::fromMes
     );
     return result;
 }
+const int SimnetSonarStatusFrequencyAndDSPVoltage::BYTE_LENGTH;
+const int SimnetSonarStatusFrequencyAndDSPVoltage::ID;
+
 SimnetSonarStatusFrequencyAndDSPVoltage SimnetSonarStatusFrequencyAndDSPVoltage::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5828,14 +6269,17 @@ SimnetSonarStatusFrequencyAndDSPVoltage SimnetSonarStatusFrequencyAndDSPVoltage:
 
     SimnetSonarStatusFrequencyAndDSPVoltage result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
+    ) >> 5) & 0x7;
     return result;
 }
+const int SimnetParameterHandle::BYTE_LENGTH;
+const int SimnetParameterHandle::ID;
+
 SimnetParameterHandle SimnetParameterHandle::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5846,47 +6290,50 @@ SimnetParameterHandle SimnetParameterHandle::fromMessage(Message const& message)
 
     SimnetParameterHandle result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
-    result.message_id = decode8(
+    ) >> 5) & 0x7;
+    result.message_id = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.repeat_indicator = decode8(
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
         &message.payload[2]
-    ) >> 6;
-    result.d = decode8(
+    ) >> 6) & 0x3;
+    result.d = (decode8(
         &message.payload[3]
-    ) >> 0;
-    result.group = decode8(
+    ) >> 0) & 0xff;
+    result.group = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.f = decode8(
+    ) >> 0) & 0xff;
+    result.f = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.g = decode8(
+    ) >> 0) & 0xff;
+    result.g = (decode8(
         &message.payload[6]
-    ) >> 0;
-    result.h = decode8(
+    ) >> 0) & 0xff;
+    result.h = (decode8(
         &message.payload[7]
-    ) >> 0;
-    result.i = decode8(
+    ) >> 0) & 0xff;
+    result.i = (decode8(
         &message.payload[8]
-    ) >> 0;
-    result.j = decode8(
+    ) >> 0) & 0xff;
+    result.j = (decode8(
         &message.payload[9]
-    ) >> 0;
-    result.backlight = decode8(
+    ) >> 0) & 0xff;
+    result.backlight = (decode8(
         &message.payload[10]
-    ) >> 0;
-    result.l = decode16(
+    ) >> 0) & 0xff;
+    result.l = (decode16(
         &message.payload[11]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     return result;
 }
+const int SimnetEventCommandUnknown::BYTE_LENGTH;
+const int SimnetEventCommandUnknown::ID;
+
 SimnetEventCommandUnknown SimnetEventCommandUnknown::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5897,29 +6344,32 @@ SimnetEventCommandUnknown SimnetEventCommandUnknown::fromMessage(Message const& 
 
     SimnetEventCommandUnknown result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
-    result.a = decode16(
+    ) >> 5) & 0x7;
+    result.a = (decode16(
         &message.payload[2]
-    ) >> 0;
-    result.b = decode16(
+    ) >> 0) & 0xffff;
+    result.b = (decode16(
         &message.payload[4]
-    ) >> 0;
-    result.c = decode16(
+    ) >> 0) & 0xffff;
+    result.c = (decode16(
         &message.payload[6]
-    ) >> 0;
-    result.d = decode16(
+    ) >> 0) & 0xffff;
+    result.d = (decode16(
         &message.payload[8]
-    ) >> 0;
-    result.e = decode16(
+    ) >> 0) & 0xffff;
+    result.e = (decode16(
         &message.payload[10]
-    ) >> 0;
+    ) >> 0) & 0xffff;
     return result;
 }
+const int SimnetEventReplyAPCommand::BYTE_LENGTH;
+const int SimnetEventReplyAPCommand::ID;
+
 SimnetEventReplyAPCommand SimnetEventReplyAPCommand::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5930,38 +6380,41 @@ SimnetEventReplyAPCommand SimnetEventReplyAPCommand::fromMessage(Message const& 
 
     SimnetEventReplyAPCommand result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
-    result.ap_command = decode8(
+    ) >> 5) & 0x7;
+    result.ap_command = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.b = decode16(
+    ) >> 0) & 0xff;
+    result.b = (decode16(
         &message.payload[3]
-    ) >> 0;
-    result.controlling_device = decode8(
+    ) >> 0) & 0xffff;
+    result.controlling_device = (decode8(
         &message.payload[5]
-    ) >> 0;
-    result.event = decode16(
+    ) >> 0) & 0xff;
+    result.event = (decode16(
         &message.payload[6]
-    ) >> 0;
-    result.direction = decode8(
+    ) >> 0) & 0xffff;
+    result.direction = (decode8(
         &message.payload[8]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto angle_raw = decode16(
         &message.payload[9]
     );
     uint16_t angle_iraw =
         reinterpret_cast<uint16_t const&>(angle_raw);
     result.angle = angle_iraw * 0.005729577951308233;
-    result.g = decode8(
+    result.g = (decode8(
         &message.payload[11]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int SimnetAlarmMessage::BYTE_LENGTH;
+const int SimnetAlarmMessage::ID;
+
 SimnetAlarmMessage SimnetAlarmMessage::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5972,23 +6425,26 @@ SimnetAlarmMessage SimnetAlarmMessage::fromMessage(Message const& message) {
 
     SimnetAlarmMessage result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
-    result.message_id = decode16(
+    ) >> 5) & 0x7;
+    result.message_id = (decode16(
         &message.payload[2]
-    ) >> 0;
-    result.b = decode8(
+    ) >> 0) & 0xffff;
+    result.b = (decode8(
         &message.payload[4]
-    ) >> 0;
-    result.c = decode8(
+    ) >> 0) & 0xff;
+    result.c = (decode8(
         &message.payload[5]
-    ) >> 0;
+    ) >> 0) & 0xff;
     return result;
 }
+const int AirmarAdditionalWeatherData::BYTE_LENGTH;
+const int AirmarAdditionalWeatherData::ID;
+
 AirmarAdditionalWeatherData AirmarAdditionalWeatherData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -5999,15 +6455,15 @@ AirmarAdditionalWeatherData AirmarAdditionalWeatherData::fromMessage(Message con
 
     AirmarAdditionalWeatherData result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
-    result.c = decode8(
+    ) >> 5) & 0x7;
+    result.c = (decode8(
         &message.payload[2]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto apparent_windchill_temperature_raw = decode16(
         &message.payload[3]
     );
@@ -6028,6 +6484,9 @@ AirmarAdditionalWeatherData AirmarAdditionalWeatherData::fromMessage(Message con
     result.dewpoint = dewpoint_iraw * 0.01;
     return result;
 }
+const int AirmarHeaterControl::BYTE_LENGTH;
+const int AirmarHeaterControl::ID;
+
 AirmarHeaterControl AirmarHeaterControl::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -6038,15 +6497,15 @@ AirmarHeaterControl AirmarHeaterControl::fromMessage(Message const& message) {
 
     AirmarHeaterControl result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
-    result.c = decode8(
+    ) >> 5) & 0x7;
+    result.c = (decode8(
         &message.payload[2]
-    ) >> 0;
+    ) >> 0) & 0xff;
     auto plate_temperature_raw = decode16(
         &message.payload[3]
     );
@@ -6067,6 +6526,9 @@ AirmarHeaterControl AirmarHeaterControl::fromMessage(Message const& message) {
     result.dewpoint = dewpoint_iraw * 0.01;
     return result;
 }
+const int AirmarPOST::BYTE_LENGTH;
+const int AirmarPOST::ID;
+
 AirmarPOST AirmarPOST::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -6077,23 +6539,23 @@ AirmarPOST AirmarPOST::fromMessage(Message const& message) {
 
     AirmarPOST result;
 
-    result.reserved = decode8(
+    result.reserved = (decode8(
         &message.payload[1]
-    ) >> 3;
-    result.industry_code = decode8(
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
         &message.payload[1]
-    ) >> 5;
-    result.control = decode8(
+    ) >> 5) & 0x7;
+    result.control = (decode8(
         &message.payload[2]
-    ) >> 0;
-    result.reserved1 = decode8(
+    ) >> 0) & 0xf;
+    result.reserved1 = (decode8(
         &message.payload[2]
-    ) >> 4;
-    result.test_id = decode8(
+    ) >> 4) & 0x7f;
+    result.test_id = (decode8(
         &message.payload[4]
-    ) >> 3;
-    result.test_result = decode8(
+    ) >> 3) & 0xff;
+    result.test_result = (decode8(
         &message.payload[5]
-    ) >> 3;
+    ) >> 3) & 0xff;
     return result;
 }

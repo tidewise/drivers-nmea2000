@@ -5,6 +5,9 @@ using namespace nmea2000::decode;
 using namespace nmea2000::pgns;
 
 <% definitions.each do |cxx_name, pgn| %>
+const int <%= cxx_name %>::BYTE_LENGTH;
+const int <%= cxx_name %>::ID;
+
 <%= cxx_name %> <%= cxx_name %>::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
@@ -23,9 +26,9 @@ using namespace nmea2000::pgns;
             byte_length_in_bits = field.byte_length * 8;
 %>
 <%          if field.unsigned? && !field.float? %>
-    result.<%= field_name %> = decode<%= byte_length_in_bits %>(
+    result.<%= field_name %> = (decode<%= byte_length_in_bits %>(
         &message.payload[<%= byte_offset %>]
-    ) >> <%= relative_bit_offset %>;
+    ) >> <%= relative_bit_offset %>) & 0x<%= (2**field.bit_length - 1).to_s(16) %>;
 <%          elsif field.float? %>
     auto <%= field_name %>_raw = decode<%= byte_length_in_bits %>(
         &message.payload[<%= byte_offset %>]
