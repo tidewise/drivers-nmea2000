@@ -30,7 +30,7 @@ module PGNDefinitions
         end
 
         SUPPORTED_FIELD_TYPES = %w[
-            EnumField IntField UIntField DblField UDblField
+            ASCIIField EnumField IntField UIntField DblField UDblField
         ].freeze
 
         def supported?
@@ -48,6 +48,10 @@ module PGNDefinitions
 
         def unsigned?
             @xml.name.start_with?('U') || enum?
+        end
+
+        def ascii?
+            %w[ASCIIField].include?(@xml.name)
         end
 
         def enum?

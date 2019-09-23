@@ -25,7 +25,10 @@ const int <%= cxx_name %>::ID;
             relative_bit_offset = field.relative_bit_offset
             byte_length_in_bits = field.byte_length * 8;
 %>
-<%          if field.unsigned? && !field.float? %>
+<%          if field.ascii? %>
+    result.<%= field_name %> = decodeString(&message.payload[<%= byte_offset %>],
+                                            <%= field.byte_length%>);
+<%          elsif field.unsigned? && !field.float? %>
     result.<%= field_name %> = (decode<%= byte_length_in_bits %>(
         &message.payload[<%= byte_offset %>]
     ) >> <%= relative_bit_offset %>) & 0x<%= (2**field.bit_length - 1).to_s(16) %>;

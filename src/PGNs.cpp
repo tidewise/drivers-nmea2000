@@ -932,6 +932,14 @@ ProductInformation ProductInformation::fromMessage(Message const& message) {
     result.product_code = (decode16(
         &message.payload[2]
     ) >> 0) & 0xffff;
+    result.model_id = decodeString(&message.payload[4],
+                                            32);
+    result.software_version_code = decodeString(&message.payload[36],
+                                            32);
+    result.model_version = decodeString(&message.payload[68],
+                                            32);
+    result.model_serial_code = decodeString(&message.payload[100],
+                                            32);
     result.certification_level = (decode8(
         &message.payload[132]
     ) >> 0) & 0xff;
@@ -2132,6 +2140,8 @@ TrackedTargetData TrackedTargetData::fromMessage(Message const& message) {
     uint32_t utc_of_fix_iraw =
         reinterpret_cast<uint32_t const&>(utc_of_fix_raw);
     result.utc_of_fix = utc_of_fix_iraw * 0.0001 + 0.0;
+    result.name = decodeString(&message.payload[25],
+                                            256);
     return result;
 }
 const int PositionRapidUpdate::BYTE_LENGTH;
@@ -2657,6 +2667,8 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     int16_t position_reference_from_bow_iraw =
         reinterpret_cast<int16_t const&>(position_reference_from_bow_raw);
     result.position_reference_from_bow = position_reference_from_bow_iraw * 0.1 + 0.0;
+    result.name = decodeString(&message.payload[32],
+                                            32);
     result.dte = (decode8(
         &message.payload[52]
     ) >> 0) & 0x1;
@@ -2681,6 +2693,8 @@ Datum Datum::fromMessage(Message const& message) {
 
     Datum result;
 
+    result.local_datum = decodeString(&message.payload[0],
+                                            4);
     auto delta_latitude_raw = decode32(
         &message.payload[4]
     );
@@ -2699,6 +2713,8 @@ Datum Datum::fromMessage(Message const& message) {
     int32_t delta_altitude_iraw =
         reinterpret_cast<int32_t const&>(delta_altitude_raw);
     result.delta_altitude = delta_altitude_iraw * 1.0 + 0.0;
+    result.reference_datum = decodeString(&message.payload[16],
+                                            4);
     return result;
 }
 const int UserDatum::BYTE_LENGTH;
@@ -2768,6 +2784,8 @@ UserDatum UserDatum::fromMessage(Message const& message) {
     int32_t ellipsoid_flattening_inverse_iraw =
         reinterpret_cast<int32_t const&>(ellipsoid_flattening_inverse_raw);
     result.ellipsoid_flattening_inverse = ellipsoid_flattening_inverse_iraw * 1.0 + 0.0;
+    result.datum_name = decodeString(&message.payload[36],
+                                            4);
     return result;
 }
 const int CrossTrackError::BYTE_LENGTH;
@@ -4181,6 +4199,10 @@ AISClassAStaticAndVoyageRelatedData AISClassAStaticAndVoyageRelatedData::fromMes
     result.imo_number = reinterpret_cast<int32_t const&>(
         imo_number_raw
     );
+    result.callsign = decodeString(&message.payload[9],
+                                            8);
+    result.name = decodeString(&message.payload[16],
+                                            32);
     result.type_of_ship = (decode8(
         &message.payload[36]
     ) >> 0) & 0xff;
@@ -4223,6 +4245,8 @@ AISClassAStaticAndVoyageRelatedData AISClassAStaticAndVoyageRelatedData::fromMes
     int16_t draft_iraw =
         reinterpret_cast<int16_t const&>(draft_raw);
     result.draft = draft_iraw * 0.01 + 0.0;
+    result.destination = decodeString(&message.payload[53],
+                                            32);
     result.ais_version_indicator = (decode8(
         &message.payload[73]
     ) >> 0) & 0x3;
@@ -4523,6 +4547,8 @@ AISAddressedSafetyRelatedMessage AISAddressedSafetyRelatedMessage::fromMessage(M
     result.retransmit_flag = (decode8(
         &message.payload[10]
     ) >> 6) & 0x1;
+    result.safety_related_text = decodeString(&message.payload[11],
+                                            256);
     return result;
 }
 const int AISSafetyRelatedBroadcastMessage::BYTE_LENGTH;
@@ -4901,6 +4927,8 @@ AISClassBStaticDataMsg24PartA AISClassBStaticDataMsg24PartA::fromMessage(Message
     result.user_id = reinterpret_cast<int32_t const&>(
         user_id_raw
     );
+    result.name = decodeString(&message.payload[5],
+                                            32);
     return result;
 }
 const int AISClassBStaticDataMsg24PartB::BYTE_LENGTH;
@@ -4931,6 +4959,10 @@ AISClassBStaticDataMsg24PartB AISClassBStaticDataMsg24PartB::fromMessage(Message
     result.type_of_ship = (decode8(
         &message.payload[5]
     ) >> 0) & 0xff;
+    result.vendor_id = decodeString(&message.payload[6],
+                                            8);
+    result.callsign = decodeString(&message.payload[13],
+                                            8);
     auto length_raw = decode16(
         &message.payload[20]
     );
@@ -4988,6 +5020,8 @@ RouteAndWPServiceDatabaseList RouteAndWPServiceDatabaseList::fromMessage(Message
     result.database_id = (decode8(
         &message.payload[3]
     ) >> 0) & 0xff;
+    result.database_name = decodeString(&message.payload[4],
+                                            8);
     auto database_timestamp_raw = decode32(
         &message.payload[12]
     );
@@ -5039,6 +5073,8 @@ RouteAndWPServiceRouteList RouteAndWPServiceRouteList::fromMessage(Message const
     result.route_id = (decode8(
         &message.payload[4]
     ) >> 0) & 0xff;
+    result.route_name = decodeString(&message.payload[5],
+                                            8);
     result.wp_identification_method = (decode8(
         &message.payload[13]
     ) >> 4) & 0x3;
@@ -5066,6 +5102,8 @@ RouteAndWPServiceRouteWPListAttributes RouteAndWPServiceRouteWPListAttributes::f
     result.route_id = (decode8(
         &message.payload[1]
     ) >> 0) & 0xff;
+    result.route_wp_list_name = decodeString(&message.payload[2],
+                                            8);
     auto route_wp_list_timestamp_raw = decode32(
         &message.payload[10]
     );
@@ -5129,6 +5167,8 @@ RouteAndWPServiceRouteWPNamePosition RouteAndWPServiceRouteWPNamePosition::fromM
     result.wp_id = (decode8(
         &message.payload[6]
     ) >> 0) & 0xff;
+    result.wp_name = decodeString(&message.payload[7],
+                                            8);
     auto wp_latitude_raw = decode32(
         &message.payload[15]
     );
@@ -5174,6 +5214,8 @@ RouteAndWPServiceRouteWPName RouteAndWPServiceRouteWPName::fromMessage(Message c
     result.wp_id = (decode8(
         &message.payload[6]
     ) >> 0) & 0xff;
+    result.wp_name = decodeString(&message.payload[7],
+                                            8);
     return result;
 }
 const int RouteAndWPServiceXTELimitNavigationMethod::BYTE_LENGTH;
@@ -5246,6 +5288,8 @@ RouteAndWPServiceWPComment RouteAndWPServiceWPComment::fromMessage(Message const
     result.wp_id_rpsnumber = (decode8(
         &message.payload[6]
     ) >> 0) & 0xff;
+    result.comment = decodeString(&message.payload[7],
+                                            8);
     return result;
 }
 const int RouteAndWPServiceRouteComment::BYTE_LENGTH;
@@ -5276,6 +5320,8 @@ RouteAndWPServiceRouteComment RouteAndWPServiceRouteComment::fromMessage(Message
     result.route_id = (decode8(
         &message.payload[5]
     ) >> 0) & 0xff;
+    result.comment = decodeString(&message.payload[6],
+                                            8);
     return result;
 }
 const int RouteAndWPServiceDatabaseComment::BYTE_LENGTH;
@@ -5303,6 +5349,8 @@ RouteAndWPServiceDatabaseComment RouteAndWPServiceDatabaseComment::fromMessage(M
     result.database_id = (decode8(
         &message.payload[4]
     ) >> 0) & 0xff;
+    result.comment = decodeString(&message.payload[5],
+                                            8);
     return result;
 }
 const int RouteAndWPServiceRadiusOfTurn::BYTE_LENGTH;
@@ -5372,6 +5420,8 @@ RouteAndWPServiceWPListWPNamePosition RouteAndWPServiceWPListWPNamePosition::fro
     result.wp_id = (decode8(
         &message.payload[6]
     ) >> 0) & 0xff;
+    result.wp_name = decodeString(&message.payload[7],
+                                            8);
     auto wp_latitude_raw = decode32(
         &message.payload[15]
     );
@@ -5966,6 +6016,8 @@ MooredBuoyStationData MooredBuoyStationData::fromMessage(Message const& message)
     uint16_t water_temperature_iraw =
         reinterpret_cast<uint16_t const&>(water_temperature_raw);
     result.water_temperature = water_temperature_iraw * 0.01 + -273.15;
+    result.station_id = decodeString(&message.payload[34],
+                                            8);
     return result;
 }
 const int SmallCraftStatus::BYTE_LENGTH;
@@ -6143,6 +6195,8 @@ SimradTextMessage SimradTextMessage::fromMessage(Message const& message) {
     result.prio = (decode8(
         &message.payload[9]
     ) >> 0) & 0xff;
+    result.text = decodeString(&message.payload[10],
+                                            32);
     return result;
 }
 const int NavicoProductInformation::BYTE_LENGTH;
@@ -6170,6 +6224,8 @@ NavicoProductInformation NavicoProductInformation::fromMessage(Message const& me
     result.product_code = reinterpret_cast<int16_t const&>(
         product_code_raw
     );
+    result.model = decodeString(&message.payload[4],
+                                            32);
     result.a = (decode8(
         &message.payload[36]
     ) >> 0) & 0xff;
@@ -6179,6 +6235,12 @@ NavicoProductInformation NavicoProductInformation::fromMessage(Message const& me
     result.c = (decode8(
         &message.payload[38]
     ) >> 0) & 0xff;
+    result.firmware_version = decodeString(&message.payload[39],
+                                            16);
+    result.firmware_date = decodeString(&message.payload[49],
+                                            32);
+    result.firmware_time = decodeString(&message.payload[81],
+                                            32);
     return result;
 }
 const int SimnetReprogramData::BYTE_LENGTH;
@@ -6584,6 +6646,10 @@ SimnetAISClassBStaticDataMsg24PartB SimnetAISClassBStaticDataMsg24PartB::fromMes
     result.type_of_ship = (decode8(
         &message.payload[9]
     ) >> 0) & 0xff;
+    result.vendor_id = decodeString(&message.payload[10],
+                                            8);
+    result.callsign = decodeString(&message.payload[17],
+                                            8);
     auto length_raw = decode16(
         &message.payload[24]
     );
@@ -6656,6 +6722,8 @@ SimnetAISClassBStaticDataMsg24PartA SimnetAISClassBStaticDataMsg24PartA::fromMes
     result.user_id = reinterpret_cast<int32_t const&>(
         user_id_raw
     );
+    result.name = decodeString(&message.payload[9],
+                                            32);
     return result;
 }
 const int SimnetSonarStatusFrequencyAndDSPVoltage::BYTE_LENGTH;
@@ -6932,6 +7000,8 @@ SimnetAlarmMessage SimnetAlarmMessage::fromMessage(Message const& message) {
     result.c = (decode8(
         &message.payload[5]
     ) >> 0) & 0xff;
+    result.text = decodeString(&message.payload[6],
+                                            256);
     return result;
 }
 const int AirmarAdditionalWeatherData::BYTE_LENGTH;

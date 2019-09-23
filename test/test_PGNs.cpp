@@ -230,6 +230,20 @@ TEST_F(PGNsTest, it_parses_UDbl_fields_whose_values_would_not_fit_in_Dbl) {
     ASSERT_FLOAT_EQ(0xC412 * 0.01 - 273.15, parsed.internal_device_temperature);
 }
 
+TEST_F(PGNsTest, it_parses_zero_terminated_ASCII_fields) {
+    auto parsed = parse_message<Datum>(
+        { 'a', 'b', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+    );
+    ASSERT_EQ("ab", parsed.local_datum);
+}
+
+TEST_F(PGNsTest, it_parses_non_zero_terminated_ASCII_fields) {
+    auto parsed = parse_message<Datum>(
+        { 'a', 'b', 'c', 'd', 'e', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+    );
+    ASSERT_EQ("abcd", parsed.local_datum);
+}
+
 template<typename M>
 M parse_message(vector<uint8_t> const& payload, int size) {
     Message message;

@@ -345,6 +345,10 @@ namespace nmea2000 {
 
             uint16_t nmea_2000_version;
             uint16_t product_code;
+            std::string model_id;
+            std::string software_version_code;
+            std::string model_version;
+            std::string model_serial_code;
             uint8_t certification_level;
             uint8_t load_equivalency;
         };
@@ -736,6 +740,7 @@ namespace nmea2000 {
             float cpa;
             float tcpa;
             float utc_of_fix;
+            std::string name;
         };
         struct PositionRapidUpdate {
             static const int BYTE_LENGTH = 8;
@@ -891,6 +896,7 @@ namespace nmea2000 {
             float beam;
             float position_reference_from_starboard;
             float position_reference_from_bow;
+            std::string name;
             uint8_t dte;
             uint8_t ais_mode;
             uint8_t ais_transceiver_information;
@@ -901,9 +907,11 @@ namespace nmea2000 {
 
             static Datum fromMessage(Message const& message);
 
+            std::string local_datum;
             float delta_latitude;
             float delta_longitude;
             float delta_altitude;
+            std::string reference_datum;
         };
         struct UserDatum {
             static const int BYTE_LENGTH = 40;
@@ -920,6 +928,7 @@ namespace nmea2000 {
             float scale;
             float ellipsoid_semi_major_axis;
             float ellipsoid_flattening_inverse;
+            std::string datum_name;
         };
         struct CrossTrackError {
             static const int BYTE_LENGTH = 6;
@@ -1351,6 +1360,8 @@ namespace nmea2000 {
             uint8_t repeat_indicator;
             int32_t user_id;
             int32_t imo_number;
+            std::string callsign;
+            std::string name;
             uint8_t type_of_ship;
             float length;
             float beam;
@@ -1359,6 +1370,7 @@ namespace nmea2000 {
             uint16_t eta_date;
             float eta_time;
             float draft;
+            std::string destination;
             uint8_t ais_version_indicator;
             uint8_t gnss_type;
             uint8_t dte;
@@ -1462,6 +1474,7 @@ namespace nmea2000 {
             uint8_t sequence_number;
             uint32_t destination_id;
             uint8_t retransmit_flag;
+            std::string safety_related_text;
         };
         struct AISSafetyRelatedBroadcastMessage {
             static const int BYTE_LENGTH = 42;
@@ -1583,6 +1596,7 @@ namespace nmea2000 {
             uint8_t message_id;
             uint8_t repeat_indicator;
             int32_t user_id;
+            std::string name;
         };
         struct AISClassBStaticDataMsg24PartB {
             static const int BYTE_LENGTH = 33;
@@ -1594,6 +1608,8 @@ namespace nmea2000 {
             uint8_t repeat_indicator;
             int32_t user_id;
             uint8_t type_of_ship;
+            std::string vendor_id;
+            std::string callsign;
             float length;
             float beam;
             float position_reference_from_starboard;
@@ -1610,6 +1626,7 @@ namespace nmea2000 {
             uint8_t nitems;
             uint8_t number_of_databases_available;
             uint8_t database_id;
+            std::string database_name;
             float database_timestamp;
             uint16_t database_datestamp;
             uint8_t wp_position_resolution;
@@ -1628,6 +1645,7 @@ namespace nmea2000 {
             uint8_t number_of_routes_in_database;
             uint8_t database_id;
             uint8_t route_id;
+            std::string route_name;
             uint8_t wp_identification_method;
             uint8_t route_status;
         };
@@ -1639,6 +1657,7 @@ namespace nmea2000 {
 
             uint8_t database_id;
             uint8_t route_id;
+            std::string route_wp_list_name;
             float route_wp_list_timestamp;
             uint16_t route_wp_list_datestamp;
             uint8_t change_at_last_timestamp;
@@ -1661,6 +1680,7 @@ namespace nmea2000 {
             uint8_t database_id;
             uint8_t route_id;
             uint8_t wp_id;
+            std::string wp_name;
             float wp_latitude;
             float wp_longitude;
         };
@@ -1676,6 +1696,7 @@ namespace nmea2000 {
             uint8_t database_id;
             uint8_t route_id;
             uint8_t wp_id;
+            std::string wp_name;
         };
         struct RouteAndWPServiceXTELimitNavigationMethod {
             static const int BYTE_LENGTH = 10;
@@ -1704,6 +1725,7 @@ namespace nmea2000 {
             uint8_t database_id;
             uint8_t route_id;
             uint8_t wp_id_rpsnumber;
+            std::string comment;
         };
         struct RouteAndWPServiceRouteComment {
             static const int BYTE_LENGTH = 14;
@@ -1716,6 +1738,7 @@ namespace nmea2000 {
             uint16_t number_of_routes_with_comments;
             uint8_t database_id;
             uint8_t route_id;
+            std::string comment;
         };
         struct RouteAndWPServiceDatabaseComment {
             static const int BYTE_LENGTH = 13;
@@ -1727,6 +1750,7 @@ namespace nmea2000 {
             uint8_t nitems;
             uint16_t number_of_databases_with_comments;
             uint8_t database_id;
+            std::string comment;
         };
         struct RouteAndWPServiceRadiusOfTurn {
             static const int BYTE_LENGTH = 9;
@@ -1754,6 +1778,7 @@ namespace nmea2000 {
             uint8_t database_id;
             uint8_t reserved;
             uint8_t wp_id;
+            std::string wp_name;
             float wp_latitude;
             float wp_longitude;
         };
@@ -1933,6 +1958,7 @@ namespace nmea2000 {
             uint16_t pressure_tendency_rate;
             float air_temperature;
             float water_temperature;
+            std::string station_id;
         };
         struct SmallCraftStatus {
             static const int BYTE_LENGTH = 2;
@@ -1987,6 +2013,7 @@ namespace nmea2000 {
             uint8_t d;
             uint8_t sid;
             uint8_t prio;
+            std::string text;
         };
         struct NavicoProductInformation {
             static const int BYTE_LENGTH = 113;
@@ -1997,9 +2024,13 @@ namespace nmea2000 {
             uint8_t reserved;
             uint8_t industry_code;
             int16_t product_code;
+            std::string model;
             uint8_t a;
             uint8_t b;
             uint8_t c;
+            std::string firmware_version;
+            std::string firmware_date;
+            std::string firmware_time;
         };
         struct SimnetReprogramData {
             static const int BYTE_LENGTH = 261;
@@ -2160,6 +2191,8 @@ namespace nmea2000 {
             uint8_t e;
             int32_t user_id;
             uint8_t type_of_ship;
+            std::string vendor_id;
+            std::string callsign;
             float length;
             float beam;
             float position_reference_from_starboard;
@@ -2180,6 +2213,7 @@ namespace nmea2000 {
             uint8_t d;
             uint8_t e;
             int32_t user_id;
+            std::string name;
         };
         struct SimnetSonarStatusFrequencyAndDSPVoltage {
             static const int BYTE_LENGTH = 2;
@@ -2283,6 +2317,7 @@ namespace nmea2000 {
             uint16_t message_id;
             uint8_t b;
             uint8_t c;
+            std::string text;
         };
         struct AirmarAdditionalWeatherData {
             static const int BYTE_LENGTH = 9;

@@ -2,6 +2,7 @@
 #define NMEA2000_DECODE_HPP
 
 #include <cstdint>
+#include <algorithm>
 
 namespace nmea2000 {
     namespace decode {
@@ -30,6 +31,11 @@ namespace nmea2000 {
 
         inline std::uint8_t decode8(std::uint8_t const* byte) {
             return byte[0];
+        }
+
+        inline std::string decodeString(std::uint8_t const* byte, int length) {
+            auto end = std::find(byte, byte + length, 0);
+            return std::string(byte, end);
         }
     };
 }

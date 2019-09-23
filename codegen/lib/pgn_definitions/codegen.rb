@@ -23,6 +23,7 @@ module PGNDefinitions
 
         def self.pgn_field_cxx_type(field)
             return 'float' if field.float?
+            return 'std::string' if field.ascii?
             raise ArgumentError, 'unsupported field' unless field.integer? || field.enum?
 
             "#{'u' if field.unsigned?}int#{field.byte_length * 8}_t"
