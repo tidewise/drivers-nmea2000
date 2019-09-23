@@ -49,6 +49,16 @@ namespace nmea2000 {
             uint8_t iso_self_configurable;
             uint8_t new_source_address;
         };
+        struct AirmarBootStateAcknowledgment {
+            static const int BYTE_LENGTH = 3;
+            static const int ID = 65285;
+
+            static AirmarBootStateAcknowledgment fromMessage(Message const& message);
+
+            uint8_t reserved;
+            uint8_t industry_code;
+            uint8_t boot_state;
+        };
         struct LowranceTemperature {
             static const int BYTE_LENGTH = 5;
             static const int ID = 65285;
@@ -65,6 +75,15 @@ namespace nmea2000 {
             static const int ID = 65286;
 
             static AirmarBootStateRequest fromMessage(Message const& message);
+
+            uint8_t reserved;
+            uint8_t industry_code;
+        };
+        struct SimnetConfigureTemperatureSensor {
+            static const int BYTE_LENGTH = 2;
+            static const int ID = 65287;
+
+            static SimnetConfigureTemperatureSensor fromMessage(Message const& message);
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -169,6 +188,34 @@ namespace nmea2000 {
             uint8_t reserved;
             uint8_t industry_code;
         };
+        struct NMEARequestGroupFunction {
+            static const int BYTE_LENGTH = 9;
+            static const int ID = 126208;
+
+            static NMEARequestGroupFunction fromMessage(Message const& message);
+
+            int8_t function_code;
+            uint32_t pgn;
+            uint8_t transmission_interval;
+            uint8_t transmission_interval_offset;
+            uint8_t number_of_requested_parameters;
+            int8_t parameter_index;
+            int16_t parameter_value;
+        };
+        struct NMEACommandGroupFunction {
+            static const int BYTE_LENGTH = 9;
+            static const int ID = 126208;
+
+            static NMEACommandGroupFunction fromMessage(Message const& message);
+
+            int8_t function_code;
+            uint32_t pgn;
+            uint8_t priority;
+            uint8_t reserved;
+            uint8_t number_of_commanded_parameters;
+            int8_t parameter_index;
+            int16_t parameter_value;
+        };
         struct NMEAAcknowledgeGroupFunction {
             static const int BYTE_LENGTH = 7;
             static const int ID = 126208;
@@ -203,6 +250,62 @@ namespace nmea2000 {
 
             uint8_t function_code;
             uint32_t pgn;
+        };
+        struct AirmarCalibrateCompass {
+            static const int BYTE_LENGTH = 24;
+            static const int ID = 126720;
+
+            static AirmarCalibrateCompass fromMessage(Message const& message);
+
+            uint8_t reserved;
+            uint8_t industry_code;
+            int8_t proprietary_id;
+            uint8_t calibrate_function;
+            uint8_t calibration_status;
+            int8_t verify_score;
+            float x_axis_gain_value;
+            float y_axis_gain_value;
+            float z_axis_gain_value;
+            float x_axis_linear_offset;
+            float y_axis_linear_offset;
+            float z_axis_linear_offset;
+            float x_axis_angular_offset;
+            float pitch_and_roll_damping;
+            float compass_rate_gyro_damping;
+        };
+        struct AirmarAttitudeOffset {
+            static const int BYTE_LENGTH = 9;
+            static const int ID = 126720;
+
+            static AirmarAttitudeOffset fromMessage(Message const& message);
+
+            uint8_t reserved;
+            uint8_t industry_code;
+            int8_t proprietary_id;
+            float azimuth_offset;
+            float pitch_offset;
+            float roll_offset;
+        };
+        struct AirmarTrueWindOptions {
+            static const int BYTE_LENGTH = 24;
+            static const int ID = 126720;
+
+            static AirmarTrueWindOptions fromMessage(Message const& message);
+
+            uint8_t reserved;
+            uint8_t industry_code;
+            int8_t proprietary_id;
+            uint8_t cog_substition_for_hdg;
+            uint8_t calibration_status;
+        };
+        struct ManufacturerPropietaryAddressableMultiFrame {
+            static const int BYTE_LENGTH = 2;
+            static const int ID = 126720;
+
+            static ManufacturerPropietaryAddressableMultiFrame fromMessage(Message const& message);
+
+            uint8_t reserved;
+            uint8_t industry_code;
         };
         struct AirmarAddressableMultiFrame {
             static const int BYTE_LENGTH = 3;
@@ -2043,6 +2146,27 @@ namespace nmea2000 {
             uint8_t reserved;
             uint8_t industry_code;
         };
+        struct SimnetAISClassBStaticDataMsg24PartB {
+            static const int BYTE_LENGTH = 37;
+            static const int ID = 130842;
+
+            static SimnetAISClassBStaticDataMsg24PartB fromMessage(Message const& message);
+
+            uint8_t reserved;
+            uint8_t industry_code;
+            uint8_t message_id;
+            uint8_t repeat_indicator;
+            uint8_t d;
+            uint8_t e;
+            int32_t user_id;
+            uint8_t type_of_ship;
+            float length;
+            float beam;
+            float position_reference_from_starboard;
+            float position_reference_from_bow;
+            int32_t mothership_user_id;
+            uint8_t ;
+        };
         struct SimnetAISClassBStaticDataMsg24PartA {
             static const int BYTE_LENGTH = 29;
             static const int ID = 130842;
@@ -2085,6 +2209,38 @@ namespace nmea2000 {
             uint8_t j;
             uint8_t backlight;
             uint16_t l;
+        };
+        struct SimnetEventCommandAPCommand {
+            static const int BYTE_LENGTH = 12;
+            static const int ID = 130850;
+
+            static SimnetEventCommandAPCommand fromMessage(Message const& message);
+
+            uint8_t reserved;
+            uint8_t industry_code;
+            uint8_t ap_command;
+            uint16_t b;
+            uint8_t controlling_device;
+            uint16_t event;
+            uint8_t direction;
+            float angle;
+            uint8_t g;
+        };
+        struct SimnetEventCommandAlarm {
+            static const int BYTE_LENGTH = 12;
+            static const int ID = 130850;
+
+            static SimnetEventCommandAlarm fromMessage(Message const& message);
+
+            uint8_t reserved;
+            uint8_t industry_code;
+            uint16_t a;
+            uint8_t alarm_command;
+            uint8_t c;
+            uint16_t alarm;
+            int16_t message_id;
+            uint8_t f;
+            uint8_t g;
         };
         struct SimnetEventCommandUnknown {
             static const int BYTE_LENGTH = 12;

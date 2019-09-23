@@ -193,15 +193,26 @@ module PGNDefinitions
     describe Library do
         it 'reads the definitions' do
             library = Library.read(File.expand_path('../../pgns.xml', __dir__))
-            pgn = library.from_id(59_392)
-            assert_equal 'ISO Acknowledgement', pgn.name
+            pgns = library.from_id(59_392)
+            assert_equal ['ISO Acknowledgement'], pgns.map(&:name)
+        end
+
+        it 'handles duplicate IDs' do
+            library = Library.read(File.expand_path('../../pgns.xml', __dir__))
+            pgns = library.from_id(65_287)
+
+            expected = [
+                'Simnet: Configure Temperature Sensor',
+                'Airmar: Access Level'
+            ]
+            assert_equal expected, pgns.map(&:name)
         end
     end
 
     describe PGN do
         before do
             library = Library.read(File.expand_path('../../pgns.xml', __dir__))
-            @pgn = library.from_id(59_392)
+            @pgn = library.from_id(59_392).first
         end
 
         it 'returns the id' do

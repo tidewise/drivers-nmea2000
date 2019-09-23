@@ -112,6 +112,30 @@ ISOCommandedAddress ISOCommandedAddress::fromMessage(Message const& message) {
     ) >> 0) & 0xff;
     return result;
 }
+const int AirmarBootStateAcknowledgment::BYTE_LENGTH;
+const int AirmarBootStateAcknowledgment::ID;
+
+AirmarBootStateAcknowledgment AirmarBootStateAcknowledgment::fromMessage(Message const& message) {
+    if (message.pgn != ID) {
+        throw std::invalid_argument("unexpected PGN ID");
+    }
+    else if (message.size != BYTE_LENGTH) {
+        throw std::invalid_argument("unexpected payload size");
+    }
+
+    AirmarBootStateAcknowledgment result;
+
+    result.reserved = (decode8(
+        &message.payload[1]
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
+        &message.payload[1]
+    ) >> 5) & 0x7;
+    result.boot_state = (decode8(
+        &message.payload[2]
+    ) >> 0) & 0xf;
+    return result;
+}
 const int LowranceTemperature::BYTE_LENGTH;
 const int LowranceTemperature::ID;
 
@@ -154,6 +178,27 @@ AirmarBootStateRequest AirmarBootStateRequest::fromMessage(Message const& messag
     }
 
     AirmarBootStateRequest result;
+
+    result.reserved = (decode8(
+        &message.payload[1]
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
+        &message.payload[1]
+    ) >> 5) & 0x7;
+    return result;
+}
+const int SimnetConfigureTemperatureSensor::BYTE_LENGTH;
+const int SimnetConfigureTemperatureSensor::ID;
+
+SimnetConfigureTemperatureSensor SimnetConfigureTemperatureSensor::fromMessage(Message const& message) {
+    if (message.pgn != ID) {
+        throw std::invalid_argument("unexpected PGN ID");
+    }
+    else if (message.size != BYTE_LENGTH) {
+        throw std::invalid_argument("unexpected payload size");
+    }
+
+    SimnetConfigureTemperatureSensor result;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -412,6 +457,96 @@ SimnetAutopilotMode1 SimnetAutopilotMode1::fromMessage(Message const& message) {
     ) >> 5) & 0x7;
     return result;
 }
+const int NMEARequestGroupFunction::BYTE_LENGTH;
+const int NMEARequestGroupFunction::ID;
+
+NMEARequestGroupFunction NMEARequestGroupFunction::fromMessage(Message const& message) {
+    if (message.pgn != ID) {
+        throw std::invalid_argument("unexpected PGN ID");
+    }
+    else if (message.size != BYTE_LENGTH) {
+        throw std::invalid_argument("unexpected payload size");
+    }
+
+    NMEARequestGroupFunction result;
+
+    auto function_code_raw = decode8(
+        &message.payload[0]
+    );
+    result.function_code = reinterpret_cast<int8_t const&>(
+        function_code_raw
+    );
+    result.pgn = (decode32(
+        &message.payload[1]
+    ) >> 0) & 0xffffff;
+    result.transmission_interval = (decode8(
+        &message.payload[4]
+    ) >> 0) & 0xf;
+    result.transmission_interval_offset = (decode8(
+        &message.payload[4]
+    ) >> 4) & 0xf;
+    result.number_of_requested_parameters = (decode8(
+        &message.payload[5]
+    ) >> 0) & 0xff;
+    auto parameter_index_raw = decode8(
+        &message.payload[6]
+    );
+    result.parameter_index = reinterpret_cast<int8_t const&>(
+        parameter_index_raw
+    );
+    auto parameter_value_raw = decode16(
+        &message.payload[7]
+    );
+    result.parameter_value = reinterpret_cast<int16_t const&>(
+        parameter_value_raw
+    );
+    return result;
+}
+const int NMEACommandGroupFunction::BYTE_LENGTH;
+const int NMEACommandGroupFunction::ID;
+
+NMEACommandGroupFunction NMEACommandGroupFunction::fromMessage(Message const& message) {
+    if (message.pgn != ID) {
+        throw std::invalid_argument("unexpected PGN ID");
+    }
+    else if (message.size != BYTE_LENGTH) {
+        throw std::invalid_argument("unexpected payload size");
+    }
+
+    NMEACommandGroupFunction result;
+
+    auto function_code_raw = decode8(
+        &message.payload[0]
+    );
+    result.function_code = reinterpret_cast<int8_t const&>(
+        function_code_raw
+    );
+    result.pgn = (decode32(
+        &message.payload[1]
+    ) >> 0) & 0xffffff;
+    result.priority = (decode8(
+        &message.payload[4]
+    ) >> 0) & 0xf;
+    result.reserved = (decode8(
+        &message.payload[4]
+    ) >> 4) & 0xf;
+    result.number_of_commanded_parameters = (decode8(
+        &message.payload[5]
+    ) >> 0) & 0xff;
+    auto parameter_index_raw = decode8(
+        &message.payload[6]
+    );
+    result.parameter_index = reinterpret_cast<int8_t const&>(
+        parameter_index_raw
+    );
+    auto parameter_value_raw = decode16(
+        &message.payload[7]
+    );
+    result.parameter_value = reinterpret_cast<int16_t const&>(
+        parameter_value_raw
+    );
+    return result;
+}
 const int NMEAAcknowledgeGroupFunction::BYTE_LENGTH;
 const int NMEAAcknowledgeGroupFunction::ID;
 
@@ -503,6 +638,198 @@ PGNListTransmitAndReceive PGNListTransmitAndReceive::fromMessage(Message const& 
     result.pgn = (decode32(
         &message.payload[1]
     ) >> 0) & 0xffffff;
+    return result;
+}
+const int AirmarCalibrateCompass::BYTE_LENGTH;
+const int AirmarCalibrateCompass::ID;
+
+AirmarCalibrateCompass AirmarCalibrateCompass::fromMessage(Message const& message) {
+    if (message.pgn != ID) {
+        throw std::invalid_argument("unexpected PGN ID");
+    }
+    else if (message.size != BYTE_LENGTH) {
+        throw std::invalid_argument("unexpected payload size");
+    }
+
+    AirmarCalibrateCompass result;
+
+    result.reserved = (decode8(
+        &message.payload[1]
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
+        &message.payload[1]
+    ) >> 5) & 0x7;
+    auto proprietary_id_raw = decode8(
+        &message.payload[2]
+    );
+    result.proprietary_id = reinterpret_cast<int8_t const&>(
+        proprietary_id_raw
+    );
+    result.calibrate_function = (decode8(
+        &message.payload[3]
+    ) >> 0) & 0xff;
+    result.calibration_status = (decode8(
+        &message.payload[4]
+    ) >> 0) & 0xff;
+    auto verify_score_raw = decode8(
+        &message.payload[5]
+    );
+    result.verify_score = reinterpret_cast<int8_t const&>(
+        verify_score_raw
+    );
+    auto x_axis_gain_value_raw = decode16(
+        &message.payload[6]
+    );
+    int16_t x_axis_gain_value_iraw =
+        reinterpret_cast<int16_t const&>(x_axis_gain_value_raw);
+    result.x_axis_gain_value = x_axis_gain_value_iraw * 0.01;
+    auto y_axis_gain_value_raw = decode16(
+        &message.payload[8]
+    );
+    int16_t y_axis_gain_value_iraw =
+        reinterpret_cast<int16_t const&>(y_axis_gain_value_raw);
+    result.y_axis_gain_value = y_axis_gain_value_iraw * 0.01;
+    auto z_axis_gain_value_raw = decode16(
+        &message.payload[10]
+    );
+    int16_t z_axis_gain_value_iraw =
+        reinterpret_cast<int16_t const&>(z_axis_gain_value_raw);
+    result.z_axis_gain_value = z_axis_gain_value_iraw * 0.01;
+    auto x_axis_linear_offset_raw = decode16(
+        &message.payload[12]
+    );
+    int16_t x_axis_linear_offset_iraw =
+        reinterpret_cast<int16_t const&>(x_axis_linear_offset_raw);
+    result.x_axis_linear_offset = x_axis_linear_offset_iraw * 0.01;
+    auto y_axis_linear_offset_raw = decode16(
+        &message.payload[14]
+    );
+    int16_t y_axis_linear_offset_iraw =
+        reinterpret_cast<int16_t const&>(y_axis_linear_offset_raw);
+    result.y_axis_linear_offset = y_axis_linear_offset_iraw * 0.01;
+    auto z_axis_linear_offset_raw = decode16(
+        &message.payload[16]
+    );
+    int16_t z_axis_linear_offset_iraw =
+        reinterpret_cast<int16_t const&>(z_axis_linear_offset_raw);
+    result.z_axis_linear_offset = z_axis_linear_offset_iraw * 0.01;
+    auto x_axis_angular_offset_raw = decode16(
+        &message.payload[18]
+    );
+    int16_t x_axis_angular_offset_iraw =
+        reinterpret_cast<int16_t const&>(x_axis_angular_offset_raw);
+    result.x_axis_angular_offset = x_axis_angular_offset_iraw * 0.1;
+    auto pitch_and_roll_damping_raw = decode16(
+        &message.payload[20]
+    );
+    int16_t pitch_and_roll_damping_iraw =
+        reinterpret_cast<int16_t const&>(pitch_and_roll_damping_raw);
+    result.pitch_and_roll_damping = pitch_and_roll_damping_iraw * 0.05;
+    auto compass_rate_gyro_damping_raw = decode16(
+        &message.payload[22]
+    );
+    int16_t compass_rate_gyro_damping_iraw =
+        reinterpret_cast<int16_t const&>(compass_rate_gyro_damping_raw);
+    result.compass_rate_gyro_damping = compass_rate_gyro_damping_iraw * 0.05;
+    return result;
+}
+const int AirmarAttitudeOffset::BYTE_LENGTH;
+const int AirmarAttitudeOffset::ID;
+
+AirmarAttitudeOffset AirmarAttitudeOffset::fromMessage(Message const& message) {
+    if (message.pgn != ID) {
+        throw std::invalid_argument("unexpected PGN ID");
+    }
+    else if (message.size != BYTE_LENGTH) {
+        throw std::invalid_argument("unexpected payload size");
+    }
+
+    AirmarAttitudeOffset result;
+
+    result.reserved = (decode8(
+        &message.payload[1]
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
+        &message.payload[1]
+    ) >> 5) & 0x7;
+    auto proprietary_id_raw = decode8(
+        &message.payload[2]
+    );
+    result.proprietary_id = reinterpret_cast<int8_t const&>(
+        proprietary_id_raw
+    );
+    auto azimuth_offset_raw = decode16(
+        &message.payload[3]
+    );
+    int16_t azimuth_offset_iraw =
+        reinterpret_cast<int16_t const&>(azimuth_offset_raw);
+    result.azimuth_offset = azimuth_offset_iraw * 0.005729577951308233;
+    auto pitch_offset_raw = decode16(
+        &message.payload[5]
+    );
+    int16_t pitch_offset_iraw =
+        reinterpret_cast<int16_t const&>(pitch_offset_raw);
+    result.pitch_offset = pitch_offset_iraw * 0.005729577951308233;
+    auto roll_offset_raw = decode16(
+        &message.payload[7]
+    );
+    int16_t roll_offset_iraw =
+        reinterpret_cast<int16_t const&>(roll_offset_raw);
+    result.roll_offset = roll_offset_iraw * 0.005729577951308233;
+    return result;
+}
+const int AirmarTrueWindOptions::BYTE_LENGTH;
+const int AirmarTrueWindOptions::ID;
+
+AirmarTrueWindOptions AirmarTrueWindOptions::fromMessage(Message const& message) {
+    if (message.pgn != ID) {
+        throw std::invalid_argument("unexpected PGN ID");
+    }
+    else if (message.size != BYTE_LENGTH) {
+        throw std::invalid_argument("unexpected payload size");
+    }
+
+    AirmarTrueWindOptions result;
+
+    result.reserved = (decode8(
+        &message.payload[1]
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
+        &message.payload[1]
+    ) >> 5) & 0x7;
+    auto proprietary_id_raw = decode8(
+        &message.payload[2]
+    );
+    result.proprietary_id = reinterpret_cast<int8_t const&>(
+        proprietary_id_raw
+    );
+    result.cog_substition_for_hdg = (decode8(
+        &message.payload[3]
+    ) >> 0) & 0x3;
+    result.calibration_status = (decode8(
+        &message.payload[3]
+    ) >> 2) & 0xff;
+    return result;
+}
+const int ManufacturerPropietaryAddressableMultiFrame::BYTE_LENGTH;
+const int ManufacturerPropietaryAddressableMultiFrame::ID;
+
+ManufacturerPropietaryAddressableMultiFrame ManufacturerPropietaryAddressableMultiFrame::fromMessage(Message const& message) {
+    if (message.pgn != ID) {
+        throw std::invalid_argument("unexpected PGN ID");
+    }
+    else if (message.size != BYTE_LENGTH) {
+        throw std::invalid_argument("unexpected payload size");
+    }
+
+    ManufacturerPropietaryAddressableMultiFrame result;
+
+    result.reserved = (decode8(
+        &message.payload[1]
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
+        &message.payload[1]
+    ) >> 5) & 0x7;
     return result;
 }
 const int AirmarAddressableMultiFrame::BYTE_LENGTH;
@@ -6217,6 +6544,81 @@ SimnetDataUserGroupConfiguration SimnetDataUserGroupConfiguration::fromMessage(M
     ) >> 5) & 0x7;
     return result;
 }
+const int SimnetAISClassBStaticDataMsg24PartB::BYTE_LENGTH;
+const int SimnetAISClassBStaticDataMsg24PartB::ID;
+
+SimnetAISClassBStaticDataMsg24PartB SimnetAISClassBStaticDataMsg24PartB::fromMessage(Message const& message) {
+    if (message.pgn != ID) {
+        throw std::invalid_argument("unexpected PGN ID");
+    }
+    else if (message.size != BYTE_LENGTH) {
+        throw std::invalid_argument("unexpected payload size");
+    }
+
+    SimnetAISClassBStaticDataMsg24PartB result;
+
+    result.reserved = (decode8(
+        &message.payload[1]
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
+        &message.payload[1]
+    ) >> 5) & 0x7;
+    result.message_id = (decode8(
+        &message.payload[2]
+    ) >> 0) & 0x3f;
+    result.repeat_indicator = (decode8(
+        &message.payload[2]
+    ) >> 6) & 0x3;
+    result.d = (decode8(
+        &message.payload[3]
+    ) >> 0) & 0xff;
+    result.e = (decode8(
+        &message.payload[4]
+    ) >> 0) & 0xff;
+    auto user_id_raw = decode32(
+        &message.payload[5]
+    );
+    result.user_id = reinterpret_cast<int32_t const&>(
+        user_id_raw
+    );
+    result.type_of_ship = (decode8(
+        &message.payload[9]
+    ) >> 0) & 0xff;
+    auto length_raw = decode16(
+        &message.payload[24]
+    );
+    int16_t length_iraw =
+        reinterpret_cast<int16_t const&>(length_raw);
+    result.length = length_iraw * 0.1;
+    auto beam_raw = decode16(
+        &message.payload[26]
+    );
+    int16_t beam_iraw =
+        reinterpret_cast<int16_t const&>(beam_raw);
+    result.beam = beam_iraw * 0.1;
+    auto position_reference_from_starboard_raw = decode16(
+        &message.payload[28]
+    );
+    int16_t position_reference_from_starboard_iraw =
+        reinterpret_cast<int16_t const&>(position_reference_from_starboard_raw);
+    result.position_reference_from_starboard = position_reference_from_starboard_iraw * 0.1;
+    auto position_reference_from_bow_raw = decode16(
+        &message.payload[30]
+    );
+    int16_t position_reference_from_bow_iraw =
+        reinterpret_cast<int16_t const&>(position_reference_from_bow_raw);
+    result.position_reference_from_bow = position_reference_from_bow_iraw * 0.1;
+    auto mothership_user_id_raw = decode32(
+        &message.payload[32]
+    );
+    result.mothership_user_id = reinterpret_cast<int32_t const&>(
+        mothership_user_id_raw
+    );
+    result. = (decode8(
+        &message.payload[36]
+    ) >> 0) & 0x3;
+    return result;
+}
 const int SimnetAISClassBStaticDataMsg24PartA::BYTE_LENGTH;
 const int SimnetAISClassBStaticDataMsg24PartA::ID;
 
@@ -6329,6 +6731,96 @@ SimnetParameterHandle SimnetParameterHandle::fromMessage(Message const& message)
     result.l = (decode16(
         &message.payload[11]
     ) >> 0) & 0xffff;
+    return result;
+}
+const int SimnetEventCommandAPCommand::BYTE_LENGTH;
+const int SimnetEventCommandAPCommand::ID;
+
+SimnetEventCommandAPCommand SimnetEventCommandAPCommand::fromMessage(Message const& message) {
+    if (message.pgn != ID) {
+        throw std::invalid_argument("unexpected PGN ID");
+    }
+    else if (message.size != BYTE_LENGTH) {
+        throw std::invalid_argument("unexpected payload size");
+    }
+
+    SimnetEventCommandAPCommand result;
+
+    result.reserved = (decode8(
+        &message.payload[1]
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
+        &message.payload[1]
+    ) >> 5) & 0x7;
+    result.ap_command = (decode8(
+        &message.payload[2]
+    ) >> 0) & 0xff;
+    result.b = (decode16(
+        &message.payload[3]
+    ) >> 0) & 0xffff;
+    result.controlling_device = (decode8(
+        &message.payload[5]
+    ) >> 0) & 0xff;
+    result.event = (decode16(
+        &message.payload[6]
+    ) >> 0) & 0xffff;
+    result.direction = (decode8(
+        &message.payload[8]
+    ) >> 0) & 0xff;
+    auto angle_raw = decode16(
+        &message.payload[9]
+    );
+    uint16_t angle_iraw =
+        reinterpret_cast<uint16_t const&>(angle_raw);
+    result.angle = angle_iraw * 0.005729577951308233;
+    result.g = (decode8(
+        &message.payload[11]
+    ) >> 0) & 0xff;
+    return result;
+}
+const int SimnetEventCommandAlarm::BYTE_LENGTH;
+const int SimnetEventCommandAlarm::ID;
+
+SimnetEventCommandAlarm SimnetEventCommandAlarm::fromMessage(Message const& message) {
+    if (message.pgn != ID) {
+        throw std::invalid_argument("unexpected PGN ID");
+    }
+    else if (message.size != BYTE_LENGTH) {
+        throw std::invalid_argument("unexpected payload size");
+    }
+
+    SimnetEventCommandAlarm result;
+
+    result.reserved = (decode8(
+        &message.payload[1]
+    ) >> 3) & 0x3;
+    result.industry_code = (decode8(
+        &message.payload[1]
+    ) >> 5) & 0x7;
+    result.a = (decode16(
+        &message.payload[2]
+    ) >> 0) & 0xffff;
+    result.alarm_command = (decode8(
+        &message.payload[4]
+    ) >> 0) & 0xff;
+    result.c = (decode8(
+        &message.payload[5]
+    ) >> 0) & 0xff;
+    result.alarm = (decode16(
+        &message.payload[6]
+    ) >> 0) & 0xffff;
+    auto message_id_raw = decode16(
+        &message.payload[8]
+    );
+    result.message_id = reinterpret_cast<int16_t const&>(
+        message_id_raw
+    );
+    result.f = (decode8(
+        &message.payload[10]
+    ) >> 0) & 0xff;
+    result.g = (decode8(
+        &message.payload[11]
+    ) >> 0) & 0xff;
     return result;
 }
 const int SimnetEventCommandUnknown::BYTE_LENGTH;
