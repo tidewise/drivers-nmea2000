@@ -36,7 +36,7 @@ const int <%= cxx_name %>::ID;
 <%              integer_field_type = "#{'u' if field.unsigned?}int#{byte_length_in_bits}_t" %>
     <%= integer_field_type %> <%= field_name %>_iraw =
         reinterpret_cast<<%= integer_field_type %> const&>(<%= field_name %>_raw);
-    result.<%= field_name %> = <%= field_name %>_iraw * <%= field.scale %>;
+    result.<%= field_name %> = <%= field_name %>_iraw * <%= field.scale %> + <%= field.offset %>;
 <%          else %>
     auto <%= field_name %>_raw = decode<%= byte_length_in_bits %>(
         &message.payload[<%= byte_offset %>]

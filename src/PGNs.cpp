@@ -163,7 +163,7 @@ LowranceTemperature LowranceTemperature::fromMessage(Message const& message) {
     );
     uint16_t actual_temperature_iraw =
         reinterpret_cast<uint16_t const&>(actual_temperature_raw);
-    result.actual_temperature = actual_temperature_iraw * 0.01;
+    result.actual_temperature = actual_temperature_iraw * 0.01 + -273.15;
     return result;
 }
 const int AirmarBootStateRequest::BYTE_LENGTH;
@@ -424,13 +424,13 @@ AirmarDeviceInformation AirmarDeviceInformation::fromMessage(Message const& mess
     );
     uint16_t internal_device_temperature_iraw =
         reinterpret_cast<uint16_t const&>(internal_device_temperature_raw);
-    result.internal_device_temperature = internal_device_temperature_iraw * 0.01;
+    result.internal_device_temperature = internal_device_temperature_iraw * 0.01 + -273.15;
     auto supply_voltage_raw = decode16(
         &message.payload[5]
     );
     int16_t supply_voltage_iraw =
         reinterpret_cast<int16_t const&>(supply_voltage_raw);
-    result.supply_voltage = supply_voltage_iraw * 0.01;
+    result.supply_voltage = supply_voltage_iraw * 0.01 + 0.0;
     result.reserved1 = (decode8(
         &message.payload[7]
     ) >> 0) & 0xff;
@@ -682,55 +682,55 @@ AirmarCalibrateCompass AirmarCalibrateCompass::fromMessage(Message const& messag
     );
     int16_t x_axis_gain_value_iraw =
         reinterpret_cast<int16_t const&>(x_axis_gain_value_raw);
-    result.x_axis_gain_value = x_axis_gain_value_iraw * 0.01;
+    result.x_axis_gain_value = x_axis_gain_value_iraw * 0.01 + 0.0;
     auto y_axis_gain_value_raw = decode16(
         &message.payload[8]
     );
     int16_t y_axis_gain_value_iraw =
         reinterpret_cast<int16_t const&>(y_axis_gain_value_raw);
-    result.y_axis_gain_value = y_axis_gain_value_iraw * 0.01;
+    result.y_axis_gain_value = y_axis_gain_value_iraw * 0.01 + 0.0;
     auto z_axis_gain_value_raw = decode16(
         &message.payload[10]
     );
     int16_t z_axis_gain_value_iraw =
         reinterpret_cast<int16_t const&>(z_axis_gain_value_raw);
-    result.z_axis_gain_value = z_axis_gain_value_iraw * 0.01;
+    result.z_axis_gain_value = z_axis_gain_value_iraw * 0.01 + 0.0;
     auto x_axis_linear_offset_raw = decode16(
         &message.payload[12]
     );
     int16_t x_axis_linear_offset_iraw =
         reinterpret_cast<int16_t const&>(x_axis_linear_offset_raw);
-    result.x_axis_linear_offset = x_axis_linear_offset_iraw * 0.01;
+    result.x_axis_linear_offset = x_axis_linear_offset_iraw * 0.01 + 0.0;
     auto y_axis_linear_offset_raw = decode16(
         &message.payload[14]
     );
     int16_t y_axis_linear_offset_iraw =
         reinterpret_cast<int16_t const&>(y_axis_linear_offset_raw);
-    result.y_axis_linear_offset = y_axis_linear_offset_iraw * 0.01;
+    result.y_axis_linear_offset = y_axis_linear_offset_iraw * 0.01 + 0.0;
     auto z_axis_linear_offset_raw = decode16(
         &message.payload[16]
     );
     int16_t z_axis_linear_offset_iraw =
         reinterpret_cast<int16_t const&>(z_axis_linear_offset_raw);
-    result.z_axis_linear_offset = z_axis_linear_offset_iraw * 0.01;
+    result.z_axis_linear_offset = z_axis_linear_offset_iraw * 0.01 + 0.0;
     auto x_axis_angular_offset_raw = decode16(
         &message.payload[18]
     );
     int16_t x_axis_angular_offset_iraw =
         reinterpret_cast<int16_t const&>(x_axis_angular_offset_raw);
-    result.x_axis_angular_offset = x_axis_angular_offset_iraw * 0.1;
+    result.x_axis_angular_offset = x_axis_angular_offset_iraw * 0.1 + 0.0;
     auto pitch_and_roll_damping_raw = decode16(
         &message.payload[20]
     );
     int16_t pitch_and_roll_damping_iraw =
         reinterpret_cast<int16_t const&>(pitch_and_roll_damping_raw);
-    result.pitch_and_roll_damping = pitch_and_roll_damping_iraw * 0.05;
+    result.pitch_and_roll_damping = pitch_and_roll_damping_iraw * 0.05 + 0.0;
     auto compass_rate_gyro_damping_raw = decode16(
         &message.payload[22]
     );
     int16_t compass_rate_gyro_damping_iraw =
         reinterpret_cast<int16_t const&>(compass_rate_gyro_damping_raw);
-    result.compass_rate_gyro_damping = compass_rate_gyro_damping_iraw * 0.05;
+    result.compass_rate_gyro_damping = compass_rate_gyro_damping_iraw * 0.05 + 0.0;
     return result;
 }
 const int AirmarAttitudeOffset::BYTE_LENGTH;
@@ -763,19 +763,19 @@ AirmarAttitudeOffset AirmarAttitudeOffset::fromMessage(Message const& message) {
     );
     int16_t azimuth_offset_iraw =
         reinterpret_cast<int16_t const&>(azimuth_offset_raw);
-    result.azimuth_offset = azimuth_offset_iraw * 0.005729577951308233;
+    result.azimuth_offset = azimuth_offset_iraw * 0.005729577951308233 + 0.0;
     auto pitch_offset_raw = decode16(
         &message.payload[5]
     );
     int16_t pitch_offset_iraw =
         reinterpret_cast<int16_t const&>(pitch_offset_raw);
-    result.pitch_offset = pitch_offset_iraw * 0.005729577951308233;
+    result.pitch_offset = pitch_offset_iraw * 0.005729577951308233 + 0.0;
     auto roll_offset_raw = decode16(
         &message.payload[7]
     );
     int16_t roll_offset_iraw =
         reinterpret_cast<int16_t const&>(roll_offset_raw);
-    result.roll_offset = roll_offset_iraw * 0.005729577951308233;
+    result.roll_offset = roll_offset_iraw * 0.005729577951308233 + 0.0;
     return result;
 }
 const int AirmarTrueWindOptions::BYTE_LENGTH;
@@ -886,7 +886,7 @@ SystemTime SystemTime::fromMessage(Message const& message) {
     );
     uint32_t time_iraw =
         reinterpret_cast<uint32_t const&>(time_raw);
-    result.time = time_iraw * 0.0001;
+    result.time = time_iraw * 0.0001 + 0.0;
     return result;
 }
 const int Heartbeat::BYTE_LENGTH;
@@ -907,7 +907,7 @@ Heartbeat Heartbeat::fromMessage(Message const& message) {
     );
     uint16_t interval_iraw =
         reinterpret_cast<uint16_t const&>(interval_raw);
-    result.interval = interval_iraw * 10.0;
+    result.interval = interval_iraw * 10.0 + 0.0;
     result.status = (decode8(
         &message.payload[2]
     ) >> 0) & 0xff;
@@ -1000,43 +1000,43 @@ HeadingTrackControl HeadingTrackControl::fromMessage(Message const& message) {
     );
     int16_t commanded_rudder_angle_iraw =
         reinterpret_cast<int16_t const&>(commanded_rudder_angle_raw);
-    result.commanded_rudder_angle = commanded_rudder_angle_iraw * 0.005729577951308233;
+    result.commanded_rudder_angle = commanded_rudder_angle_iraw * 0.005729577951308233 + 0.0;
     auto heading_to_steer_course__raw = decode16(
         &message.payload[5]
     );
     uint16_t heading_to_steer_course__iraw =
         reinterpret_cast<uint16_t const&>(heading_to_steer_course__raw);
-    result.heading_to_steer_course_ = heading_to_steer_course__iraw * 0.005729577951308233;
+    result.heading_to_steer_course_ = heading_to_steer_course__iraw * 0.005729577951308233 + 0.0;
     auto track_raw = decode16(
         &message.payload[7]
     );
     uint16_t track_iraw =
         reinterpret_cast<uint16_t const&>(track_raw);
-    result.track = track_iraw * 0.005729577951308233;
+    result.track = track_iraw * 0.005729577951308233 + 0.0;
     auto rudder_limit_raw = decode16(
         &message.payload[9]
     );
     uint16_t rudder_limit_iraw =
         reinterpret_cast<uint16_t const&>(rudder_limit_raw);
-    result.rudder_limit = rudder_limit_iraw * 0.005729577951308233;
+    result.rudder_limit = rudder_limit_iraw * 0.005729577951308233 + 0.0;
     auto off_heading_limit_raw = decode16(
         &message.payload[11]
     );
     uint16_t off_heading_limit_iraw =
         reinterpret_cast<uint16_t const&>(off_heading_limit_raw);
-    result.off_heading_limit = off_heading_limit_iraw * 0.005729577951308233;
+    result.off_heading_limit = off_heading_limit_iraw * 0.005729577951308233 + 0.0;
     auto radius_of_turn_order_raw = decode16(
         &message.payload[13]
     );
     int16_t radius_of_turn_order_iraw =
         reinterpret_cast<int16_t const&>(radius_of_turn_order_raw);
-    result.radius_of_turn_order = radius_of_turn_order_iraw * 0.005729577951308233;
+    result.radius_of_turn_order = radius_of_turn_order_iraw * 0.005729577951308233 + 0.0;
     auto rate_of_turn_order_raw = decode16(
         &message.payload[15]
     );
     int16_t rate_of_turn_order_iraw =
         reinterpret_cast<int16_t const&>(rate_of_turn_order_raw);
-    result.rate_of_turn_order = rate_of_turn_order_iraw * 0.005729577951308233;
+    result.rate_of_turn_order = rate_of_turn_order_iraw * 0.005729577951308233 + 0.0;
     result.off_track_limit = (decode16(
         &message.payload[17]
     ) >> 0) & 0xffff;
@@ -1045,7 +1045,7 @@ HeadingTrackControl HeadingTrackControl::fromMessage(Message const& message) {
     );
     uint16_t vessel_heading_iraw =
         reinterpret_cast<uint16_t const&>(vessel_heading_raw);
-    result.vessel_heading = vessel_heading_iraw * 0.005729577951308233;
+    result.vessel_heading = vessel_heading_iraw * 0.005729577951308233 + 0.0;
     return result;
 }
 const int Rudder::BYTE_LENGTH;
@@ -1069,13 +1069,13 @@ Rudder Rudder::fromMessage(Message const& message) {
     );
     int16_t angle_order_iraw =
         reinterpret_cast<int16_t const&>(angle_order_raw);
-    result.angle_order = angle_order_iraw * 0.005729577951308233;
+    result.angle_order = angle_order_iraw * 0.005729577951308233 + 0.0;
     auto position_raw = decode16(
         &message.payload[4]
     );
     int16_t position_iraw =
         reinterpret_cast<int16_t const&>(position_raw);
-    result.position = position_iraw * 0.005729577951308233;
+    result.position = position_iraw * 0.005729577951308233 + 0.0;
     result.reserved = (decode16(
         &message.payload[6]
     ) >> 0) & 0xffff;
@@ -1102,19 +1102,19 @@ VesselHeading VesselHeading::fromMessage(Message const& message) {
     );
     uint16_t heading_iraw =
         reinterpret_cast<uint16_t const&>(heading_raw);
-    result.heading = heading_iraw * 0.005729577951308233;
+    result.heading = heading_iraw * 0.005729577951308233 + 0.0;
     auto deviation_raw = decode16(
         &message.payload[3]
     );
     int16_t deviation_iraw =
         reinterpret_cast<int16_t const&>(deviation_raw);
-    result.deviation = deviation_iraw * 0.005729577951308233;
+    result.deviation = deviation_iraw * 0.005729577951308233 + 0.0;
     auto variation_raw = decode16(
         &message.payload[5]
     );
     int16_t variation_iraw =
         reinterpret_cast<int16_t const&>(variation_raw);
-    result.variation = variation_iraw * 0.005729577951308233;
+    result.variation = variation_iraw * 0.005729577951308233 + 0.0;
     result.reference = (decode8(
         &message.payload[7]
     ) >> 0) & 0x3;
@@ -1144,7 +1144,7 @@ RateOfTurn RateOfTurn::fromMessage(Message const& message) {
     );
     int32_t rate_iraw =
         reinterpret_cast<int32_t const&>(rate_raw);
-    result.rate = rate_iraw * 1.0;
+    result.rate = rate_iraw * 1.0 + 0.0;
     return result;
 }
 const int Attitude::BYTE_LENGTH;
@@ -1168,19 +1168,19 @@ Attitude Attitude::fromMessage(Message const& message) {
     );
     int16_t yaw_iraw =
         reinterpret_cast<int16_t const&>(yaw_raw);
-    result.yaw = yaw_iraw * 0.005729577951308233;
+    result.yaw = yaw_iraw * 0.005729577951308233 + 0.0;
     auto pitch_raw = decode16(
         &message.payload[3]
     );
     int16_t pitch_iraw =
         reinterpret_cast<int16_t const&>(pitch_raw);
-    result.pitch = pitch_iraw * 0.005729577951308233;
+    result.pitch = pitch_iraw * 0.005729577951308233 + 0.0;
     auto roll_raw = decode16(
         &message.payload[5]
     );
     int16_t roll_iraw =
         reinterpret_cast<int16_t const&>(roll_raw);
-    result.roll = roll_iraw * 0.005729577951308233;
+    result.roll = roll_iraw * 0.005729577951308233 + 0.0;
     return result;
 }
 const int MagneticVariation::BYTE_LENGTH;
@@ -1210,7 +1210,7 @@ MagneticVariation MagneticVariation::fromMessage(Message const& message) {
     );
     int16_t variation_iraw =
         reinterpret_cast<int16_t const&>(variation_raw);
-    result.variation = variation_iraw * 0.005729577951308233;
+    result.variation = variation_iraw * 0.005729577951308233 + 0.0;
     return result;
 }
 const int EngineParametersRapidUpdate::BYTE_LENGTH;
@@ -1231,7 +1231,7 @@ EngineParametersRapidUpdate EngineParametersRapidUpdate::fromMessage(Message con
     );
     uint16_t engine_speed_iraw =
         reinterpret_cast<uint16_t const&>(engine_speed_raw);
-    result.engine_speed = engine_speed_iraw * 0.25;
+    result.engine_speed = engine_speed_iraw * 0.25 + 0.0;
     result.engine_boost_pressure = (decode16(
         &message.payload[3]
     ) >> 0) & 0xffff;
@@ -1267,25 +1267,25 @@ EngineParametersDynamic EngineParametersDynamic::fromMessage(Message const& mess
     );
     uint16_t oil_temperature_iraw =
         reinterpret_cast<uint16_t const&>(oil_temperature_raw);
-    result.oil_temperature = oil_temperature_iraw * 0.1;
+    result.oil_temperature = oil_temperature_iraw * 0.1 + -273.15;
     auto temperature_raw = decode16(
         &message.payload[5]
     );
     uint16_t temperature_iraw =
         reinterpret_cast<uint16_t const&>(temperature_raw);
-    result.temperature = temperature_iraw * 0.01;
+    result.temperature = temperature_iraw * 0.01 + -273.15;
     auto alternator_potential_raw = decode16(
         &message.payload[7]
     );
     int16_t alternator_potential_iraw =
         reinterpret_cast<int16_t const&>(alternator_potential_raw);
-    result.alternator_potential = alternator_potential_iraw * 0.01;
+    result.alternator_potential = alternator_potential_iraw * 0.01 + 0.0;
     auto fuel_rate_raw = decode16(
         &message.payload[9]
     );
     int16_t fuel_rate_iraw =
         reinterpret_cast<int16_t const&>(fuel_rate_raw);
-    result.fuel_rate = fuel_rate_iraw * 0.1;
+    result.fuel_rate = fuel_rate_iraw * 0.1 + 0.0;
     result.total_engine_hours = (decode32(
         &message.payload[11]
     ) >> 0) & 0xffffffff;
@@ -1351,7 +1351,7 @@ TransmissionParametersDynamic TransmissionParametersDynamic::fromMessage(Message
     );
     uint16_t oil_temperature_iraw =
         reinterpret_cast<uint16_t const&>(oil_temperature_raw);
-    result.oil_temperature = oil_temperature_iraw * 0.01;
+    result.oil_temperature = oil_temperature_iraw * 0.01 + -273.15;
     auto discrete_status_1_raw = decode8(
         &message.payload[6]
     );
@@ -1378,13 +1378,13 @@ TripParametersVessel TripParametersVessel::fromMessage(Message const& message) {
     );
     int32_t time_to_empty_iraw =
         reinterpret_cast<int32_t const&>(time_to_empty_raw);
-    result.time_to_empty = time_to_empty_iraw * 0.001;
+    result.time_to_empty = time_to_empty_iraw * 0.001 + 0.0;
     auto distance_to_empty_raw = decode32(
         &message.payload[4]
     );
     int32_t distance_to_empty_iraw =
         reinterpret_cast<int32_t const&>(distance_to_empty_raw);
-    result.distance_to_empty = distance_to_empty_iraw * 0.01;
+    result.distance_to_empty = distance_to_empty_iraw * 0.01 + 0.0;
     result.estimated_fuel_remaining = (decode16(
         &message.payload[8]
     ) >> 0) & 0xffff;
@@ -1393,7 +1393,7 @@ TripParametersVessel TripParametersVessel::fromMessage(Message const& message) {
     );
     int32_t trip_run_time_iraw =
         reinterpret_cast<int32_t const&>(trip_run_time_raw);
-    result.trip_run_time = trip_run_time_iraw * 0.001;
+    result.trip_run_time = trip_run_time_iraw * 0.001 + 0.0;
     return result;
 }
 const int TripParametersEngine::BYTE_LENGTH;
@@ -1417,19 +1417,19 @@ TripParametersEngine TripParametersEngine::fromMessage(Message const& message) {
     );
     int16_t fuel_rate_average_iraw =
         reinterpret_cast<int16_t const&>(fuel_rate_average_raw);
-    result.fuel_rate_average = fuel_rate_average_iraw * 0.1;
+    result.fuel_rate_average = fuel_rate_average_iraw * 0.1 + 0.0;
     auto fuel_rate_economy_raw = decode16(
         &message.payload[5]
     );
     int16_t fuel_rate_economy_iraw =
         reinterpret_cast<int16_t const&>(fuel_rate_economy_raw);
-    result.fuel_rate_economy = fuel_rate_economy_iraw * 0.1;
+    result.fuel_rate_economy = fuel_rate_economy_iraw * 0.1 + 0.0;
     auto instantaneous_fuel_economy_raw = decode16(
         &message.payload[7]
     );
     int16_t instantaneous_fuel_economy_iraw =
         reinterpret_cast<int16_t const&>(instantaneous_fuel_economy_raw);
-    result.instantaneous_fuel_economy = instantaneous_fuel_economy_iraw * 0.1;
+    result.instantaneous_fuel_economy = instantaneous_fuel_economy_iraw * 0.1 + 0.0;
     return result;
 }
 const int EngineParametersStatic::BYTE_LENGTH;
@@ -1522,25 +1522,25 @@ ACInputStatus ACInputStatus::fromMessage(Message const& message) {
     );
     int16_t voltage_iraw =
         reinterpret_cast<int16_t const&>(voltage_raw);
-    result.voltage = voltage_iraw * 0.01;
+    result.voltage = voltage_iraw * 0.01 + 0.0;
     auto current_raw = decode16(
         &message.payload[5]
     );
     int16_t current_iraw =
         reinterpret_cast<int16_t const&>(current_raw);
-    result.current = current_iraw * 0.1;
+    result.current = current_iraw * 0.1 + 0.0;
     auto frequency_raw = decode16(
         &message.payload[7]
     );
     int16_t frequency_iraw =
         reinterpret_cast<int16_t const&>(frequency_raw);
-    result.frequency = frequency_iraw * 0.01;
+    result.frequency = frequency_iraw * 0.01 + 0.0;
     auto breaker_size_raw = decode16(
         &message.payload[9]
     );
     int16_t breaker_size_iraw =
         reinterpret_cast<int16_t const&>(breaker_size_raw);
-    result.breaker_size = breaker_size_iraw * 0.1;
+    result.breaker_size = breaker_size_iraw * 0.1 + 0.0;
     auto real_power_raw = decode32(
         &message.payload[11]
     );
@@ -1558,7 +1558,7 @@ ACInputStatus ACInputStatus::fromMessage(Message const& message) {
     );
     int8_t power_factor_iraw =
         reinterpret_cast<int8_t const&>(power_factor_raw);
-    result.power_factor = power_factor_iraw * 0.01;
+    result.power_factor = power_factor_iraw * 0.01 + 0.0;
     return result;
 }
 const int ACOutputStatus::BYTE_LENGTH;
@@ -1591,25 +1591,25 @@ ACOutputStatus ACOutputStatus::fromMessage(Message const& message) {
     );
     int16_t voltage_iraw =
         reinterpret_cast<int16_t const&>(voltage_raw);
-    result.voltage = voltage_iraw * 0.01;
+    result.voltage = voltage_iraw * 0.01 + 0.0;
     auto current_raw = decode16(
         &message.payload[5]
     );
     int16_t current_iraw =
         reinterpret_cast<int16_t const&>(current_raw);
-    result.current = current_iraw * 0.1;
+    result.current = current_iraw * 0.1 + 0.0;
     auto frequency_raw = decode16(
         &message.payload[7]
     );
     int16_t frequency_iraw =
         reinterpret_cast<int16_t const&>(frequency_raw);
-    result.frequency = frequency_iraw * 0.01;
+    result.frequency = frequency_iraw * 0.01 + 0.0;
     auto breaker_size_raw = decode16(
         &message.payload[9]
     );
     int16_t breaker_size_iraw =
         reinterpret_cast<int16_t const&>(breaker_size_raw);
-    result.breaker_size = breaker_size_iraw * 0.1;
+    result.breaker_size = breaker_size_iraw * 0.1 + 0.0;
     auto real_power_raw = decode32(
         &message.payload[11]
     );
@@ -1627,7 +1627,7 @@ ACOutputStatus ACOutputStatus::fromMessage(Message const& message) {
     );
     int8_t power_factor_iraw =
         reinterpret_cast<int8_t const&>(power_factor_raw);
-    result.power_factor = power_factor_iraw * 0.01;
+    result.power_factor = power_factor_iraw * 0.01 + 0.0;
     return result;
 }
 const int FluidLevel::BYTE_LENGTH;
@@ -1651,13 +1651,13 @@ FluidLevel FluidLevel::fromMessage(Message const& message) {
     );
     int16_t level_iraw =
         reinterpret_cast<int16_t const&>(level_raw);
-    result.level = level_iraw * 0.004;
+    result.level = level_iraw * 0.004 + 0.0;
     auto capacity_raw = decode32(
         &message.payload[3]
     );
     int32_t capacity_iraw =
         reinterpret_cast<int32_t const&>(capacity_raw);
-    result.capacity = capacity_iraw * 0.1;
+    result.capacity = capacity_iraw * 0.1 + 0.0;
     result.reserved = (decode8(
         &message.payload[7]
     ) >> 0) & 0xff;
@@ -1696,7 +1696,7 @@ DCDetailedStatus DCDetailedStatus::fromMessage(Message const& message) {
     );
     int16_t ripple_voltage_iraw =
         reinterpret_cast<int16_t const&>(ripple_voltage_raw);
-    result.ripple_voltage = ripple_voltage_iraw * 0.001;
+    result.ripple_voltage = ripple_voltage_iraw * 0.001 + 0.0;
     return result;
 }
 const int ChargerStatus::BYTE_LENGTH;
@@ -1750,19 +1750,19 @@ BatteryStatus BatteryStatus::fromMessage(Message const& message) {
     );
     int16_t voltage_iraw =
         reinterpret_cast<int16_t const&>(voltage_raw);
-    result.voltage = voltage_iraw * 0.01;
+    result.voltage = voltage_iraw * 0.01 + 0.0;
     auto current_raw = decode16(
         &message.payload[3]
     );
     int16_t current_iraw =
         reinterpret_cast<int16_t const&>(current_raw);
-    result.current = current_iraw * 0.1;
+    result.current = current_iraw * 0.1 + 0.0;
     auto temperature_raw = decode16(
         &message.payload[5]
     );
     uint16_t temperature_iraw =
         reinterpret_cast<uint16_t const&>(temperature_raw);
-    result.temperature = temperature_iraw * 0.01;
+    result.temperature = temperature_iraw * 0.01 + -273.15;
     result.sid = (decode8(
         &message.payload[7]
     ) >> 0) & 0xff;
@@ -1813,7 +1813,7 @@ ChargerConfigurationStatus ChargerConfigurationStatus::fromMessage(Message const
     );
     int16_t charge_current_limit_iraw =
         reinterpret_cast<int16_t const&>(charge_current_limit_raw);
-    result.charge_current_limit = charge_current_limit_iraw * 0.1;
+    result.charge_current_limit = charge_current_limit_iraw * 0.1 + 0.0;
     result.charging_algorithm = (decode8(
         &message.payload[5]
     ) >> 0) & 0xff;
@@ -1825,7 +1825,7 @@ ChargerConfigurationStatus ChargerConfigurationStatus::fromMessage(Message const
     );
     uint16_t estimated_temperature_iraw =
         reinterpret_cast<uint16_t const&>(estimated_temperature_raw);
-    result.estimated_temperature = estimated_temperature_iraw * 0.01;
+    result.estimated_temperature = estimated_temperature_iraw * 0.01 + -273.15;
     result.equalize_one_time_enable_disable = (decode8(
         &message.payload[9]
     ) >> 0) & 0xf;
@@ -1975,13 +1975,13 @@ Speed Speed::fromMessage(Message const& message) {
     );
     int16_t speed_water_referenced_iraw =
         reinterpret_cast<int16_t const&>(speed_water_referenced_raw);
-    result.speed_water_referenced = speed_water_referenced_iraw * 0.01;
+    result.speed_water_referenced = speed_water_referenced_iraw * 0.01 + 0.0;
     auto speed_ground_referenced_raw = decode16(
         &message.payload[3]
     );
     int16_t speed_ground_referenced_iraw =
         reinterpret_cast<int16_t const&>(speed_ground_referenced_raw);
-    result.speed_ground_referenced = speed_ground_referenced_iraw * 0.01;
+    result.speed_ground_referenced = speed_ground_referenced_iraw * 0.01 + 0.0;
     result.speed_water_referenced_type = (decode8(
         &message.payload[5]
     ) >> 0) & 0xff;
@@ -2011,19 +2011,19 @@ WaterDepth WaterDepth::fromMessage(Message const& message) {
     );
     uint32_t depth_iraw =
         reinterpret_cast<uint32_t const&>(depth_raw);
-    result.depth = depth_iraw * 0.01;
+    result.depth = depth_iraw * 0.01 + 0.0;
     auto offset_raw = decode16(
         &message.payload[5]
     );
     int16_t offset_iraw =
         reinterpret_cast<int16_t const&>(offset_raw);
-    result.offset = offset_iraw * 0.001;
+    result.offset = offset_iraw * 0.001 + 0.0;
     auto offset1_raw = decode8(
         &message.payload[7]
     );
     int8_t offset1_iraw =
         reinterpret_cast<int8_t const&>(offset1_raw);
-    result.offset1 = offset1_iraw * 10.0;
+    result.offset1 = offset1_iraw * 10.0 + 0.0;
     return result;
 }
 const int DistanceLog::BYTE_LENGTH;
@@ -2047,7 +2047,7 @@ DistanceLog DistanceLog::fromMessage(Message const& message) {
     );
     uint32_t time_iraw =
         reinterpret_cast<uint32_t const&>(time_raw);
-    result.time = time_iraw * 0.0001;
+    result.time = time_iraw * 0.0001 + 0.0;
     result.log = (decode32(
         &message.payload[6]
     ) >> 0) & 0xffffffff;
@@ -2095,43 +2095,43 @@ TrackedTargetData TrackedTargetData::fromMessage(Message const& message) {
     );
     uint16_t bearing_iraw =
         reinterpret_cast<uint16_t const&>(bearing_raw);
-    result.bearing = bearing_iraw * 0.005729577951308233;
+    result.bearing = bearing_iraw * 0.005729577951308233 + 0.0;
     auto distance_raw = decode32(
         &message.payload[5]
     );
     int32_t distance_iraw =
         reinterpret_cast<int32_t const&>(distance_raw);
-    result.distance = distance_iraw * 0.001;
+    result.distance = distance_iraw * 0.001 + 0.0;
     auto course_raw = decode16(
         &message.payload[9]
     );
     uint16_t course_iraw =
         reinterpret_cast<uint16_t const&>(course_raw);
-    result.course = course_iraw * 0.005729577951308233;
+    result.course = course_iraw * 0.005729577951308233 + 0.0;
     auto speed_raw = decode16(
         &message.payload[11]
     );
     uint16_t speed_iraw =
         reinterpret_cast<uint16_t const&>(speed_raw);
-    result.speed = speed_iraw * 0.01;
+    result.speed = speed_iraw * 0.01 + 0.0;
     auto cpa_raw = decode32(
         &message.payload[13]
     );
     int32_t cpa_iraw =
         reinterpret_cast<int32_t const&>(cpa_raw);
-    result.cpa = cpa_iraw * 0.01;
+    result.cpa = cpa_iraw * 0.01 + 0.0;
     auto tcpa_raw = decode32(
         &message.payload[17]
     );
     int32_t tcpa_iraw =
         reinterpret_cast<int32_t const&>(tcpa_raw);
-    result.tcpa = tcpa_iraw * 0.001;
+    result.tcpa = tcpa_iraw * 0.001 + 0.0;
     auto utc_of_fix_raw = decode32(
         &message.payload[21]
     );
     uint32_t utc_of_fix_iraw =
         reinterpret_cast<uint32_t const&>(utc_of_fix_raw);
-    result.utc_of_fix = utc_of_fix_iraw * 0.0001;
+    result.utc_of_fix = utc_of_fix_iraw * 0.0001 + 0.0;
     return result;
 }
 const int PositionRapidUpdate::BYTE_LENGTH;
@@ -2152,13 +2152,13 @@ PositionRapidUpdate PositionRapidUpdate::fromMessage(Message const& message) {
     );
     int32_t latitude_iraw =
         reinterpret_cast<int32_t const&>(latitude_raw);
-    result.latitude = latitude_iraw * 1.0e-07;
+    result.latitude = latitude_iraw * 1.0e-07 + 0.0;
     auto longitude_raw = decode32(
         &message.payload[4]
     );
     int32_t longitude_iraw =
         reinterpret_cast<int32_t const&>(longitude_raw);
-    result.longitude = longitude_iraw * 1.0e-07;
+    result.longitude = longitude_iraw * 1.0e-07 + 0.0;
     return result;
 }
 const int COGSOGRapidUpdate::BYTE_LENGTH;
@@ -2185,13 +2185,13 @@ COGSOGRapidUpdate COGSOGRapidUpdate::fromMessage(Message const& message) {
     );
     uint16_t cog_iraw =
         reinterpret_cast<uint16_t const&>(cog_raw);
-    result.cog = cog_iraw * 0.005729577951308233;
+    result.cog = cog_iraw * 0.005729577951308233 + 0.0;
     auto sog_raw = decode16(
         &message.payload[4]
     );
     uint16_t sog_iraw =
         reinterpret_cast<uint16_t const&>(sog_raw);
-    result.sog = sog_iraw * 0.01;
+    result.sog = sog_iraw * 0.01 + 0.0;
     return result;
 }
 const int PositionDeltaRapidUpdate::BYTE_LENGTH;
@@ -2251,7 +2251,7 @@ AltitudeDeltaRapidUpdate AltitudeDeltaRapidUpdate::fromMessage(Message const& me
     );
     uint32_t course_over_ground_iraw =
         reinterpret_cast<uint32_t const&>(course_over_ground_raw);
-    result.course_over_ground = course_over_ground_iraw * 0.005729577951308233;
+    result.course_over_ground = course_over_ground_iraw * 0.005729577951308233 + 0.0;
     result.altitude_delta = (decode16(
         &message.payload[8]
     ) >> 0) & 0xffff;
@@ -2281,25 +2281,25 @@ GNSSPositionData GNSSPositionData::fromMessage(Message const& message) {
     );
     uint32_t time_iraw =
         reinterpret_cast<uint32_t const&>(time_raw);
-    result.time = time_iraw * 0.0001;
+    result.time = time_iraw * 0.0001 + 0.0;
     auto latitude_raw = decode64(
         &message.payload[7]
     );
     int64_t latitude_iraw =
         reinterpret_cast<int64_t const&>(latitude_raw);
-    result.latitude = latitude_iraw * 1.0e-16;
+    result.latitude = latitude_iraw * 1.0e-16 + 0.0;
     auto longitude_raw = decode64(
         &message.payload[15]
     );
     int64_t longitude_iraw =
         reinterpret_cast<int64_t const&>(longitude_raw);
-    result.longitude = longitude_iraw * 1.0e-16;
+    result.longitude = longitude_iraw * 1.0e-16 + 0.0;
     auto altitude_raw = decode64(
         &message.payload[23]
     );
     int64_t altitude_iraw =
         reinterpret_cast<int64_t const&>(altitude_raw);
-    result.altitude = altitude_iraw * 1.0e-06;
+    result.altitude = altitude_iraw * 1.0e-06 + 0.0;
     result.gnss_type = (decode8(
         &message.payload[31]
     ) >> 0) & 0xf;
@@ -2317,19 +2317,19 @@ GNSSPositionData GNSSPositionData::fromMessage(Message const& message) {
     );
     int16_t hdop_iraw =
         reinterpret_cast<int16_t const&>(hdop_raw);
-    result.hdop = hdop_iraw * 0.01;
+    result.hdop = hdop_iraw * 0.01 + 0.0;
     auto pdop_raw = decode16(
         &message.payload[36]
     );
     int16_t pdop_iraw =
         reinterpret_cast<int16_t const&>(pdop_raw);
-    result.pdop = pdop_iraw * 0.01;
+    result.pdop = pdop_iraw * 0.01 + 0.0;
     auto geoidal_separation_raw = decode16(
         &message.payload[38]
     );
     int16_t geoidal_separation_iraw =
         reinterpret_cast<int16_t const&>(geoidal_separation_raw);
-    result.geoidal_separation = geoidal_separation_iraw * 0.01;
+    result.geoidal_separation = geoidal_separation_iraw * 0.01 + 0.0;
     result.reference_stations = (decode8(
         &message.payload[40]
     ) >> 0) & 0xff;
@@ -2344,7 +2344,7 @@ GNSSPositionData GNSSPositionData::fromMessage(Message const& message) {
     );
     int16_t age_of_dgnss_corrections_iraw =
         reinterpret_cast<int16_t const&>(age_of_dgnss_corrections_raw);
-    result.age_of_dgnss_corrections = age_of_dgnss_corrections_iraw * 0.01;
+    result.age_of_dgnss_corrections = age_of_dgnss_corrections_iraw * 0.01 + 0.0;
     return result;
 }
 const int TimeDate::BYTE_LENGTH;
@@ -2368,7 +2368,7 @@ TimeDate TimeDate::fromMessage(Message const& message) {
     );
     uint32_t time_iraw =
         reinterpret_cast<uint32_t const&>(time_raw);
-    result.time = time_iraw * 0.0001;
+    result.time = time_iraw * 0.0001 + 0.0;
     auto local_offset_raw = decode16(
         &message.payload[6]
     );
@@ -2407,13 +2407,13 @@ AISClassAPositionReport AISClassAPositionReport::fromMessage(Message const& mess
     );
     int32_t longitude_iraw =
         reinterpret_cast<int32_t const&>(longitude_raw);
-    result.longitude = longitude_iraw * 1.0e-07;
+    result.longitude = longitude_iraw * 1.0e-07 + 0.0;
     auto latitude_raw = decode32(
         &message.payload[9]
     );
     int32_t latitude_iraw =
         reinterpret_cast<int32_t const&>(latitude_raw);
-    result.latitude = latitude_iraw * 1.0e-07;
+    result.latitude = latitude_iraw * 1.0e-07 + 0.0;
     result.position_accuracy = (decode8(
         &message.payload[13]
     ) >> 0) & 0x1;
@@ -2428,13 +2428,13 @@ AISClassAPositionReport AISClassAPositionReport::fromMessage(Message const& mess
     );
     uint16_t cog_iraw =
         reinterpret_cast<uint16_t const&>(cog_raw);
-    result.cog = cog_iraw * 0.005729577951308233;
+    result.cog = cog_iraw * 0.005729577951308233 + 0.0;
     auto sog_raw = decode16(
         &message.payload[16]
     );
     uint16_t sog_iraw =
         reinterpret_cast<uint16_t const&>(sog_raw);
-    result.sog = sog_iraw * 0.01;
+    result.sog = sog_iraw * 0.01 + 0.0;
     result.ais_transceiver_information = (decode8(
         &message.payload[20]
     ) >> 3) & 0x1f;
@@ -2443,13 +2443,13 @@ AISClassAPositionReport AISClassAPositionReport::fromMessage(Message const& mess
     );
     uint16_t heading_iraw =
         reinterpret_cast<uint16_t const&>(heading_raw);
-    result.heading = heading_iraw * 0.005729577951308233;
+    result.heading = heading_iraw * 0.005729577951308233 + 0.0;
     auto rate_of_turn_raw = decode16(
         &message.payload[23]
     );
     uint16_t rate_of_turn_iraw =
         reinterpret_cast<uint16_t const&>(rate_of_turn_raw);
-    result.rate_of_turn = rate_of_turn_iraw * 0.005729577951308233;
+    result.rate_of_turn = rate_of_turn_iraw * 0.005729577951308233 + 0.0;
     result.nav_status = (decode8(
         &message.payload[25]
     ) >> 0) & 0xff;
@@ -2491,13 +2491,13 @@ AISClassBPositionReport AISClassBPositionReport::fromMessage(Message const& mess
     );
     int32_t longitude_iraw =
         reinterpret_cast<int32_t const&>(longitude_raw);
-    result.longitude = longitude_iraw * 1.0e-07;
+    result.longitude = longitude_iraw * 1.0e-07 + 0.0;
     auto latitude_raw = decode32(
         &message.payload[9]
     );
     int32_t latitude_iraw =
         reinterpret_cast<int32_t const&>(latitude_raw);
-    result.latitude = latitude_iraw * 1.0e-07;
+    result.latitude = latitude_iraw * 1.0e-07 + 0.0;
     result.position_accuracy = (decode8(
         &message.payload[13]
     ) >> 0) & 0x1;
@@ -2512,13 +2512,13 @@ AISClassBPositionReport AISClassBPositionReport::fromMessage(Message const& mess
     );
     uint16_t cog_iraw =
         reinterpret_cast<uint16_t const&>(cog_raw);
-    result.cog = cog_iraw * 0.005729577951308233;
+    result.cog = cog_iraw * 0.005729577951308233 + 0.0;
     auto sog_raw = decode16(
         &message.payload[16]
     );
     uint16_t sog_iraw =
         reinterpret_cast<uint16_t const&>(sog_raw);
-    result.sog = sog_iraw * 0.01;
+    result.sog = sog_iraw * 0.01 + 0.0;
     result.ais_transceiver_information = (decode8(
         &message.payload[20]
     ) >> 3) & 0x1f;
@@ -2527,7 +2527,7 @@ AISClassBPositionReport AISClassBPositionReport::fromMessage(Message const& mess
     );
     uint16_t heading_iraw =
         reinterpret_cast<uint16_t const&>(heading_raw);
-    result.heading = heading_iraw * 0.005729577951308233;
+    result.heading = heading_iraw * 0.005729577951308233 + 0.0;
     result.regional_application = (decode8(
         &message.payload[23]
     ) >> 0) & 0xff;
@@ -2587,13 +2587,13 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     );
     int32_t longitude_iraw =
         reinterpret_cast<int32_t const&>(longitude_raw);
-    result.longitude = longitude_iraw * 1.0e-07;
+    result.longitude = longitude_iraw * 1.0e-07 + 0.0;
     auto latitude_raw = decode32(
         &message.payload[9]
     );
     int32_t latitude_iraw =
         reinterpret_cast<int32_t const&>(latitude_raw);
-    result.latitude = latitude_iraw * 1.0e-07;
+    result.latitude = latitude_iraw * 1.0e-07 + 0.0;
     result.position_accuracy = (decode8(
         &message.payload[13]
     ) >> 0) & 0x1;
@@ -2608,13 +2608,13 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     );
     uint16_t cog_iraw =
         reinterpret_cast<uint16_t const&>(cog_raw);
-    result.cog = cog_iraw * 0.005729577951308233;
+    result.cog = cog_iraw * 0.005729577951308233 + 0.0;
     auto sog_raw = decode16(
         &message.payload[16]
     );
     uint16_t sog_iraw =
         reinterpret_cast<uint16_t const&>(sog_raw);
-    result.sog = sog_iraw * 0.01;
+    result.sog = sog_iraw * 0.01 + 0.0;
     result.regional_application = (decode8(
         &message.payload[18]
     ) >> 0) & 0xff;
@@ -2629,7 +2629,7 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     );
     uint16_t true_heading_iraw =
         reinterpret_cast<uint16_t const&>(true_heading_raw);
-    result.true_heading = true_heading_iraw * 0.005729577951308233;
+    result.true_heading = true_heading_iraw * 0.005729577951308233 + 0.0;
     result.gnss_type = (decode8(
         &message.payload[23]
     ) >> 4) & 0xf;
@@ -2638,25 +2638,25 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     );
     int16_t length_iraw =
         reinterpret_cast<int16_t const&>(length_raw);
-    result.length = length_iraw * 0.1;
+    result.length = length_iraw * 0.1 + 0.0;
     auto beam_raw = decode16(
         &message.payload[26]
     );
     int16_t beam_iraw =
         reinterpret_cast<int16_t const&>(beam_raw);
-    result.beam = beam_iraw * 0.1;
+    result.beam = beam_iraw * 0.1 + 0.0;
     auto position_reference_from_starboard_raw = decode16(
         &message.payload[28]
     );
     int16_t position_reference_from_starboard_iraw =
         reinterpret_cast<int16_t const&>(position_reference_from_starboard_raw);
-    result.position_reference_from_starboard = position_reference_from_starboard_iraw * 0.1;
+    result.position_reference_from_starboard = position_reference_from_starboard_iraw * 0.1 + 0.0;
     auto position_reference_from_bow_raw = decode16(
         &message.payload[30]
     );
     int16_t position_reference_from_bow_iraw =
         reinterpret_cast<int16_t const&>(position_reference_from_bow_raw);
-    result.position_reference_from_bow = position_reference_from_bow_iraw * 0.1;
+    result.position_reference_from_bow = position_reference_from_bow_iraw * 0.1 + 0.0;
     result.dte = (decode8(
         &message.payload[52]
     ) >> 0) & 0x1;
@@ -2686,19 +2686,19 @@ Datum Datum::fromMessage(Message const& message) {
     );
     int32_t delta_latitude_iraw =
         reinterpret_cast<int32_t const&>(delta_latitude_raw);
-    result.delta_latitude = delta_latitude_iraw * 1.0e-07;
+    result.delta_latitude = delta_latitude_iraw * 1.0e-07 + 0.0;
     auto delta_longitude_raw = decode32(
         &message.payload[8]
     );
     int32_t delta_longitude_iraw =
         reinterpret_cast<int32_t const&>(delta_longitude_raw);
-    result.delta_longitude = delta_longitude_iraw * 1.0e-07;
+    result.delta_longitude = delta_longitude_iraw * 1.0e-07 + 0.0;
     auto delta_altitude_raw = decode32(
         &message.payload[12]
     );
     int32_t delta_altitude_iraw =
         reinterpret_cast<int32_t const&>(delta_altitude_raw);
-    result.delta_altitude = delta_altitude_iraw * 1.0;
+    result.delta_altitude = delta_altitude_iraw * 1.0 + 0.0;
     return result;
 }
 const int UserDatum::BYTE_LENGTH;
@@ -2719,55 +2719,55 @@ UserDatum UserDatum::fromMessage(Message const& message) {
     );
     int32_t delta_x_iraw =
         reinterpret_cast<int32_t const&>(delta_x_raw);
-    result.delta_x = delta_x_iraw * 0.01;
+    result.delta_x = delta_x_iraw * 0.01 + 0.0;
     auto delta_y_raw = decode32(
         &message.payload[4]
     );
     int32_t delta_y_iraw =
         reinterpret_cast<int32_t const&>(delta_y_raw);
-    result.delta_y = delta_y_iraw * 0.01;
+    result.delta_y = delta_y_iraw * 0.01 + 0.0;
     auto delta_z_raw = decode32(
         &message.payload[8]
     );
     int32_t delta_z_iraw =
         reinterpret_cast<int32_t const&>(delta_z_raw);
-    result.delta_z = delta_z_iraw * 0.01;
+    result.delta_z = delta_z_iraw * 0.01 + 0.0;
     auto rotation_in_x_raw = decode32(
         &message.payload[12]
     );
     int32_t rotation_in_x_iraw =
         reinterpret_cast<int32_t const&>(rotation_in_x_raw);
-    result.rotation_in_x = rotation_in_x_iraw * 1.0;
+    result.rotation_in_x = rotation_in_x_iraw * 1.0 + 0.0;
     auto rotation_in_y_raw = decode32(
         &message.payload[16]
     );
     int32_t rotation_in_y_iraw =
         reinterpret_cast<int32_t const&>(rotation_in_y_raw);
-    result.rotation_in_y = rotation_in_y_iraw * 1.0;
+    result.rotation_in_y = rotation_in_y_iraw * 1.0 + 0.0;
     auto rotation_in_z_raw = decode32(
         &message.payload[20]
     );
     int32_t rotation_in_z_iraw =
         reinterpret_cast<int32_t const&>(rotation_in_z_raw);
-    result.rotation_in_z = rotation_in_z_iraw * 1.0;
+    result.rotation_in_z = rotation_in_z_iraw * 1.0 + 0.0;
     auto scale_raw = decode32(
         &message.payload[24]
     );
     int32_t scale_iraw =
         reinterpret_cast<int32_t const&>(scale_raw);
-    result.scale = scale_iraw * 1.0;
+    result.scale = scale_iraw * 1.0 + 0.0;
     auto ellipsoid_semi_major_axis_raw = decode32(
         &message.payload[28]
     );
     int32_t ellipsoid_semi_major_axis_iraw =
         reinterpret_cast<int32_t const&>(ellipsoid_semi_major_axis_raw);
-    result.ellipsoid_semi_major_axis = ellipsoid_semi_major_axis_iraw * 0.01;
+    result.ellipsoid_semi_major_axis = ellipsoid_semi_major_axis_iraw * 0.01 + 0.0;
     auto ellipsoid_flattening_inverse_raw = decode32(
         &message.payload[32]
     );
     int32_t ellipsoid_flattening_inverse_iraw =
         reinterpret_cast<int32_t const&>(ellipsoid_flattening_inverse_raw);
-    result.ellipsoid_flattening_inverse = ellipsoid_flattening_inverse_iraw * 1.0;
+    result.ellipsoid_flattening_inverse = ellipsoid_flattening_inverse_iraw * 1.0 + 0.0;
     return result;
 }
 const int CrossTrackError::BYTE_LENGTH;
@@ -2797,7 +2797,7 @@ CrossTrackError CrossTrackError::fromMessage(Message const& message) {
     );
     int32_t xte_iraw =
         reinterpret_cast<int32_t const&>(xte_raw);
-    result.xte = xte_iraw * 0.01;
+    result.xte = xte_iraw * 0.01 + 0.0;
     return result;
 }
 const int NavigationData::BYTE_LENGTH;
@@ -2821,7 +2821,7 @@ NavigationData NavigationData::fromMessage(Message const& message) {
     );
     int32_t distance_to_waypoint_iraw =
         reinterpret_cast<int32_t const&>(distance_to_waypoint_raw);
-    result.distance_to_waypoint = distance_to_waypoint_iraw * 0.01;
+    result.distance_to_waypoint = distance_to_waypoint_iraw * 0.01 + 0.0;
     result.course_bearing_reference = (decode8(
         &message.payload[5]
     ) >> 0) & 0x3;
@@ -2839,7 +2839,7 @@ NavigationData NavigationData::fromMessage(Message const& message) {
     );
     uint32_t eta_time_iraw =
         reinterpret_cast<uint32_t const&>(eta_time_raw);
-    result.eta_time = eta_time_iraw * 0.0001;
+    result.eta_time = eta_time_iraw * 0.0001 + 0.0;
     result.eta_date = (decode16(
         &message.payload[10]
     ) >> 0) & 0xffff;
@@ -2848,13 +2848,13 @@ NavigationData NavigationData::fromMessage(Message const& message) {
     );
     uint16_t bearing_origin_to_destination_waypoint_iraw =
         reinterpret_cast<uint16_t const&>(bearing_origin_to_destination_waypoint_raw);
-    result.bearing_origin_to_destination_waypoint = bearing_origin_to_destination_waypoint_iraw * 0.005729577951308233;
+    result.bearing_origin_to_destination_waypoint = bearing_origin_to_destination_waypoint_iraw * 0.005729577951308233 + 0.0;
     auto bearing_position_to_destination_waypoint_raw = decode16(
         &message.payload[14]
     );
     uint16_t bearing_position_to_destination_waypoint_iraw =
         reinterpret_cast<uint16_t const&>(bearing_position_to_destination_waypoint_raw);
-    result.bearing_position_to_destination_waypoint = bearing_position_to_destination_waypoint_iraw * 0.005729577951308233;
+    result.bearing_position_to_destination_waypoint = bearing_position_to_destination_waypoint_iraw * 0.005729577951308233 + 0.0;
     result.origin_waypoint_number = (decode32(
         &message.payload[16]
     ) >> 0) & 0xffffffff;
@@ -2866,19 +2866,19 @@ NavigationData NavigationData::fromMessage(Message const& message) {
     );
     int32_t destination_latitude_iraw =
         reinterpret_cast<int32_t const&>(destination_latitude_raw);
-    result.destination_latitude = destination_latitude_iraw * 1.0e-07;
+    result.destination_latitude = destination_latitude_iraw * 1.0e-07 + 0.0;
     auto destination_longitude_raw = decode32(
         &message.payload[28]
     );
     int32_t destination_longitude_iraw =
         reinterpret_cast<int32_t const&>(destination_longitude_raw);
-    result.destination_longitude = destination_longitude_iraw * 1.0e-07;
+    result.destination_longitude = destination_longitude_iraw * 1.0e-07 + 0.0;
     auto waypoint_closing_velocity_raw = decode16(
         &message.payload[32]
     );
     int16_t waypoint_closing_velocity_iraw =
         reinterpret_cast<int16_t const&>(waypoint_closing_velocity_raw);
-    result.waypoint_closing_velocity = waypoint_closing_velocity_iraw * 0.01;
+    result.waypoint_closing_velocity = waypoint_closing_velocity_iraw * 0.01 + 0.0;
     return result;
 }
 const int NavigationRouteWPInformation::BYTE_LENGTH;
@@ -2920,13 +2920,13 @@ NavigationRouteWPInformation NavigationRouteWPInformation::fromMessage(Message c
     );
     int32_t wp_latitude_iraw =
         reinterpret_cast<int32_t const&>(wp_latitude_raw);
-    result.wp_latitude = wp_latitude_iraw * 1.0e-07;
+    result.wp_latitude = wp_latitude_iraw * 1.0e-07 + 0.0;
     auto wp_longitude_raw = decode32(
         &message.payload[526]
     );
     int32_t wp_longitude_iraw =
         reinterpret_cast<int32_t const&>(wp_longitude_raw);
-    result.wp_longitude = wp_longitude_iraw * 1.0e-07;
+    result.wp_longitude = wp_longitude_iraw * 1.0e-07 + 0.0;
     return result;
 }
 const int SetDriftRapidUpdate::BYTE_LENGTH;
@@ -2953,13 +2953,13 @@ SetDriftRapidUpdate SetDriftRapidUpdate::fromMessage(Message const& message) {
     );
     uint16_t set_iraw =
         reinterpret_cast<uint16_t const&>(set_raw);
-    result.set = set_iraw * 0.005729577951308233;
+    result.set = set_iraw * 0.005729577951308233 + 0.0;
     auto drift_raw = decode16(
         &message.payload[4]
     );
     int16_t drift_iraw =
         reinterpret_cast<int16_t const&>(drift_raw);
-    result.drift = drift_iraw * 0.01;
+    result.drift = drift_iraw * 0.01 + 0.0;
     return result;
 }
 const int NavigationRouteTimeToFromMark::BYTE_LENGTH;
@@ -2983,7 +2983,7 @@ NavigationRouteTimeToFromMark NavigationRouteTimeToFromMark::fromMessage(Message
     );
     int32_t time_to_mark_iraw =
         reinterpret_cast<int32_t const&>(time_to_mark_raw);
-    result.time_to_mark = time_to_mark_iraw * 0.001;
+    result.time_to_mark = time_to_mark_iraw * 0.001 + 0.0;
     result.mark_type = (decode8(
         &message.payload[5]
     ) >> 0) & 0xf;
@@ -3019,13 +3019,13 @@ BearingAndDistanceBetweenTwoMarks BearingAndDistanceBetweenTwoMarks::fromMessage
     );
     uint16_t bearing_origin_to_destination_iraw =
         reinterpret_cast<uint16_t const&>(bearing_origin_to_destination_raw);
-    result.bearing_origin_to_destination = bearing_origin_to_destination_iraw * 0.005729577951308233;
+    result.bearing_origin_to_destination = bearing_origin_to_destination_iraw * 0.005729577951308233 + 0.0;
     auto distance_raw = decode32(
         &message.payload[4]
     );
     int32_t distance_iraw =
         reinterpret_cast<int32_t const&>(distance_raw);
-    result.distance = distance_iraw * 0.01;
+    result.distance = distance_iraw * 0.01 + 0.0;
     result.origin_mark_type = (decode8(
         &message.payload[8]
     ) >> 0) & 0xf;
@@ -3061,19 +3061,19 @@ GNSSControlStatus GNSSControlStatus::fromMessage(Message const& message) {
     );
     int16_t pdop_mask_iraw =
         reinterpret_cast<int16_t const&>(pdop_mask_raw);
-    result.pdop_mask = pdop_mask_iraw * 0.01;
+    result.pdop_mask = pdop_mask_iraw * 0.01 + 0.0;
     auto pdop_switch_raw = decode16(
         &message.payload[4]
     );
     int16_t pdop_switch_iraw =
         reinterpret_cast<int16_t const&>(pdop_switch_raw);
-    result.pdop_switch = pdop_switch_iraw * 0.01;
+    result.pdop_switch = pdop_switch_iraw * 0.01 + 0.0;
     auto snr_mask_raw = decode16(
         &message.payload[6]
     );
     int16_t snr_mask_iraw =
         reinterpret_cast<int16_t const&>(snr_mask_raw);
-    result.snr_mask = snr_mask_iraw * 0.01;
+    result.snr_mask = snr_mask_iraw * 0.01 + 0.0;
     result.gnss_mode_desired_ = (decode8(
         &message.payload[8]
     ) >> 0) & 0x7;
@@ -3091,7 +3091,7 @@ GNSSControlStatus GNSSControlStatus::fromMessage(Message const& message) {
     );
     int16_t antenna_altitude_for_2d_mode_iraw =
         reinterpret_cast<int16_t const&>(antenna_altitude_for_2d_mode_raw);
-    result.antenna_altitude_for_2d_mode = antenna_altitude_for_2d_mode_iraw * 0.01;
+    result.antenna_altitude_for_2d_mode = antenna_altitude_for_2d_mode_iraw * 0.01 + 0.0;
     result.use_antenna_altitude_for_2d_mode = (decode8(
         &message.payload[13]
     ) >> 0) & 0x3;
@@ -3124,19 +3124,19 @@ GNSSDOPs GNSSDOPs::fromMessage(Message const& message) {
     );
     int16_t hdop_iraw =
         reinterpret_cast<int16_t const&>(hdop_raw);
-    result.hdop = hdop_iraw * 0.01;
+    result.hdop = hdop_iraw * 0.01 + 0.0;
     auto vdop_raw = decode16(
         &message.payload[4]
     );
     int16_t vdop_iraw =
         reinterpret_cast<int16_t const&>(vdop_raw);
-    result.vdop = vdop_iraw * 0.01;
+    result.vdop = vdop_iraw * 0.01 + 0.0;
     auto tdop_raw = decode16(
         &message.payload[6]
     );
     int16_t tdop_iraw =
         reinterpret_cast<int16_t const&>(tdop_raw);
-    result.tdop = tdop_iraw * 0.01;
+    result.tdop = tdop_iraw * 0.01 + 0.0;
     return result;
 }
 const int GNSSSatsInView::BYTE_LENGTH;
@@ -3169,19 +3169,19 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     );
     int16_t elevation_iraw =
         reinterpret_cast<int16_t const&>(elevation_raw);
-    result.elevation = elevation_iraw * 0.005729577951308233;
+    result.elevation = elevation_iraw * 0.005729577951308233 + 0.0;
     auto azimuth_raw = decode16(
         &message.payload[6]
     );
     int16_t azimuth_iraw =
         reinterpret_cast<int16_t const&>(azimuth_raw);
-    result.azimuth = azimuth_iraw * 0.005729577951308233;
+    result.azimuth = azimuth_iraw * 0.005729577951308233 + 0.0;
     auto snr_raw = decode16(
         &message.payload[8]
     );
     int16_t snr_iraw =
         reinterpret_cast<int16_t const&>(snr_raw);
-    result.snr = snr_iraw * 0.01;
+    result.snr = snr_iraw * 0.01 + 0.0;
     result.range_residuals = (decode32(
         &message.payload[10]
     ) >> 0) & 0xffffffff;
@@ -3196,19 +3196,19 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     );
     int16_t elevation1_iraw =
         reinterpret_cast<int16_t const&>(elevation1_raw);
-    result.elevation1 = elevation1_iraw * 0.005729577951308233;
+    result.elevation1 = elevation1_iraw * 0.005729577951308233 + 0.0;
     auto azimuth1_raw = decode16(
         &message.payload[18]
     );
     int16_t azimuth1_iraw =
         reinterpret_cast<int16_t const&>(azimuth1_raw);
-    result.azimuth1 = azimuth1_iraw * 0.005729577951308233;
+    result.azimuth1 = azimuth1_iraw * 0.005729577951308233 + 0.0;
     auto snr1_raw = decode16(
         &message.payload[20]
     );
     int16_t snr1_iraw =
         reinterpret_cast<int16_t const&>(snr1_raw);
-    result.snr1 = snr1_iraw * 0.01;
+    result.snr1 = snr1_iraw * 0.01 + 0.0;
     result.range_residuals1 = (decode32(
         &message.payload[22]
     ) >> 0) & 0xffffffff;
@@ -3223,19 +3223,19 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     );
     int16_t elevation2_iraw =
         reinterpret_cast<int16_t const&>(elevation2_raw);
-    result.elevation2 = elevation2_iraw * 0.005729577951308233;
+    result.elevation2 = elevation2_iraw * 0.005729577951308233 + 0.0;
     auto azimuth2_raw = decode16(
         &message.payload[30]
     );
     int16_t azimuth2_iraw =
         reinterpret_cast<int16_t const&>(azimuth2_raw);
-    result.azimuth2 = azimuth2_iraw * 0.005729577951308233;
+    result.azimuth2 = azimuth2_iraw * 0.005729577951308233 + 0.0;
     auto snr2_raw = decode16(
         &message.payload[32]
     );
     int16_t snr2_iraw =
         reinterpret_cast<int16_t const&>(snr2_raw);
-    result.snr2 = snr2_iraw * 0.01;
+    result.snr2 = snr2_iraw * 0.01 + 0.0;
     result.range_residuals2 = (decode32(
         &message.payload[34]
     ) >> 0) & 0xffffffff;
@@ -3250,19 +3250,19 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     );
     int16_t elevation3_iraw =
         reinterpret_cast<int16_t const&>(elevation3_raw);
-    result.elevation3 = elevation3_iraw * 0.005729577951308233;
+    result.elevation3 = elevation3_iraw * 0.005729577951308233 + 0.0;
     auto azimuth3_raw = decode16(
         &message.payload[42]
     );
     int16_t azimuth3_iraw =
         reinterpret_cast<int16_t const&>(azimuth3_raw);
-    result.azimuth3 = azimuth3_iraw * 0.005729577951308233;
+    result.azimuth3 = azimuth3_iraw * 0.005729577951308233 + 0.0;
     auto snr3_raw = decode16(
         &message.payload[44]
     );
     int16_t snr3_iraw =
         reinterpret_cast<int16_t const&>(snr3_raw);
-    result.snr3 = snr3_iraw * 0.01;
+    result.snr3 = snr3_iraw * 0.01 + 0.0;
     result.range_residuals3 = (decode32(
         &message.payload[46]
     ) >> 0) & 0xffffffff;
@@ -3277,19 +3277,19 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     );
     int16_t elevation4_iraw =
         reinterpret_cast<int16_t const&>(elevation4_raw);
-    result.elevation4 = elevation4_iraw * 0.005729577951308233;
+    result.elevation4 = elevation4_iraw * 0.005729577951308233 + 0.0;
     auto azimuth4_raw = decode16(
         &message.payload[54]
     );
     int16_t azimuth4_iraw =
         reinterpret_cast<int16_t const&>(azimuth4_raw);
-    result.azimuth4 = azimuth4_iraw * 0.005729577951308233;
+    result.azimuth4 = azimuth4_iraw * 0.005729577951308233 + 0.0;
     auto snr4_raw = decode16(
         &message.payload[56]
     );
     int16_t snr4_iraw =
         reinterpret_cast<int16_t const&>(snr4_raw);
-    result.snr4 = snr4_iraw * 0.01;
+    result.snr4 = snr4_iraw * 0.01 + 0.0;
     result.range_residuals4 = (decode32(
         &message.payload[58]
     ) >> 0) & 0xffffffff;
@@ -3304,19 +3304,19 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     );
     int16_t elevation5_iraw =
         reinterpret_cast<int16_t const&>(elevation5_raw);
-    result.elevation5 = elevation5_iraw * 0.005729577951308233;
+    result.elevation5 = elevation5_iraw * 0.005729577951308233 + 0.0;
     auto azimuth5_raw = decode16(
         &message.payload[66]
     );
     int16_t azimuth5_iraw =
         reinterpret_cast<int16_t const&>(azimuth5_raw);
-    result.azimuth5 = azimuth5_iraw * 0.005729577951308233;
+    result.azimuth5 = azimuth5_iraw * 0.005729577951308233 + 0.0;
     auto snr5_raw = decode16(
         &message.payload[68]
     );
     int16_t snr5_iraw =
         reinterpret_cast<int16_t const&>(snr5_raw);
-    result.snr5 = snr5_iraw * 0.01;
+    result.snr5 = snr5_iraw * 0.01 + 0.0;
     result.range_residuals5 = (decode32(
         &message.payload[70]
     ) >> 0) & 0xffffffff;
@@ -3331,19 +3331,19 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     );
     int16_t elevation6_iraw =
         reinterpret_cast<int16_t const&>(elevation6_raw);
-    result.elevation6 = elevation6_iraw * 0.005729577951308233;
+    result.elevation6 = elevation6_iraw * 0.005729577951308233 + 0.0;
     auto azimuth6_raw = decode16(
         &message.payload[78]
     );
     int16_t azimuth6_iraw =
         reinterpret_cast<int16_t const&>(azimuth6_raw);
-    result.azimuth6 = azimuth6_iraw * 0.005729577951308233;
+    result.azimuth6 = azimuth6_iraw * 0.005729577951308233 + 0.0;
     auto snr6_raw = decode16(
         &message.payload[80]
     );
     int16_t snr6_iraw =
         reinterpret_cast<int16_t const&>(snr6_raw);
-    result.snr6 = snr6_iraw * 0.01;
+    result.snr6 = snr6_iraw * 0.01 + 0.0;
     result.range_residuals6 = (decode32(
         &message.payload[82]
     ) >> 0) & 0xffffffff;
@@ -3358,19 +3358,19 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     );
     int16_t elevation7_iraw =
         reinterpret_cast<int16_t const&>(elevation7_raw);
-    result.elevation7 = elevation7_iraw * 0.005729577951308233;
+    result.elevation7 = elevation7_iraw * 0.005729577951308233 + 0.0;
     auto azimuth7_raw = decode16(
         &message.payload[90]
     );
     int16_t azimuth7_iraw =
         reinterpret_cast<int16_t const&>(azimuth7_raw);
-    result.azimuth7 = azimuth7_iraw * 0.005729577951308233;
+    result.azimuth7 = azimuth7_iraw * 0.005729577951308233 + 0.0;
     auto snr7_raw = decode16(
         &message.payload[92]
     );
     int16_t snr7_iraw =
         reinterpret_cast<int16_t const&>(snr7_raw);
-    result.snr7 = snr7_iraw * 0.01;
+    result.snr7 = snr7_iraw * 0.01 + 0.0;
     result.range_residuals7 = (decode32(
         &message.payload[94]
     ) >> 0) & 0xffffffff;
@@ -3385,19 +3385,19 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     );
     int16_t elevation8_iraw =
         reinterpret_cast<int16_t const&>(elevation8_raw);
-    result.elevation8 = elevation8_iraw * 0.005729577951308233;
+    result.elevation8 = elevation8_iraw * 0.005729577951308233 + 0.0;
     auto azimuth8_raw = decode16(
         &message.payload[102]
     );
     int16_t azimuth8_iraw =
         reinterpret_cast<int16_t const&>(azimuth8_raw);
-    result.azimuth8 = azimuth8_iraw * 0.005729577951308233;
+    result.azimuth8 = azimuth8_iraw * 0.005729577951308233 + 0.0;
     auto snr8_raw = decode16(
         &message.payload[104]
     );
     int16_t snr8_iraw =
         reinterpret_cast<int16_t const&>(snr8_raw);
-    result.snr8 = snr8_iraw * 0.01;
+    result.snr8 = snr8_iraw * 0.01 + 0.0;
     result.range_residuals8 = (decode32(
         &message.payload[106]
     ) >> 0) & 0xffffffff;
@@ -3412,19 +3412,19 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     );
     int16_t elevation9_iraw =
         reinterpret_cast<int16_t const&>(elevation9_raw);
-    result.elevation9 = elevation9_iraw * 0.005729577951308233;
+    result.elevation9 = elevation9_iraw * 0.005729577951308233 + 0.0;
     auto azimuth9_raw = decode16(
         &message.payload[114]
     );
     int16_t azimuth9_iraw =
         reinterpret_cast<int16_t const&>(azimuth9_raw);
-    result.azimuth9 = azimuth9_iraw * 0.005729577951308233;
+    result.azimuth9 = azimuth9_iraw * 0.005729577951308233 + 0.0;
     auto snr9_raw = decode16(
         &message.payload[116]
     );
     int16_t snr9_iraw =
         reinterpret_cast<int16_t const&>(snr9_raw);
-    result.snr9 = snr9_iraw * 0.01;
+    result.snr9 = snr9_iraw * 0.01 + 0.0;
     result.range_residuals9 = (decode32(
         &message.payload[118]
     ) >> 0) & 0xffffffff;
@@ -3439,19 +3439,19 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     );
     int16_t elevation10_iraw =
         reinterpret_cast<int16_t const&>(elevation10_raw);
-    result.elevation10 = elevation10_iraw * 0.005729577951308233;
+    result.elevation10 = elevation10_iraw * 0.005729577951308233 + 0.0;
     auto azimuth10_raw = decode16(
         &message.payload[126]
     );
     int16_t azimuth10_iraw =
         reinterpret_cast<int16_t const&>(azimuth10_raw);
-    result.azimuth10 = azimuth10_iraw * 0.005729577951308233;
+    result.azimuth10 = azimuth10_iraw * 0.005729577951308233 + 0.0;
     auto snr10_raw = decode16(
         &message.payload[128]
     );
     int16_t snr10_iraw =
         reinterpret_cast<int16_t const&>(snr10_raw);
-    result.snr10 = snr10_iraw * 0.01;
+    result.snr10 = snr10_iraw * 0.01 + 0.0;
     result.range_residuals10 = (decode32(
         &message.payload[130]
     ) >> 0) & 0xffffffff;
@@ -3466,19 +3466,19 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     );
     int16_t elevation11_iraw =
         reinterpret_cast<int16_t const&>(elevation11_raw);
-    result.elevation11 = elevation11_iraw * 0.005729577951308233;
+    result.elevation11 = elevation11_iraw * 0.005729577951308233 + 0.0;
     auto azimuth11_raw = decode16(
         &message.payload[138]
     );
     int16_t azimuth11_iraw =
         reinterpret_cast<int16_t const&>(azimuth11_raw);
-    result.azimuth11 = azimuth11_iraw * 0.005729577951308233;
+    result.azimuth11 = azimuth11_iraw * 0.005729577951308233 + 0.0;
     auto snr11_raw = decode16(
         &message.payload[140]
     );
     int16_t snr11_iraw =
         reinterpret_cast<int16_t const&>(snr11_raw);
-    result.snr11 = snr11_iraw * 0.01;
+    result.snr11 = snr11_iraw * 0.01 + 0.0;
     result.range_residuals11 = (decode32(
         &message.payload[142]
     ) >> 0) & 0xffffffff;
@@ -3493,19 +3493,19 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     );
     int16_t elevation12_iraw =
         reinterpret_cast<int16_t const&>(elevation12_raw);
-    result.elevation12 = elevation12_iraw * 0.005729577951308233;
+    result.elevation12 = elevation12_iraw * 0.005729577951308233 + 0.0;
     auto azimuth12_raw = decode16(
         &message.payload[150]
     );
     int16_t azimuth12_iraw =
         reinterpret_cast<int16_t const&>(azimuth12_raw);
-    result.azimuth12 = azimuth12_iraw * 0.005729577951308233;
+    result.azimuth12 = azimuth12_iraw * 0.005729577951308233 + 0.0;
     auto snr12_raw = decode16(
         &message.payload[152]
     );
     int16_t snr12_iraw =
         reinterpret_cast<int16_t const&>(snr12_raw);
-    result.snr12 = snr12_iraw * 0.01;
+    result.snr12 = snr12_iraw * 0.01 + 0.0;
     result.range_residuals12 = (decode32(
         &message.payload[154]
     ) >> 0) & 0xffffffff;
@@ -3520,19 +3520,19 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     );
     int16_t elevation13_iraw =
         reinterpret_cast<int16_t const&>(elevation13_raw);
-    result.elevation13 = elevation13_iraw * 0.005729577951308233;
+    result.elevation13 = elevation13_iraw * 0.005729577951308233 + 0.0;
     auto azimuth13_raw = decode16(
         &message.payload[162]
     );
     int16_t azimuth13_iraw =
         reinterpret_cast<int16_t const&>(azimuth13_raw);
-    result.azimuth13 = azimuth13_iraw * 0.005729577951308233;
+    result.azimuth13 = azimuth13_iraw * 0.005729577951308233 + 0.0;
     auto snr13_raw = decode16(
         &message.payload[164]
     );
     int16_t snr13_iraw =
         reinterpret_cast<int16_t const&>(snr13_raw);
-    result.snr13 = snr13_iraw * 0.01;
+    result.snr13 = snr13_iraw * 0.01 + 0.0;
     result.range_residuals13 = (decode32(
         &message.payload[166]
     ) >> 0) & 0xffffffff;
@@ -3547,19 +3547,19 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     );
     int16_t elevation14_iraw =
         reinterpret_cast<int16_t const&>(elevation14_raw);
-    result.elevation14 = elevation14_iraw * 0.005729577951308233;
+    result.elevation14 = elevation14_iraw * 0.005729577951308233 + 0.0;
     auto azimuth14_raw = decode16(
         &message.payload[174]
     );
     int16_t azimuth14_iraw =
         reinterpret_cast<int16_t const&>(azimuth14_raw);
-    result.azimuth14 = azimuth14_iraw * 0.005729577951308233;
+    result.azimuth14 = azimuth14_iraw * 0.005729577951308233 + 0.0;
     auto snr14_raw = decode16(
         &message.payload[176]
     );
     int16_t snr14_iraw =
         reinterpret_cast<int16_t const&>(snr14_raw);
-    result.snr14 = snr14_iraw * 0.01;
+    result.snr14 = snr14_iraw * 0.01 + 0.0;
     result.range_residuals14 = (decode32(
         &message.payload[178]
     ) >> 0) & 0xffffffff;
@@ -3574,19 +3574,19 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     );
     int16_t elevation15_iraw =
         reinterpret_cast<int16_t const&>(elevation15_raw);
-    result.elevation15 = elevation15_iraw * 0.005729577951308233;
+    result.elevation15 = elevation15_iraw * 0.005729577951308233 + 0.0;
     auto azimuth15_raw = decode16(
         &message.payload[186]
     );
     int16_t azimuth15_iraw =
         reinterpret_cast<int16_t const&>(azimuth15_raw);
-    result.azimuth15 = azimuth15_iraw * 0.005729577951308233;
+    result.azimuth15 = azimuth15_iraw * 0.005729577951308233 + 0.0;
     auto snr15_raw = decode16(
         &message.payload[188]
     );
     int16_t snr15_iraw =
         reinterpret_cast<int16_t const&>(snr15_raw);
-    result.snr15 = snr15_iraw * 0.01;
+    result.snr15 = snr15_iraw * 0.01 + 0.0;
     result.range_residuals15 = (decode32(
         &message.payload[190]
     ) >> 0) & 0xffffffff;
@@ -3601,19 +3601,19 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     );
     int16_t elevation16_iraw =
         reinterpret_cast<int16_t const&>(elevation16_raw);
-    result.elevation16 = elevation16_iraw * 0.005729577951308233;
+    result.elevation16 = elevation16_iraw * 0.005729577951308233 + 0.0;
     auto azimuth16_raw = decode16(
         &message.payload[198]
     );
     int16_t azimuth16_iraw =
         reinterpret_cast<int16_t const&>(azimuth16_raw);
-    result.azimuth16 = azimuth16_iraw * 0.005729577951308233;
+    result.azimuth16 = azimuth16_iraw * 0.005729577951308233 + 0.0;
     auto snr16_raw = decode16(
         &message.payload[200]
     );
     int16_t snr16_iraw =
         reinterpret_cast<int16_t const&>(snr16_raw);
-    result.snr16 = snr16_iraw * 0.01;
+    result.snr16 = snr16_iraw * 0.01 + 0.0;
     result.range_residuals16 = (decode32(
         &message.payload[202]
     ) >> 0) & 0xffffffff;
@@ -3628,19 +3628,19 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     );
     int16_t elevation17_iraw =
         reinterpret_cast<int16_t const&>(elevation17_raw);
-    result.elevation17 = elevation17_iraw * 0.005729577951308233;
+    result.elevation17 = elevation17_iraw * 0.005729577951308233 + 0.0;
     auto azimuth17_raw = decode16(
         &message.payload[210]
     );
     int16_t azimuth17_iraw =
         reinterpret_cast<int16_t const&>(azimuth17_raw);
-    result.azimuth17 = azimuth17_iraw * 0.005729577951308233;
+    result.azimuth17 = azimuth17_iraw * 0.005729577951308233 + 0.0;
     auto snr17_raw = decode16(
         &message.payload[212]
     );
     int16_t snr17_iraw =
         reinterpret_cast<int16_t const&>(snr17_raw);
-    result.snr17 = snr17_iraw * 0.01;
+    result.snr17 = snr17_iraw * 0.01 + 0.0;
     result.range_residuals17 = (decode32(
         &message.payload[214]
     ) >> 0) & 0xffffffff;
@@ -4120,13 +4120,13 @@ AISUTCAndDateReport AISUTCAndDateReport::fromMessage(Message const& message) {
     );
     int32_t longitude_iraw =
         reinterpret_cast<int32_t const&>(longitude_raw);
-    result.longitude = longitude_iraw * 1.0e-07;
+    result.longitude = longitude_iraw * 1.0e-07 + 0.0;
     auto latitude_raw = decode32(
         &message.payload[9]
     );
     int32_t latitude_iraw =
         reinterpret_cast<int32_t const&>(latitude_raw);
-    result.latitude = latitude_iraw * 1.0e-07;
+    result.latitude = latitude_iraw * 1.0e-07 + 0.0;
     result.position_accuracy = (decode8(
         &message.payload[13]
     ) >> 0) & 0x1;
@@ -4138,7 +4138,7 @@ AISUTCAndDateReport AISUTCAndDateReport::fromMessage(Message const& message) {
     );
     uint32_t position_time_iraw =
         reinterpret_cast<uint32_t const&>(position_time_raw);
-    result.position_time = position_time_iraw * 0.0001;
+    result.position_time = position_time_iraw * 0.0001 + 0.0;
     result.ais_transceiver_information = (decode8(
         &message.payload[20]
     ) >> 3) & 0x1f;
@@ -4189,25 +4189,25 @@ AISClassAStaticAndVoyageRelatedData AISClassAStaticAndVoyageRelatedData::fromMes
     );
     int16_t length_iraw =
         reinterpret_cast<int16_t const&>(length_raw);
-    result.length = length_iraw * 0.1;
+    result.length = length_iraw * 0.1 + 0.0;
     auto beam_raw = decode16(
         &message.payload[39]
     );
     int16_t beam_iraw =
         reinterpret_cast<int16_t const&>(beam_raw);
-    result.beam = beam_iraw * 0.1;
+    result.beam = beam_iraw * 0.1 + 0.0;
     auto position_reference_from_starboard_raw = decode16(
         &message.payload[41]
     );
     int16_t position_reference_from_starboard_iraw =
         reinterpret_cast<int16_t const&>(position_reference_from_starboard_raw);
-    result.position_reference_from_starboard = position_reference_from_starboard_iraw * 0.1;
+    result.position_reference_from_starboard = position_reference_from_starboard_iraw * 0.1 + 0.0;
     auto position_reference_from_bow_raw = decode16(
         &message.payload[43]
     );
     int16_t position_reference_from_bow_iraw =
         reinterpret_cast<int16_t const&>(position_reference_from_bow_raw);
-    result.position_reference_from_bow = position_reference_from_bow_iraw * 0.1;
+    result.position_reference_from_bow = position_reference_from_bow_iraw * 0.1 + 0.0;
     result.eta_date = (decode16(
         &message.payload[45]
     ) >> 0) & 0xffff;
@@ -4216,13 +4216,13 @@ AISClassAStaticAndVoyageRelatedData AISClassAStaticAndVoyageRelatedData::fromMes
     );
     uint32_t eta_time_iraw =
         reinterpret_cast<uint32_t const&>(eta_time_raw);
-    result.eta_time = eta_time_iraw * 0.0001;
+    result.eta_time = eta_time_iraw * 0.0001 + 0.0;
     auto draft_raw = decode16(
         &message.payload[51]
     );
     int16_t draft_iraw =
         reinterpret_cast<int16_t const&>(draft_raw);
-    result.draft = draft_iraw * 0.01;
+    result.draft = draft_iraw * 0.01 + 0.0;
     result.ais_version_indicator = (decode8(
         &message.payload[73]
     ) >> 0) & 0x3;
@@ -4375,13 +4375,13 @@ AISSARAircraftPositionReport AISSARAircraftPositionReport::fromMessage(Message c
     );
     int32_t longitude_iraw =
         reinterpret_cast<int32_t const&>(longitude_raw);
-    result.longitude = longitude_iraw * 1.0e-07;
+    result.longitude = longitude_iraw * 1.0e-07 + 0.0;
     auto latitude_raw = decode32(
         &message.payload[9]
     );
     int32_t latitude_iraw =
         reinterpret_cast<int32_t const&>(latitude_raw);
-    result.latitude = latitude_iraw * 1.0e-07;
+    result.latitude = latitude_iraw * 1.0e-07 + 0.0;
     result.position_accuracy = (decode8(
         &message.payload[13]
     ) >> 0) & 0x1;
@@ -4396,13 +4396,13 @@ AISSARAircraftPositionReport AISSARAircraftPositionReport::fromMessage(Message c
     );
     uint16_t cog_iraw =
         reinterpret_cast<uint16_t const&>(cog_raw);
-    result.cog = cog_iraw * 0.005729577951308233;
+    result.cog = cog_iraw * 0.005729577951308233 + 0.0;
     auto sog_raw = decode16(
         &message.payload[16]
     );
     uint16_t sog_iraw =
         reinterpret_cast<uint16_t const&>(sog_raw);
-    result.sog = sog_iraw * 0.1;
+    result.sog = sog_iraw * 0.1 + 0.0;
     result.ais_transceiver_information = (decode8(
         &message.payload[20]
     ) >> 3) & 0x1f;
@@ -4411,7 +4411,7 @@ AISSARAircraftPositionReport AISSARAircraftPositionReport::fromMessage(Message c
     );
     int64_t altitude_iraw =
         reinterpret_cast<int64_t const&>(altitude_raw);
-    result.altitude = altitude_iraw * 1.0;
+    result.altitude = altitude_iraw * 1.0 + 0.0;
     result.reserved_for_regional_applications = (decode8(
         &message.payload[29]
     ) >> 0) & 0xff;
@@ -4438,13 +4438,13 @@ RadioFrequencyModePower RadioFrequencyModePower::fromMessage(Message const& mess
     );
     int32_t rx_frequency_iraw =
         reinterpret_cast<int32_t const&>(rx_frequency_raw);
-    result.rx_frequency = rx_frequency_iraw * 10.0;
+    result.rx_frequency = rx_frequency_iraw * 10.0 + 0.0;
     auto tx_frequency_raw = decode32(
         &message.payload[4]
     );
     int32_t tx_frequency_iraw =
         reinterpret_cast<int32_t const&>(tx_frequency_raw);
-    result.tx_frequency = tx_frequency_iraw * 10.0;
+    result.tx_frequency = tx_frequency_iraw * 10.0 + 0.0;
     result.radio_channel = (decode8(
         &message.payload[8]
     ) >> 0) & 0xff;
@@ -4699,25 +4699,25 @@ AISChannelManagement AISChannelManagement::fromMessage(Message const& message) {
     );
     int32_t north_east_longitude_corner_1_iraw =
         reinterpret_cast<int32_t const&>(north_east_longitude_corner_1_raw);
-    result.north_east_longitude_corner_1 = north_east_longitude_corner_1_iraw * 1.0e-07;
+    result.north_east_longitude_corner_1 = north_east_longitude_corner_1_iraw * 1.0e-07 + 0.0;
     auto north_east_latitude_corner_1_raw = decode32(
         &message.payload[14]
     );
     int32_t north_east_latitude_corner_1_iraw =
         reinterpret_cast<int32_t const&>(north_east_latitude_corner_1_raw);
-    result.north_east_latitude_corner_1 = north_east_latitude_corner_1_iraw * 1.0e-07;
+    result.north_east_latitude_corner_1 = north_east_latitude_corner_1_iraw * 1.0e-07 + 0.0;
     auto south_west_longitude_corner_1_raw = decode32(
         &message.payload[18]
     );
     int32_t south_west_longitude_corner_1_iraw =
         reinterpret_cast<int32_t const&>(south_west_longitude_corner_1_raw);
-    result.south_west_longitude_corner_1 = south_west_longitude_corner_1_iraw * 1.0e-07;
+    result.south_west_longitude_corner_1 = south_west_longitude_corner_1_iraw * 1.0e-07 + 0.0;
     auto south_west_latitude_corner_2_raw = decode32(
         &message.payload[22]
     );
     int32_t south_west_latitude_corner_2_iraw =
         reinterpret_cast<int32_t const&>(south_west_latitude_corner_2_raw);
-    result.south_west_latitude_corner_2 = south_west_latitude_corner_2_iraw * 1.0e-07;
+    result.south_west_latitude_corner_2 = south_west_latitude_corner_2_iraw * 1.0e-07 + 0.0;
     result.addressed_or_broadcast_message_indicator = (decode8(
         &message.payload[26]
     ) >> 6) & 0x3;
@@ -4750,25 +4750,25 @@ AISClassBGroupAssignment AISClassBGroupAssignment::fromMessage(Message const& me
     );
     int32_t north_east_longitude_corner_1_iraw =
         reinterpret_cast<int32_t const&>(north_east_longitude_corner_1_raw);
-    result.north_east_longitude_corner_1 = north_east_longitude_corner_1_iraw * 1.0e-07;
+    result.north_east_longitude_corner_1 = north_east_longitude_corner_1_iraw * 1.0e-07 + 0.0;
     auto north_east_latitude_corner_1_raw = decode32(
         &message.payload[10]
     );
     int32_t north_east_latitude_corner_1_iraw =
         reinterpret_cast<int32_t const&>(north_east_latitude_corner_1_raw);
-    result.north_east_latitude_corner_1 = north_east_latitude_corner_1_iraw * 1.0e-07;
+    result.north_east_latitude_corner_1 = north_east_latitude_corner_1_iraw * 1.0e-07 + 0.0;
     auto south_west_longitude_corner_1_raw = decode32(
         &message.payload[14]
     );
     int32_t south_west_longitude_corner_1_iraw =
         reinterpret_cast<int32_t const&>(south_west_longitude_corner_1_raw);
-    result.south_west_longitude_corner_1 = south_west_longitude_corner_1_iraw * 1.0e-07;
+    result.south_west_longitude_corner_1 = south_west_longitude_corner_1_iraw * 1.0e-07 + 0.0;
     auto south_west_latitude_corner_2_raw = decode32(
         &message.payload[18]
     );
     int32_t south_west_latitude_corner_2_iraw =
         reinterpret_cast<int32_t const&>(south_west_latitude_corner_2_raw);
-    result.south_west_latitude_corner_2 = south_west_latitude_corner_2_iraw * 1.0e-07;
+    result.south_west_latitude_corner_2 = south_west_latitude_corner_2_iraw * 1.0e-07 + 0.0;
     result.station_type = (decode8(
         &message.payload[22]
     ) >> 0) & 0xff;
@@ -4825,19 +4825,19 @@ DSCCallInformation DSCCallInformation::fromMessage(Message const& message) {
     );
     int32_t latitude_of_vessel_reported_iraw =
         reinterpret_cast<int32_t const&>(latitude_of_vessel_reported_raw);
-    result.latitude_of_vessel_reported = latitude_of_vessel_reported_iraw * 1.0e-07;
+    result.latitude_of_vessel_reported = latitude_of_vessel_reported_iraw * 1.0e-07 + 0.0;
     auto longitude_of_vessel_reported_raw = decode32(
         &message.payload[12]
     );
     int32_t longitude_of_vessel_reported_iraw =
         reinterpret_cast<int32_t const&>(longitude_of_vessel_reported_raw);
-    result.longitude_of_vessel_reported = longitude_of_vessel_reported_iraw * 1.0e-07;
+    result.longitude_of_vessel_reported = longitude_of_vessel_reported_iraw * 1.0e-07 + 0.0;
     auto time_of_position_raw = decode32(
         &message.payload[16]
     );
     uint32_t time_of_position_iraw =
         reinterpret_cast<uint32_t const&>(time_of_position_raw);
-    result.time_of_position = time_of_position_iraw * 0.0001;
+    result.time_of_position = time_of_position_iraw * 0.0001 + 0.0;
     auto user_id_of_ship_in_distress_raw = decode32(
         &message.payload[20]
     );
@@ -4861,7 +4861,7 @@ DSCCallInformation DSCCallInformation::fromMessage(Message const& message) {
     );
     uint32_t time_of_receipt_iraw =
         reinterpret_cast<uint32_t const&>(time_of_receipt_raw);
-    result.time_of_receipt = time_of_receipt_iraw * 0.0001;
+    result.time_of_receipt = time_of_receipt_iraw * 0.0001 + 0.0;
     result.date_of_receipt = (decode16(
         &message.payload[32]
     ) >> 0) & 0xffff;
@@ -4936,25 +4936,25 @@ AISClassBStaticDataMsg24PartB AISClassBStaticDataMsg24PartB::fromMessage(Message
     );
     int16_t length_iraw =
         reinterpret_cast<int16_t const&>(length_raw);
-    result.length = length_iraw * 0.1;
+    result.length = length_iraw * 0.1 + 0.0;
     auto beam_raw = decode16(
         &message.payload[22]
     );
     int16_t beam_iraw =
         reinterpret_cast<int16_t const&>(beam_raw);
-    result.beam = beam_iraw * 0.1;
+    result.beam = beam_iraw * 0.1 + 0.0;
     auto position_reference_from_starboard_raw = decode16(
         &message.payload[24]
     );
     int16_t position_reference_from_starboard_iraw =
         reinterpret_cast<int16_t const&>(position_reference_from_starboard_raw);
-    result.position_reference_from_starboard = position_reference_from_starboard_iraw * 0.1;
+    result.position_reference_from_starboard = position_reference_from_starboard_iraw * 0.1 + 0.0;
     auto position_reference_from_bow_raw = decode16(
         &message.payload[26]
     );
     int16_t position_reference_from_bow_iraw =
         reinterpret_cast<int16_t const&>(position_reference_from_bow_raw);
-    result.position_reference_from_bow = position_reference_from_bow_iraw * 0.1;
+    result.position_reference_from_bow = position_reference_from_bow_iraw * 0.1 + 0.0;
     auto mothership_user_id_raw = decode32(
         &message.payload[28]
     );
@@ -4993,7 +4993,7 @@ RouteAndWPServiceDatabaseList RouteAndWPServiceDatabaseList::fromMessage(Message
     );
     uint32_t database_timestamp_iraw =
         reinterpret_cast<uint32_t const&>(database_timestamp_raw);
-    result.database_timestamp = database_timestamp_iraw * 0.0001;
+    result.database_timestamp = database_timestamp_iraw * 0.0001 + 0.0;
     result.database_datestamp = (decode16(
         &message.payload[16]
     ) >> 0) & 0xffff;
@@ -5071,7 +5071,7 @@ RouteAndWPServiceRouteWPListAttributes RouteAndWPServiceRouteWPListAttributes::f
     );
     uint32_t route_wp_list_timestamp_iraw =
         reinterpret_cast<uint32_t const&>(route_wp_list_timestamp_raw);
-    result.route_wp_list_timestamp = route_wp_list_timestamp_iraw * 0.0001;
+    result.route_wp_list_timestamp = route_wp_list_timestamp_iraw * 0.0001 + 0.0;
     result.route_wp_list_datestamp = (decode16(
         &message.payload[14]
     ) >> 0) & 0xffff;
@@ -5134,13 +5134,13 @@ RouteAndWPServiceRouteWPNamePosition RouteAndWPServiceRouteWPNamePosition::fromM
     );
     int32_t wp_latitude_iraw =
         reinterpret_cast<int32_t const&>(wp_latitude_raw);
-    result.wp_latitude = wp_latitude_iraw * 1.0e-07;
+    result.wp_latitude = wp_latitude_iraw * 1.0e-07 + 0.0;
     auto wp_longitude_raw = decode32(
         &message.payload[19]
     );
     int32_t wp_longitude_iraw =
         reinterpret_cast<int32_t const&>(wp_longitude_raw);
-    result.wp_longitude = wp_longitude_iraw * 1.0e-07;
+    result.wp_longitude = wp_longitude_iraw * 1.0e-07 + 0.0;
     return result;
 }
 const int RouteAndWPServiceRouteWPName::BYTE_LENGTH;
@@ -5377,13 +5377,13 @@ RouteAndWPServiceWPListWPNamePosition RouteAndWPServiceWPListWPNamePosition::fro
     );
     int32_t wp_latitude_iraw =
         reinterpret_cast<int32_t const&>(wp_latitude_raw);
-    result.wp_latitude = wp_latitude_iraw * 1.0e-07;
+    result.wp_latitude = wp_latitude_iraw * 1.0e-07 + 0.0;
     auto wp_longitude_raw = decode32(
         &message.payload[19]
     );
     int32_t wp_longitude_iraw =
         reinterpret_cast<int32_t const&>(wp_longitude_raw);
-    result.wp_longitude = wp_longitude_iraw * 1.0e-07;
+    result.wp_longitude = wp_longitude_iraw * 1.0e-07 + 0.0;
     return result;
 }
 const int WindData::BYTE_LENGTH;
@@ -5407,19 +5407,19 @@ WindData WindData::fromMessage(Message const& message) {
     );
     int16_t wind_speed_iraw =
         reinterpret_cast<int16_t const&>(wind_speed_raw);
-    result.wind_speed = wind_speed_iraw * 0.01;
+    result.wind_speed = wind_speed_iraw * 0.01 + 0.0;
     auto wind_angle_raw = decode16(
         &message.payload[3]
     );
     uint16_t wind_angle_iraw =
         reinterpret_cast<uint16_t const&>(wind_angle_raw);
-    result.wind_angle = wind_angle_iraw * 0.005729577951308233;
+    result.wind_angle = wind_angle_iraw * 0.005729577951308233 + 0.0;
     result.reference = (decode8(
         &message.payload[5]
     ) >> 0) & 0x7;
-    result.reserved = (decode32(
+    result.reserved = (decode8(
         &message.payload[5]
-    ) >> 3) & 0x7ffff;
+    ) >> 3) & 0x1f;
     return result;
 }
 const int EnvironmentalParameters::BYTE_LENGTH;
@@ -5443,13 +5443,13 @@ EnvironmentalParameters EnvironmentalParameters::fromMessage(Message const& mess
     );
     uint16_t water_temperature_iraw =
         reinterpret_cast<uint16_t const&>(water_temperature_raw);
-    result.water_temperature = water_temperature_iraw * 0.01;
+    result.water_temperature = water_temperature_iraw * 0.01 + -273.15;
     auto outside_ambient_air_temperature_raw = decode16(
         &message.payload[3]
     );
     uint16_t outside_ambient_air_temperature_iraw =
         reinterpret_cast<uint16_t const&>(outside_ambient_air_temperature_raw);
-    result.outside_ambient_air_temperature = outside_ambient_air_temperature_iraw * 0.01;
+    result.outside_ambient_air_temperature = outside_ambient_air_temperature_iraw * 0.01 + -273.15;
     result.atmospheric_pressure = (decode16(
         &message.payload[5]
     ) >> 0) & 0xffff;
@@ -5485,13 +5485,13 @@ EnvironmentalParameters1 EnvironmentalParameters1::fromMessage(Message const& me
     );
     uint16_t temperature_iraw =
         reinterpret_cast<uint16_t const&>(temperature_raw);
-    result.temperature = temperature_iraw * 0.01;
+    result.temperature = temperature_iraw * 0.01 + -273.15;
     auto humidity_raw = decode16(
         &message.payload[4]
     );
     int16_t humidity_iraw =
         reinterpret_cast<int16_t const&>(humidity_raw);
-    result.humidity = humidity_iraw * 0.004;
+    result.humidity = humidity_iraw * 0.004 + 0.0;
     result.atmospheric_pressure = (decode16(
         &message.payload[6]
     ) >> 0) & 0xffff;
@@ -5521,13 +5521,13 @@ Temperature Temperature::fromMessage(Message const& message) {
     );
     uint16_t actual_temperature_iraw =
         reinterpret_cast<uint16_t const&>(actual_temperature_raw);
-    result.actual_temperature = actual_temperature_iraw * 0.01;
+    result.actual_temperature = actual_temperature_iraw * 0.01 + -273.15;
     auto set_temperature_raw = decode16(
         &message.payload[5]
     );
     uint16_t set_temperature_iraw =
         reinterpret_cast<uint16_t const&>(set_temperature_raw);
-    result.set_temperature = set_temperature_iraw * 0.01;
+    result.set_temperature = set_temperature_iraw * 0.01 + -273.15;
     result.reserved = (decode8(
         &message.payload[7]
     ) >> 0) & 0xff;
@@ -5587,7 +5587,7 @@ ActualPressure ActualPressure::fromMessage(Message const& message) {
     );
     uint32_t pressure_iraw =
         reinterpret_cast<uint32_t const&>(pressure_raw);
-    result.pressure = pressure_iraw * 0.1;
+    result.pressure = pressure_iraw * 0.1 + 0.0;
     return result;
 }
 const int SetPressure::BYTE_LENGTH;
@@ -5638,13 +5638,13 @@ TemperatureExtendedRange TemperatureExtendedRange::fromMessage(Message const& me
     );
     uint32_t actual_temperature_iraw =
         reinterpret_cast<uint32_t const&>(actual_temperature_raw);
-    result.actual_temperature = actual_temperature_iraw * 0.001;
+    result.actual_temperature = actual_temperature_iraw * 0.001 + -273.15;
     auto set_temperature_raw = decode16(
         &message.payload[6]
     );
     uint16_t set_temperature_iraw =
         reinterpret_cast<uint16_t const&>(set_temperature_raw);
-    result.set_temperature = set_temperature_iraw * 0.1;
+    result.set_temperature = set_temperature_iraw * 0.1 + -273.15;
     return result;
 }
 const int TideStationData::BYTE_LENGTH;
@@ -5674,31 +5674,31 @@ TideStationData TideStationData::fromMessage(Message const& message) {
     );
     uint32_t measurement_time_iraw =
         reinterpret_cast<uint32_t const&>(measurement_time_raw);
-    result.measurement_time = measurement_time_iraw * 0.0001;
+    result.measurement_time = measurement_time_iraw * 0.0001 + 0.0;
     auto station_latitude_raw = decode32(
         &message.payload[7]
     );
     int32_t station_latitude_iraw =
         reinterpret_cast<int32_t const&>(station_latitude_raw);
-    result.station_latitude = station_latitude_iraw * 1.0e-07;
+    result.station_latitude = station_latitude_iraw * 1.0e-07 + 0.0;
     auto station_longitude_raw = decode32(
         &message.payload[11]
     );
     int32_t station_longitude_iraw =
         reinterpret_cast<int32_t const&>(station_longitude_raw);
-    result.station_longitude = station_longitude_iraw * 1.0e-07;
+    result.station_longitude = station_longitude_iraw * 1.0e-07 + 0.0;
     auto tide_level_raw = decode16(
         &message.payload[15]
     );
     int16_t tide_level_iraw =
         reinterpret_cast<int16_t const&>(tide_level_raw);
-    result.tide_level = tide_level_iraw * 0.001;
+    result.tide_level = tide_level_iraw * 0.001 + 0.0;
     auto tide_level_standard_deviation_raw = decode16(
         &message.payload[17]
     );
     int16_t tide_level_standard_deviation_iraw =
         reinterpret_cast<int16_t const&>(tide_level_standard_deviation_raw);
-    result.tide_level_standard_deviation = tide_level_standard_deviation_iraw * 0.01;
+    result.tide_level_standard_deviation = tide_level_standard_deviation_iraw * 0.01 + 0.0;
     return result;
 }
 const int SalinityStationData::BYTE_LENGTH;
@@ -5725,31 +5725,31 @@ SalinityStationData SalinityStationData::fromMessage(Message const& message) {
     );
     uint32_t measurement_time_iraw =
         reinterpret_cast<uint32_t const&>(measurement_time_raw);
-    result.measurement_time = measurement_time_iraw * 0.0001;
+    result.measurement_time = measurement_time_iraw * 0.0001 + 0.0;
     auto station_latitude_raw = decode32(
         &message.payload[7]
     );
     int32_t station_latitude_iraw =
         reinterpret_cast<int32_t const&>(station_latitude_raw);
-    result.station_latitude = station_latitude_iraw * 1.0e-07;
+    result.station_latitude = station_latitude_iraw * 1.0e-07 + 0.0;
     auto station_longitude_raw = decode32(
         &message.payload[11]
     );
     int32_t station_longitude_iraw =
         reinterpret_cast<int32_t const&>(station_longitude_raw);
-    result.station_longitude = station_longitude_iraw * 1.0e-07;
+    result.station_longitude = station_longitude_iraw * 1.0e-07 + 0.0;
     auto salinity_raw = decode32(
         &message.payload[15]
     );
     int32_t salinity_iraw =
         reinterpret_cast<int32_t const&>(salinity_raw);
-    result.salinity = salinity_iraw * 1.0;
+    result.salinity = salinity_iraw * 1.0 + 0.0;
     auto water_temperature_raw = decode16(
         &message.payload[19]
     );
     uint16_t water_temperature_iraw =
         reinterpret_cast<uint16_t const&>(water_temperature_raw);
-    result.water_temperature = water_temperature_iraw * 0.01;
+    result.water_temperature = water_temperature_iraw * 0.01 + -273.15;
     return result;
 }
 const int CurrentStationData::BYTE_LENGTH;
@@ -5776,43 +5776,43 @@ CurrentStationData CurrentStationData::fromMessage(Message const& message) {
     );
     uint32_t measurement_time_iraw =
         reinterpret_cast<uint32_t const&>(measurement_time_raw);
-    result.measurement_time = measurement_time_iraw * 0.0001;
+    result.measurement_time = measurement_time_iraw * 0.0001 + 0.0;
     auto station_latitude_raw = decode32(
         &message.payload[7]
     );
     int32_t station_latitude_iraw =
         reinterpret_cast<int32_t const&>(station_latitude_raw);
-    result.station_latitude = station_latitude_iraw * 1.0e-07;
+    result.station_latitude = station_latitude_iraw * 1.0e-07 + 0.0;
     auto station_longitude_raw = decode32(
         &message.payload[11]
     );
     int32_t station_longitude_iraw =
         reinterpret_cast<int32_t const&>(station_longitude_raw);
-    result.station_longitude = station_longitude_iraw * 1.0e-07;
+    result.station_longitude = station_longitude_iraw * 1.0e-07 + 0.0;
     auto measurement_depth_raw = decode32(
         &message.payload[15]
     );
     int32_t measurement_depth_iraw =
         reinterpret_cast<int32_t const&>(measurement_depth_raw);
-    result.measurement_depth = measurement_depth_iraw * 0.01;
+    result.measurement_depth = measurement_depth_iraw * 0.01 + 0.0;
     auto current_speed_raw = decode16(
         &message.payload[19]
     );
     int16_t current_speed_iraw =
         reinterpret_cast<int16_t const&>(current_speed_raw);
-    result.current_speed = current_speed_iraw * 0.01;
+    result.current_speed = current_speed_iraw * 0.01 + 0.0;
     auto current_flow_direction_raw = decode16(
         &message.payload[21]
     );
     uint16_t current_flow_direction_iraw =
         reinterpret_cast<uint16_t const&>(current_flow_direction_raw);
-    result.current_flow_direction = current_flow_direction_iraw * 0.005729577951308233;
+    result.current_flow_direction = current_flow_direction_iraw * 0.005729577951308233 + 0.0;
     auto water_temperature_raw = decode16(
         &message.payload[23]
     );
     uint16_t water_temperature_iraw =
         reinterpret_cast<uint16_t const&>(water_temperature_raw);
-    result.water_temperature = water_temperature_iraw * 0.01;
+    result.water_temperature = water_temperature_iraw * 0.01 + -273.15;
     return result;
 }
 const int MeteorologicalStationData::BYTE_LENGTH;
@@ -5839,31 +5839,31 @@ MeteorologicalStationData MeteorologicalStationData::fromMessage(Message const& 
     );
     uint32_t measurement_time_iraw =
         reinterpret_cast<uint32_t const&>(measurement_time_raw);
-    result.measurement_time = measurement_time_iraw * 0.0001;
+    result.measurement_time = measurement_time_iraw * 0.0001 + 0.0;
     auto station_latitude_raw = decode32(
         &message.payload[7]
     );
     int32_t station_latitude_iraw =
         reinterpret_cast<int32_t const&>(station_latitude_raw);
-    result.station_latitude = station_latitude_iraw * 1.0e-07;
+    result.station_latitude = station_latitude_iraw * 1.0e-07 + 0.0;
     auto station_longitude_raw = decode32(
         &message.payload[11]
     );
     int32_t station_longitude_iraw =
         reinterpret_cast<int32_t const&>(station_longitude_raw);
-    result.station_longitude = station_longitude_iraw * 1.0e-07;
+    result.station_longitude = station_longitude_iraw * 1.0e-07 + 0.0;
     auto wind_speed_raw = decode16(
         &message.payload[15]
     );
     int16_t wind_speed_iraw =
         reinterpret_cast<int16_t const&>(wind_speed_raw);
-    result.wind_speed = wind_speed_iraw * 0.01;
+    result.wind_speed = wind_speed_iraw * 0.01 + 0.0;
     auto wind_direction_raw = decode16(
         &message.payload[17]
     );
     uint16_t wind_direction_iraw =
         reinterpret_cast<uint16_t const&>(wind_direction_raw);
-    result.wind_direction = wind_direction_iraw * 0.005729577951308233;
+    result.wind_direction = wind_direction_iraw * 0.005729577951308233 + 0.0;
     result.wind_reference = (decode8(
         &message.payload[19]
     ) >> 0) & 0x7;
@@ -5872,7 +5872,7 @@ MeteorologicalStationData MeteorologicalStationData::fromMessage(Message const& 
     );
     int16_t wind_gusts_iraw =
         reinterpret_cast<int16_t const&>(wind_gusts_raw);
-    result.wind_gusts = wind_gusts_iraw * 0.01;
+    result.wind_gusts = wind_gusts_iraw * 0.01 + 0.0;
     result.atmospheric_pressure = (decode16(
         &message.payload[22]
     ) >> 0) & 0xffff;
@@ -5881,7 +5881,7 @@ MeteorologicalStationData MeteorologicalStationData::fromMessage(Message const& 
     );
     uint16_t ambient_temperature_iraw =
         reinterpret_cast<uint16_t const&>(ambient_temperature_raw);
-    result.ambient_temperature = ambient_temperature_iraw * 0.01;
+    result.ambient_temperature = ambient_temperature_iraw * 0.01 + -273.15;
     return result;
 }
 const int MooredBuoyStationData::BYTE_LENGTH;
@@ -5908,31 +5908,31 @@ MooredBuoyStationData MooredBuoyStationData::fromMessage(Message const& message)
     );
     uint32_t measurement_time_iraw =
         reinterpret_cast<uint32_t const&>(measurement_time_raw);
-    result.measurement_time = measurement_time_iraw * 0.0001;
+    result.measurement_time = measurement_time_iraw * 0.0001 + 0.0;
     auto station_latitude_raw = decode32(
         &message.payload[7]
     );
     int32_t station_latitude_iraw =
         reinterpret_cast<int32_t const&>(station_latitude_raw);
-    result.station_latitude = station_latitude_iraw * 1.0e-07;
+    result.station_latitude = station_latitude_iraw * 1.0e-07 + 0.0;
     auto station_longitude_raw = decode32(
         &message.payload[11]
     );
     int32_t station_longitude_iraw =
         reinterpret_cast<int32_t const&>(station_longitude_raw);
-    result.station_longitude = station_longitude_iraw * 1.0e-07;
+    result.station_longitude = station_longitude_iraw * 1.0e-07 + 0.0;
     auto wind_speed_raw = decode16(
         &message.payload[15]
     );
     int16_t wind_speed_iraw =
         reinterpret_cast<int16_t const&>(wind_speed_raw);
-    result.wind_speed = wind_speed_iraw * 0.01;
+    result.wind_speed = wind_speed_iraw * 0.01 + 0.0;
     auto wind_direction_raw = decode16(
         &message.payload[17]
     );
     uint16_t wind_direction_iraw =
         reinterpret_cast<uint16_t const&>(wind_direction_raw);
-    result.wind_direction = wind_direction_iraw * 0.005729577951308233;
+    result.wind_direction = wind_direction_iraw * 0.005729577951308233 + 0.0;
     result.wind_reference = (decode8(
         &message.payload[19]
     ) >> 0) & 0x7;
@@ -5941,7 +5941,7 @@ MooredBuoyStationData MooredBuoyStationData::fromMessage(Message const& message)
     );
     int16_t wind_gusts_iraw =
         reinterpret_cast<int16_t const&>(wind_gusts_raw);
-    result.wind_gusts = wind_gusts_iraw * 0.01;
+    result.wind_gusts = wind_gusts_iraw * 0.01 + 0.0;
     result.wave_height = (decode16(
         &message.payload[22]
     ) >> 0) & 0xffff;
@@ -5959,13 +5959,13 @@ MooredBuoyStationData MooredBuoyStationData::fromMessage(Message const& message)
     );
     uint16_t air_temperature_iraw =
         reinterpret_cast<uint16_t const&>(air_temperature_raw);
-    result.air_temperature = air_temperature_iraw * 0.01;
+    result.air_temperature = air_temperature_iraw * 0.01 + -273.15;
     auto water_temperature_raw = decode16(
         &message.payload[32]
     );
     uint16_t water_temperature_iraw =
         reinterpret_cast<uint16_t const&>(water_temperature_raw);
-    result.water_temperature = water_temperature_iraw * 0.01;
+    result.water_temperature = water_temperature_iraw * 0.01 + -273.15;
     return result;
 }
 const int SmallCraftStatus::BYTE_LENGTH;
@@ -6016,37 +6016,37 @@ DirectionData DirectionData::fromMessage(Message const& message) {
     );
     uint16_t cog_iraw =
         reinterpret_cast<uint16_t const&>(cog_raw);
-    result.cog = cog_iraw * 0.005729577951308233;
+    result.cog = cog_iraw * 0.005729577951308233 + 0.0;
     auto sog_raw = decode16(
         &message.payload[4]
     );
     uint16_t sog_iraw =
         reinterpret_cast<uint16_t const&>(sog_raw);
-    result.sog = sog_iraw * 0.01;
+    result.sog = sog_iraw * 0.01 + 0.0;
     auto heading_raw = decode16(
         &message.payload[6]
     );
     uint16_t heading_iraw =
         reinterpret_cast<uint16_t const&>(heading_raw);
-    result.heading = heading_iraw * 0.005729577951308233;
+    result.heading = heading_iraw * 0.005729577951308233 + 0.0;
     auto speed_through_water_raw = decode16(
         &message.payload[8]
     );
     int16_t speed_through_water_iraw =
         reinterpret_cast<int16_t const&>(speed_through_water_raw);
-    result.speed_through_water = speed_through_water_iraw * 0.01;
+    result.speed_through_water = speed_through_water_iraw * 0.01 + 0.0;
     auto set_raw = decode16(
         &message.payload[10]
     );
     uint16_t set_iraw =
         reinterpret_cast<uint16_t const&>(set_raw);
-    result.set = set_iraw * 0.005729577951308233;
+    result.set = set_iraw * 0.005729577951308233 + 0.0;
     auto drift_raw = decode16(
         &message.payload[12]
     );
     int16_t drift_iraw =
         reinterpret_cast<int16_t const&>(drift_raw);
-    result.drift = drift_iraw * 0.01;
+    result.drift = drift_iraw * 0.01 + 0.0;
     return result;
 }
 const int VesselSpeedComponents::BYTE_LENGTH;
@@ -6067,37 +6067,37 @@ VesselSpeedComponents VesselSpeedComponents::fromMessage(Message const& message)
     );
     int16_t longitudinal_speed_water_referenced_iraw =
         reinterpret_cast<int16_t const&>(longitudinal_speed_water_referenced_raw);
-    result.longitudinal_speed_water_referenced = longitudinal_speed_water_referenced_iraw * 0.001;
+    result.longitudinal_speed_water_referenced = longitudinal_speed_water_referenced_iraw * 0.001 + 0.0;
     auto transverse_speed_water_referenced_raw = decode16(
         &message.payload[2]
     );
     int16_t transverse_speed_water_referenced_iraw =
         reinterpret_cast<int16_t const&>(transverse_speed_water_referenced_raw);
-    result.transverse_speed_water_referenced = transverse_speed_water_referenced_iraw * 0.001;
+    result.transverse_speed_water_referenced = transverse_speed_water_referenced_iraw * 0.001 + 0.0;
     auto longitudinal_speed_ground_referenced_raw = decode16(
         &message.payload[4]
     );
     int16_t longitudinal_speed_ground_referenced_iraw =
         reinterpret_cast<int16_t const&>(longitudinal_speed_ground_referenced_raw);
-    result.longitudinal_speed_ground_referenced = longitudinal_speed_ground_referenced_iraw * 0.001;
+    result.longitudinal_speed_ground_referenced = longitudinal_speed_ground_referenced_iraw * 0.001 + 0.0;
     auto transverse_speed_ground_referenced_raw = decode16(
         &message.payload[6]
     );
     int16_t transverse_speed_ground_referenced_iraw =
         reinterpret_cast<int16_t const&>(transverse_speed_ground_referenced_raw);
-    result.transverse_speed_ground_referenced = transverse_speed_ground_referenced_iraw * 0.001;
+    result.transverse_speed_ground_referenced = transverse_speed_ground_referenced_iraw * 0.001 + 0.0;
     auto stern_speed_water_referenced_raw = decode16(
         &message.payload[8]
     );
     int16_t stern_speed_water_referenced_iraw =
         reinterpret_cast<int16_t const&>(stern_speed_water_referenced_raw);
-    result.stern_speed_water_referenced = stern_speed_water_referenced_iraw * 0.001;
+    result.stern_speed_water_referenced = stern_speed_water_referenced_iraw * 0.001 + 0.0;
     auto stern_speed_ground_referenced_raw = decode16(
         &message.payload[10]
     );
     int16_t stern_speed_ground_referenced_iraw =
         reinterpret_cast<int16_t const&>(stern_speed_ground_referenced_raw);
-    result.stern_speed_ground_referenced = stern_speed_ground_referenced_iraw * 0.001;
+    result.stern_speed_ground_referenced = stern_speed_ground_referenced_iraw * 0.001 + 0.0;
     return result;
 }
 const int SimradTextMessage::BYTE_LENGTH;
@@ -6448,7 +6448,7 @@ SimnetFluidLevelSensorConfiguration SimnetFluidLevelSensorConfiguration::fromMes
     );
     int32_t capacity_iraw =
         reinterpret_cast<int32_t const&>(capacity_raw);
-    result.capacity = capacity_iraw * 0.1;
+    result.capacity = capacity_iraw * 0.1 + 0.0;
     result.g = (decode8(
         &message.payload[10]
     ) >> 0) & 0xff;
@@ -6589,32 +6589,32 @@ SimnetAISClassBStaticDataMsg24PartB SimnetAISClassBStaticDataMsg24PartB::fromMes
     );
     int16_t length_iraw =
         reinterpret_cast<int16_t const&>(length_raw);
-    result.length = length_iraw * 0.1;
+    result.length = length_iraw * 0.1 + 0.0;
     auto beam_raw = decode16(
         &message.payload[26]
     );
     int16_t beam_iraw =
         reinterpret_cast<int16_t const&>(beam_raw);
-    result.beam = beam_iraw * 0.1;
+    result.beam = beam_iraw * 0.1 + 0.0;
     auto position_reference_from_starboard_raw = decode16(
         &message.payload[28]
     );
     int16_t position_reference_from_starboard_iraw =
         reinterpret_cast<int16_t const&>(position_reference_from_starboard_raw);
-    result.position_reference_from_starboard = position_reference_from_starboard_iraw * 0.1;
+    result.position_reference_from_starboard = position_reference_from_starboard_iraw * 0.1 + 0.0;
     auto position_reference_from_bow_raw = decode16(
         &message.payload[30]
     );
     int16_t position_reference_from_bow_iraw =
         reinterpret_cast<int16_t const&>(position_reference_from_bow_raw);
-    result.position_reference_from_bow = position_reference_from_bow_iraw * 0.1;
+    result.position_reference_from_bow = position_reference_from_bow_iraw * 0.1 + 0.0;
     auto mothership_user_id_raw = decode32(
         &message.payload[32]
     );
     result.mothership_user_id = reinterpret_cast<int32_t const&>(
         mothership_user_id_raw
     );
-    result. = (decode8(
+    result.reserved1 = (decode8(
         &message.payload[36]
     ) >> 0) & 0x3;
     return result;
@@ -6772,7 +6772,7 @@ SimnetEventCommandAPCommand SimnetEventCommandAPCommand::fromMessage(Message con
     );
     uint16_t angle_iraw =
         reinterpret_cast<uint16_t const&>(angle_raw);
-    result.angle = angle_iraw * 0.005729577951308233;
+    result.angle = angle_iraw * 0.005729577951308233 + 0.0;
     result.g = (decode8(
         &message.payload[11]
     ) >> 0) & 0xff;
@@ -6898,7 +6898,7 @@ SimnetEventReplyAPCommand SimnetEventReplyAPCommand::fromMessage(Message const& 
     );
     uint16_t angle_iraw =
         reinterpret_cast<uint16_t const&>(angle_raw);
-    result.angle = angle_iraw * 0.005729577951308233;
+    result.angle = angle_iraw * 0.005729577951308233 + 0.0;
     result.g = (decode8(
         &message.payload[11]
     ) >> 0) & 0xff;
@@ -6961,19 +6961,19 @@ AirmarAdditionalWeatherData AirmarAdditionalWeatherData::fromMessage(Message con
     );
     uint16_t apparent_windchill_temperature_iraw =
         reinterpret_cast<uint16_t const&>(apparent_windchill_temperature_raw);
-    result.apparent_windchill_temperature = apparent_windchill_temperature_iraw * 0.01;
+    result.apparent_windchill_temperature = apparent_windchill_temperature_iraw * 0.01 + -273.15;
     auto true_windchill_temperature_raw = decode16(
         &message.payload[5]
     );
     uint16_t true_windchill_temperature_iraw =
         reinterpret_cast<uint16_t const&>(true_windchill_temperature_raw);
-    result.true_windchill_temperature = true_windchill_temperature_iraw * 0.01;
+    result.true_windchill_temperature = true_windchill_temperature_iraw * 0.01 + -273.15;
     auto dewpoint_raw = decode16(
         &message.payload[7]
     );
     uint16_t dewpoint_iraw =
         reinterpret_cast<uint16_t const&>(dewpoint_raw);
-    result.dewpoint = dewpoint_iraw * 0.01;
+    result.dewpoint = dewpoint_iraw * 0.01 + -273.15;
     return result;
 }
 const int AirmarHeaterControl::BYTE_LENGTH;
@@ -7003,19 +7003,19 @@ AirmarHeaterControl AirmarHeaterControl::fromMessage(Message const& message) {
     );
     uint16_t plate_temperature_iraw =
         reinterpret_cast<uint16_t const&>(plate_temperature_raw);
-    result.plate_temperature = plate_temperature_iraw * 0.01;
+    result.plate_temperature = plate_temperature_iraw * 0.01 + -273.15;
     auto air_temperature_raw = decode16(
         &message.payload[5]
     );
     uint16_t air_temperature_iraw =
         reinterpret_cast<uint16_t const&>(air_temperature_raw);
-    result.air_temperature = air_temperature_iraw * 0.01;
+    result.air_temperature = air_temperature_iraw * 0.01 + -273.15;
     auto dewpoint_raw = decode16(
         &message.payload[7]
     );
     uint16_t dewpoint_iraw =
         reinterpret_cast<uint16_t const&>(dewpoint_raw);
-    result.dewpoint = dewpoint_iraw * 0.01;
+    result.dewpoint = dewpoint_iraw * 0.01 + -273.15;
     return result;
 }
 const int AirmarPOST::BYTE_LENGTH;

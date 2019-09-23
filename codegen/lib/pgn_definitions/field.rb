@@ -58,6 +58,10 @@ module PGNDefinitions
             Float(@xml.text('Scale') || 1)
         end
 
+        def offset
+            Float(@xml.text('Offset') || 0)
+        end
+
         def each_enum_value
             return enum_for(__method__) unless block_given?
 

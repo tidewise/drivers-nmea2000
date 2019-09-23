@@ -96,6 +96,18 @@ module PGNDefinitions
             end
         end
 
+        describe 'offset' do
+            it 'returns the offset as float' do
+                field = make_field('<DblField Name="Bla"><Offset>-5</Offset></DblField>')
+                assert_in_delta -5, field.offset, 1e-6
+            end
+
+            it 'returns 0 as default' do
+                field = make_field('<DblField Name="Bla" />')
+                assert_in_delta 0, field.offset, 1e-6
+            end
+        end
+
         describe 'each_enum_value' do
             it 'enumerates the enum values' do
                 field = make_field(<<~END_OF_FIELD)
