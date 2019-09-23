@@ -7017,7 +7017,7 @@
         <UIntField Name="Reserved">
           <Description>Reserved</Description>
           <BitOffset>43</BitOffset>
-          <BitLength>19</BitLength>
+          <BitLength>5</BitLength>
         </UIntField>
       </Fields>
     </PGNDefn>
@@ -8463,7 +8463,7 @@
           <BitOffset>256</BitOffset>
           <BitLength>32</BitLength>
         </IntField>
-        <UIntField Name="">
+        <UIntField Name="Reserved">
           <BitOffset>288</BitOffset>
           <BitLength>2</BitLength>
         </UIntField>

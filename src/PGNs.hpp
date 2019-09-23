@@ -1767,7 +1767,7 @@ namespace nmea2000 {
             float wind_speed;
             float wind_angle;
             uint8_t reference;
-            uint32_t reserved;
+            uint8_t reserved;
         };
         struct EnvironmentalParameters {
             static const int BYTE_LENGTH = 7;
@@ -2165,7 +2165,7 @@ namespace nmea2000 {
             float position_reference_from_starboard;
             float position_reference_from_bow;
             int32_t mothership_user_id;
-            uint8_t ;
+            uint8_t reserved1;
         };
         struct SimnetAISClassBStaticDataMsg24PartA {
             static const int BYTE_LENGTH = 29;
