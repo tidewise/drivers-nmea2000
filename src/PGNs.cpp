@@ -16,6 +16,7 @@ ISOAcknowledgement ISOAcknowledgement::fromMessage(Message const& message) {
     }
 
     ISOAcknowledgement result;
+    result.time = message.time;
 
     result.control = (decode8(
         &message.payload[0]
@@ -43,6 +44,7 @@ ISORequest ISORequest::fromMessage(Message const& message) {
     }
 
     ISORequest result;
+    result.time = message.time;
 
     result.pgn = (decode32(
         &message.payload[0]
@@ -61,6 +63,7 @@ ISOAddressClaim ISOAddressClaim::fromMessage(Message const& message) {
     }
 
     ISOAddressClaim result;
+    result.time = message.time;
 
     result.device_function = (decode8(
         &message.payload[5]
@@ -88,6 +91,7 @@ ISOCommandedAddress ISOCommandedAddress::fromMessage(Message const& message) {
     }
 
     ISOCommandedAddress result;
+    result.time = message.time;
 
     result.manufacturer_code = (decode16(
         &message.payload[2]
@@ -124,6 +128,7 @@ AirmarBootStateAcknowledgment AirmarBootStateAcknowledgment::fromMessage(Message
     }
 
     AirmarBootStateAcknowledgment result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -148,6 +153,7 @@ LowranceTemperature LowranceTemperature::fromMessage(Message const& message) {
     }
 
     LowranceTemperature result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -178,6 +184,7 @@ AirmarBootStateRequest AirmarBootStateRequest::fromMessage(Message const& messag
     }
 
     AirmarBootStateRequest result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -199,6 +206,7 @@ SimnetConfigureTemperatureSensor SimnetConfigureTemperatureSensor::fromMessage(M
     }
 
     SimnetConfigureTemperatureSensor result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -220,6 +228,7 @@ AirmarAccessLevel AirmarAccessLevel::fromMessage(Message const& message) {
     }
 
     AirmarAccessLevel result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -256,6 +265,7 @@ SimnetTrimTabSensorCalibration SimnetTrimTabSensorCalibration::fromMessage(Messa
     }
 
     SimnetTrimTabSensorCalibration result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -277,6 +287,7 @@ SimnetPaddleWheelSpeedConfiguration SimnetPaddleWheelSpeedConfiguration::fromMes
     }
 
     SimnetPaddleWheelSpeedConfiguration result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -298,6 +309,7 @@ SimnetClearFluidLevelWarnings SimnetClearFluidLevelWarnings::fromMessage(Message
     }
 
     SimnetClearFluidLevelWarnings result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -319,6 +331,7 @@ SimnetLGC2000Configuration SimnetLGC2000Configuration::fromMessage(Message const
     }
 
     SimnetLGC2000Configuration result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -340,6 +353,7 @@ SimnetReprogramStatus SimnetReprogramStatus::fromMessage(Message const& message)
     }
 
     SimnetReprogramStatus result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -361,6 +375,7 @@ SimnetAutopilotMode SimnetAutopilotMode::fromMessage(Message const& message) {
     }
 
     SimnetAutopilotMode result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -382,6 +397,7 @@ AirmarDepthQualityFactor AirmarDepthQualityFactor::fromMessage(Message const& me
     }
 
     AirmarDepthQualityFactor result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -409,6 +425,7 @@ AirmarDeviceInformation AirmarDeviceInformation::fromMessage(Message const& mess
     }
 
     AirmarDeviceInformation result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -448,6 +465,7 @@ SimnetAutopilotMode1 SimnetAutopilotMode1::fromMessage(Message const& message) {
     }
 
     SimnetAutopilotMode1 result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -469,6 +487,7 @@ NMEARequestGroupFunction NMEARequestGroupFunction::fromMessage(Message const& me
     }
 
     NMEARequestGroupFunction result;
+    result.time = message.time;
 
     auto function_code_raw = decode8(
         &message.payload[0]
@@ -514,6 +533,7 @@ NMEACommandGroupFunction NMEACommandGroupFunction::fromMessage(Message const& me
     }
 
     NMEACommandGroupFunction result;
+    result.time = message.time;
 
     auto function_code_raw = decode8(
         &message.payload[0]
@@ -559,6 +579,7 @@ NMEAAcknowledgeGroupFunction NMEAAcknowledgeGroupFunction::fromMessage(Message c
     }
 
     NMEAAcknowledgeGroupFunction result;
+    result.time = message.time;
 
     auto function_code_raw = decode8(
         &message.payload[0]
@@ -598,6 +619,7 @@ MaretronSlaveResponse MaretronSlaveResponse::fromMessage(Message const& message)
     }
 
     MaretronSlaveResponse result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -631,6 +653,7 @@ PGNListTransmitAndReceive PGNListTransmitAndReceive::fromMessage(Message const& 
     }
 
     PGNListTransmitAndReceive result;
+    result.time = message.time;
 
     result.function_code = (decode8(
         &message.payload[0]
@@ -652,6 +675,7 @@ AirmarCalibrateCompass AirmarCalibrateCompass::fromMessage(Message const& messag
     }
 
     AirmarCalibrateCompass result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -745,6 +769,7 @@ AirmarAttitudeOffset AirmarAttitudeOffset::fromMessage(Message const& message) {
     }
 
     AirmarAttitudeOffset result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -790,6 +815,7 @@ AirmarTrueWindOptions AirmarTrueWindOptions::fromMessage(Message const& message)
     }
 
     AirmarTrueWindOptions result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -823,6 +849,7 @@ ManufacturerPropietaryAddressableMultiFrame ManufacturerPropietaryAddressableMul
     }
 
     ManufacturerPropietaryAddressableMultiFrame result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -844,6 +871,7 @@ AirmarAddressableMultiFrame AirmarAddressableMultiFrame::fromMessage(Message con
     }
 
     AirmarAddressableMultiFrame result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -871,6 +899,7 @@ SystemTime SystemTime::fromMessage(Message const& message) {
     }
 
     SystemTime result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -881,12 +910,12 @@ SystemTime SystemTime::fromMessage(Message const& message) {
     result.date = (decode16(
         &message.payload[2]
     ) >> 0) & 0xffff;
-    auto time_raw = decode32(
+    auto seconds_since_midnight_raw = decode32(
         &message.payload[4]
     );
-    uint32_t time_iraw =
-        reinterpret_cast<uint32_t const&>(time_raw);
-    result.time = time_iraw * 0.0001 + 0.0;
+    uint32_t seconds_since_midnight_iraw =
+        reinterpret_cast<uint32_t const&>(seconds_since_midnight_raw);
+    result.seconds_since_midnight = seconds_since_midnight_iraw * 0.0001 + 0.0;
     return result;
 }
 const int Heartbeat::BYTE_LENGTH;
@@ -901,6 +930,7 @@ Heartbeat Heartbeat::fromMessage(Message const& message) {
     }
 
     Heartbeat result;
+    result.time = message.time;
 
     auto interval_raw = decode16(
         &message.payload[0]
@@ -925,6 +955,7 @@ ProductInformation ProductInformation::fromMessage(Message const& message) {
     }
 
     ProductInformation result;
+    result.time = message.time;
 
     result.nmea_2000_version = (decode16(
         &message.payload[0]
@@ -960,6 +991,7 @@ ConfigurationInformation ConfigurationInformation::fromMessage(Message const& me
     }
 
     ConfigurationInformation result;
+    result.time = message.time;
 
     return result;
 }
@@ -975,6 +1007,7 @@ HeadingTrackControl HeadingTrackControl::fromMessage(Message const& message) {
     }
 
     HeadingTrackControl result;
+    result.time = message.time;
 
     result.rudder_limit_exceeded = (decode8(
         &message.payload[0]
@@ -1068,6 +1101,7 @@ Rudder Rudder::fromMessage(Message const& message) {
     }
 
     Rudder result;
+    result.time = message.time;
 
     result.direction_order = (decode8(
         &message.payload[1]
@@ -1101,6 +1135,7 @@ VesselHeading VesselHeading::fromMessage(Message const& message) {
     }
 
     VesselHeading result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -1143,6 +1178,7 @@ RateOfTurn RateOfTurn::fromMessage(Message const& message) {
     }
 
     RateOfTurn result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -1167,6 +1203,7 @@ Attitude Attitude::fromMessage(Message const& message) {
     }
 
     Attitude result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -1203,6 +1240,7 @@ MagneticVariation MagneticVariation::fromMessage(Message const& message) {
     }
 
     MagneticVariation result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -1233,6 +1271,7 @@ EngineParametersRapidUpdate EngineParametersRapidUpdate::fromMessage(Message con
     }
 
     EngineParametersRapidUpdate result;
+    result.time = message.time;
 
     auto engine_speed_raw = decode16(
         &message.payload[1]
@@ -1266,6 +1305,7 @@ EngineParametersDynamic EngineParametersDynamic::fromMessage(Message const& mess
     }
 
     EngineParametersDynamic result;
+    result.time = message.time;
 
     result.oil_pressure = (decode16(
         &message.payload[1]
@@ -1344,6 +1384,7 @@ TransmissionParametersDynamic TransmissionParametersDynamic::fromMessage(Message
     }
 
     TransmissionParametersDynamic result;
+    result.time = message.time;
 
     result.transmission_gear = (decode8(
         &message.payload[1]
@@ -1380,6 +1421,7 @@ TripParametersVessel TripParametersVessel::fromMessage(Message const& message) {
     }
 
     TripParametersVessel result;
+    result.time = message.time;
 
     auto time_to_empty_raw = decode32(
         &message.payload[0]
@@ -1416,6 +1458,7 @@ TripParametersEngine TripParametersEngine::fromMessage(Message const& message) {
     }
 
     TripParametersEngine result;
+    result.time = message.time;
 
     result.trip_fuel_used = (decode16(
         &message.payload[1]
@@ -1452,6 +1495,7 @@ EngineParametersStatic EngineParametersStatic::fromMessage(Message const& messag
     }
 
     EngineParametersStatic result;
+    result.time = message.time;
 
     result.rated_engine_speed = (decode16(
         &message.payload[1]
@@ -1476,6 +1520,7 @@ BinarySwitchBankStatus BinarySwitchBankStatus::fromMessage(Message const& messag
     }
 
     BinarySwitchBankStatus result;
+    result.time = message.time;
 
     result.indicator = (decode8(
         &message.payload[1]
@@ -1494,6 +1539,7 @@ SwitchBankControl SwitchBankControl::fromMessage(Message const& message) {
     }
 
     SwitchBankControl result;
+    result.time = message.time;
 
     result.switch_state = (decode8(
         &message.payload[1]
@@ -1512,6 +1558,7 @@ ACInputStatus ACInputStatus::fromMessage(Message const& message) {
     }
 
     ACInputStatus result;
+    result.time = message.time;
 
     result.number_of_lines = (decode8(
         &message.payload[1]
@@ -1581,6 +1628,7 @@ ACOutputStatus ACOutputStatus::fromMessage(Message const& message) {
     }
 
     ACOutputStatus result;
+    result.time = message.time;
 
     result.number_of_lines = (decode8(
         &message.payload[1]
@@ -1650,6 +1698,7 @@ FluidLevel FluidLevel::fromMessage(Message const& message) {
     }
 
     FluidLevel result;
+    result.time = message.time;
 
     result.type = (decode8(
         &message.payload[0]
@@ -1683,6 +1732,7 @@ DCDetailedStatus DCDetailedStatus::fromMessage(Message const& message) {
     }
 
     DCDetailedStatus result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -1719,6 +1769,7 @@ ChargerStatus ChargerStatus::fromMessage(Message const& message) {
     }
 
     ChargerStatus result;
+    result.time = message.time;
 
     result.operating_state = (decode8(
         &message.payload[2]
@@ -1752,6 +1803,7 @@ BatteryStatus BatteryStatus::fromMessage(Message const& message) {
     }
 
     BatteryStatus result;
+    result.time = message.time;
 
     auto voltage_raw = decode16(
         &message.payload[1]
@@ -1788,6 +1840,7 @@ InverterStatus InverterStatus::fromMessage(Message const& message) {
     }
 
     InverterStatus result;
+    result.time = message.time;
 
     result.operating_state = (decode8(
         &message.payload[3]
@@ -1809,6 +1862,7 @@ ChargerConfigurationStatus ChargerConfigurationStatus::fromMessage(Message const
     }
 
     ChargerConfigurationStatus result;
+    result.time = message.time;
 
     result.charger_enable_disable = (decode8(
         &message.payload[2]
@@ -1857,6 +1911,7 @@ InverterConfigurationStatus InverterConfigurationStatus::fromMessage(Message con
     }
 
     InverterConfigurationStatus result;
+    result.time = message.time;
 
     result.inverter_enable_disable = (decode8(
         &message.payload[3]
@@ -1887,6 +1942,7 @@ AGSConfigurationStatus AGSConfigurationStatus::fromMessage(Message const& messag
     }
 
     AGSConfigurationStatus result;
+    result.time = message.time;
 
     result.ags_mode = (decode8(
         &message.payload[2]
@@ -1905,6 +1961,7 @@ BatteryConfigurationStatus BatteryConfigurationStatus::fromMessage(Message const
     }
 
     BatteryConfigurationStatus result;
+    result.time = message.time;
 
     result.battery_type = (decode8(
         &message.payload[1]
@@ -1947,6 +2004,7 @@ AGSStatus AGSStatus::fromMessage(Message const& message) {
     }
 
     AGSStatus result;
+    result.time = message.time;
 
     result.ags_operating_state = (decode8(
         &message.payload[2]
@@ -1974,6 +2032,7 @@ Speed Speed::fromMessage(Message const& message) {
     }
 
     Speed result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -2010,6 +2069,7 @@ WaterDepth WaterDepth::fromMessage(Message const& message) {
     }
 
     WaterDepth result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -2046,16 +2106,17 @@ DistanceLog DistanceLog::fromMessage(Message const& message) {
     }
 
     DistanceLog result;
+    result.time = message.time;
 
     result.date = (decode16(
         &message.payload[0]
     ) >> 0) & 0xffff;
-    auto time_raw = decode32(
+    auto seconds_since_midnight_raw = decode32(
         &message.payload[2]
     );
-    uint32_t time_iraw =
-        reinterpret_cast<uint32_t const&>(time_raw);
-    result.time = time_iraw * 0.0001 + 0.0;
+    uint32_t seconds_since_midnight_iraw =
+        reinterpret_cast<uint32_t const&>(seconds_since_midnight_raw);
+    result.seconds_since_midnight = seconds_since_midnight_iraw * 0.0001 + 0.0;
     result.log = (decode32(
         &message.payload[6]
     ) >> 0) & 0xffffffff;
@@ -2076,6 +2137,7 @@ TrackedTargetData TrackedTargetData::fromMessage(Message const& message) {
     }
 
     TrackedTargetData result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -2156,6 +2218,7 @@ PositionRapidUpdate PositionRapidUpdate::fromMessage(Message const& message) {
     }
 
     PositionRapidUpdate result;
+    result.time = message.time;
 
     auto latitude_raw = decode32(
         &message.payload[0]
@@ -2183,6 +2246,7 @@ COGSOGRapidUpdate COGSOGRapidUpdate::fromMessage(Message const& message) {
     }
 
     COGSOGRapidUpdate result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -2216,6 +2280,7 @@ PositionDeltaRapidUpdate PositionDeltaRapidUpdate::fromMessage(Message const& me
     }
 
     PositionDeltaRapidUpdate result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -2243,6 +2308,7 @@ AltitudeDeltaRapidUpdate AltitudeDeltaRapidUpdate::fromMessage(Message const& me
     }
 
     AltitudeDeltaRapidUpdate result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -2279,6 +2345,7 @@ GNSSPositionData GNSSPositionData::fromMessage(Message const& message) {
     }
 
     GNSSPositionData result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -2286,12 +2353,12 @@ GNSSPositionData GNSSPositionData::fromMessage(Message const& message) {
     result.date = (decode16(
         &message.payload[1]
     ) >> 0) & 0xffff;
-    auto time_raw = decode32(
+    auto seconds_since_midnight_raw = decode32(
         &message.payload[3]
     );
-    uint32_t time_iraw =
-        reinterpret_cast<uint32_t const&>(time_raw);
-    result.time = time_iraw * 0.0001 + 0.0;
+    uint32_t seconds_since_midnight_iraw =
+        reinterpret_cast<uint32_t const&>(seconds_since_midnight_raw);
+    result.seconds_since_midnight = seconds_since_midnight_iraw * 0.0001 + 0.0;
     auto latitude_raw = decode64(
         &message.payload[7]
     );
@@ -2369,16 +2436,17 @@ TimeDate TimeDate::fromMessage(Message const& message) {
     }
 
     TimeDate result;
+    result.time = message.time;
 
     result.date = (decode16(
         &message.payload[0]
     ) >> 0) & 0xffff;
-    auto time_raw = decode32(
+    auto seconds_since_midnight_raw = decode32(
         &message.payload[2]
     );
-    uint32_t time_iraw =
-        reinterpret_cast<uint32_t const&>(time_raw);
-    result.time = time_iraw * 0.0001 + 0.0;
+    uint32_t seconds_since_midnight_iraw =
+        reinterpret_cast<uint32_t const&>(seconds_since_midnight_raw);
+    result.seconds_since_midnight = seconds_since_midnight_iraw * 0.0001 + 0.0;
     auto local_offset_raw = decode16(
         &message.payload[6]
     );
@@ -2399,6 +2467,7 @@ AISClassAPositionReport AISClassAPositionReport::fromMessage(Message const& mess
     }
 
     AISClassAPositionReport result;
+    result.time = message.time;
 
     result.message_id = (decode8(
         &message.payload[0]
@@ -2483,6 +2552,7 @@ AISClassBPositionReport AISClassBPositionReport::fromMessage(Message const& mess
     }
 
     AISClassBPositionReport result;
+    result.time = message.time;
 
     result.message_id = (decode8(
         &message.payload[0]
@@ -2579,6 +2649,7 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     }
 
     AISClassBExtendedPositionReport result;
+    result.time = message.time;
 
     result.message_id = (decode8(
         &message.payload[0]
@@ -2692,6 +2763,7 @@ Datum Datum::fromMessage(Message const& message) {
     }
 
     Datum result;
+    result.time = message.time;
 
     result.local_datum = decodeString(&message.payload[0],
                                             4);
@@ -2729,6 +2801,7 @@ UserDatum UserDatum::fromMessage(Message const& message) {
     }
 
     UserDatum result;
+    result.time = message.time;
 
     auto delta_x_raw = decode32(
         &message.payload[0]
@@ -2800,6 +2873,7 @@ CrossTrackError CrossTrackError::fromMessage(Message const& message) {
     }
 
     CrossTrackError result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -2830,6 +2904,7 @@ NavigationData NavigationData::fromMessage(Message const& message) {
     }
 
     NavigationData result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -2911,6 +2986,7 @@ NavigationRouteWPInformation NavigationRouteWPInformation::fromMessage(Message c
     }
 
     NavigationRouteWPInformation result;
+    result.time = message.time;
 
     result.start_rpsnumber = (decode16(
         &message.payload[0]
@@ -2959,6 +3035,7 @@ SetDriftRapidUpdate SetDriftRapidUpdate::fromMessage(Message const& message) {
     }
 
     SetDriftRapidUpdate result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -2992,6 +3069,7 @@ NavigationRouteTimeToFromMark NavigationRouteTimeToFromMark::fromMessage(Message
     }
 
     NavigationRouteTimeToFromMark result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -3022,6 +3100,7 @@ BearingAndDistanceBetweenTwoMarks BearingAndDistanceBetweenTwoMarks::fromMessage
     }
 
     BearingAndDistanceBetweenTwoMarks result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -3070,6 +3149,7 @@ GNSSControlStatus GNSSControlStatus::fromMessage(Message const& message) {
     }
 
     GNSSControlStatus result;
+    result.time = message.time;
 
     result.sv_elevation_mask = (decode16(
         &message.payload[0]
@@ -3127,6 +3207,7 @@ GNSSDOPs GNSSDOPs::fromMessage(Message const& message) {
     }
 
     GNSSDOPs result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -3169,6 +3250,7 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     }
 
     GNSSSatsInView result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -3679,6 +3761,7 @@ GPSAlmanacData GPSAlmanacData::fromMessage(Message const& message) {
     }
 
     GPSAlmanacData result;
+    result.time = message.time;
 
     result.prn = (decode8(
         &message.payload[0]
@@ -3733,6 +3816,7 @@ GNSSPseudorangeNoiseStatistics GNSSPseudorangeNoiseStatistics::fromMessage(Messa
     }
 
     GNSSPseudorangeNoiseStatistics result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -3772,6 +3856,7 @@ GNSSRAIMOutput GNSSRAIMOutput::fromMessage(Message const& message) {
     }
 
     GNSSRAIMOutput result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -3814,6 +3899,7 @@ GNSSRAIMSettings GNSSRAIMSettings::fromMessage(Message const& message) {
     }
 
     GNSSRAIMSettings result;
+    result.time = message.time;
 
     result.radial_position_error_maximum_threshold = (decode8(
         &message.payload[0]
@@ -3841,6 +3927,7 @@ GNSSPseudorangeErrorStatistics GNSSPseudorangeErrorStatistics::fromMessage(Messa
     }
 
     GNSSPseudorangeErrorStatistics result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -3880,6 +3967,7 @@ DGNSSCorrections DGNSSCorrections::fromMessage(Message const& message) {
     }
 
     DGNSSCorrections result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -3928,6 +4016,7 @@ GNSSDifferentialCorrectionReceiverInterface GNSSDifferentialCorrectionReceiverIn
     }
 
     GNSSDifferentialCorrectionReceiverInterface result;
+    result.time = message.time;
 
     result.channel = (decode8(
         &message.payload[0]
@@ -3961,6 +4050,7 @@ GNSSDifferentialCorrectionReceiverSignal GNSSDifferentialCorrectionReceiverSigna
     }
 
     GNSSDifferentialCorrectionReceiverSignal result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -4018,6 +4108,7 @@ GLONASSAlmanacData GLONASSAlmanacData::fromMessage(Message const& message) {
     }
 
     GLONASSAlmanacData result;
+    result.time = message.time;
 
     result.prn = (decode8(
         &message.payload[0]
@@ -4072,6 +4163,7 @@ AISDGNSSBroadcastBinaryMessage AISDGNSSBroadcastBinaryMessage::fromMessage(Messa
     }
 
     AISDGNSSBroadcastBinaryMessage result;
+    result.time = message.time;
 
     result.message_id = (decode8(
         &message.payload[0]
@@ -4120,6 +4212,7 @@ AISUTCAndDateReport AISUTCAndDateReport::fromMessage(Message const& message) {
     }
 
     AISUTCAndDateReport result;
+    result.time = message.time;
 
     result.message_id = (decode8(
         &message.payload[0]
@@ -4180,6 +4273,7 @@ AISClassAStaticAndVoyageRelatedData AISClassAStaticAndVoyageRelatedData::fromMes
     }
 
     AISClassAStaticAndVoyageRelatedData result;
+    result.time = message.time;
 
     result.message_id = (decode8(
         &message.payload[0]
@@ -4273,6 +4367,7 @@ AISAddressedBinaryMessage AISAddressedBinaryMessage::fromMessage(Message const& 
     }
 
     AISAddressedBinaryMessage result;
+    result.time = message.time;
 
     result.message_id = (decode8(
         &message.payload[0]
@@ -4321,6 +4416,7 @@ AISAcknowledge AISAcknowledge::fromMessage(Message const& message) {
     }
 
     AISAcknowledge result;
+    result.time = message.time;
 
     result.message_id = (decode8(
         &message.payload[0]
@@ -4351,6 +4447,7 @@ AISBinaryBroadcastMessage AISBinaryBroadcastMessage::fromMessage(Message const& 
     }
 
     AISBinaryBroadcastMessage result;
+    result.time = message.time;
 
     result.message_id = (decode8(
         &message.payload[0]
@@ -4381,6 +4478,7 @@ AISSARAircraftPositionReport AISSARAircraftPositionReport::fromMessage(Message c
     }
 
     AISSARAircraftPositionReport result;
+    result.time = message.time;
 
     result.message_id = (decode8(
         &message.payload[0]
@@ -4456,6 +4554,7 @@ RadioFrequencyModePower RadioFrequencyModePower::fromMessage(Message const& mess
     }
 
     RadioFrequencyModePower result;
+    result.time = message.time;
 
     auto rx_frequency_raw = decode32(
         &message.payload[0]
@@ -4495,6 +4594,7 @@ AISUTCDateInquiry AISUTCDateInquiry::fromMessage(Message const& message) {
     }
 
     AISUTCDateInquiry result;
+    result.time = message.time;
 
     result.message_id = (decode8(
         &message.payload[0]
@@ -4525,6 +4625,7 @@ AISAddressedSafetyRelatedMessage AISAddressedSafetyRelatedMessage::fromMessage(M
     }
 
     AISAddressedSafetyRelatedMessage result;
+    result.time = message.time;
 
     result.message_id = (decode8(
         &message.payload[0]
@@ -4563,6 +4664,7 @@ AISSafetyRelatedBroadcastMessage AISSafetyRelatedBroadcastMessage::fromMessage(M
     }
 
     AISSafetyRelatedBroadcastMessage result;
+    result.time = message.time;
 
     result.message_id = (decode8(
         &message.payload[0]
@@ -4587,6 +4689,7 @@ AISInterrogation AISInterrogation::fromMessage(Message const& message) {
     }
 
     AISInterrogation result;
+    result.time = message.time;
 
     result.message_id = (decode8(
         &message.payload[0]
@@ -4623,6 +4726,7 @@ AISAssignmentModeCommand AISAssignmentModeCommand::fromMessage(Message const& me
     }
 
     AISAssignmentModeCommand result;
+    result.time = message.time;
 
     result.message_id = (decode8(
         &message.payload[0]
@@ -4671,6 +4775,7 @@ AISDataLinkManagementMessage AISDataLinkManagementMessage::fromMessage(Message c
     }
 
     AISDataLinkManagementMessage result;
+    result.time = message.time;
 
     result.message_id = (decode8(
         &message.payload[0]
@@ -4695,6 +4800,7 @@ AISChannelManagement AISChannelManagement::fromMessage(Message const& message) {
     }
 
     AISChannelManagement result;
+    result.time = message.time;
 
     result.message_id = (decode8(
         &message.payload[0]
@@ -4764,6 +4870,7 @@ AISClassBGroupAssignment AISClassBGroupAssignment::fromMessage(Message const& me
     }
 
     AISClassBGroupAssignment result;
+    result.time = message.time;
 
     result.message_id = (decode8(
         &message.payload[0]
@@ -4821,6 +4928,7 @@ DSCCallInformation DSCCallInformation::fromMessage(Message const& message) {
     }
 
     DSCCallInformation result;
+    result.time = message.time;
 
     result.dsc_format_symbol = (decode8(
         &message.payload[0]
@@ -4914,6 +5022,7 @@ AISClassBStaticDataMsg24PartA AISClassBStaticDataMsg24PartA::fromMessage(Message
     }
 
     AISClassBStaticDataMsg24PartA result;
+    result.time = message.time;
 
     result.message_id = (decode8(
         &message.payload[0]
@@ -4943,6 +5052,7 @@ AISClassBStaticDataMsg24PartB AISClassBStaticDataMsg24PartB::fromMessage(Message
     }
 
     AISClassBStaticDataMsg24PartB result;
+    result.time = message.time;
 
     result.message_id = (decode8(
         &message.payload[0]
@@ -5007,6 +5117,7 @@ RouteAndWPServiceDatabaseList RouteAndWPServiceDatabaseList::fromMessage(Message
     }
 
     RouteAndWPServiceDatabaseList result;
+    result.time = message.time;
 
     result.start_database_id = (decode8(
         &message.payload[0]
@@ -5057,6 +5168,7 @@ RouteAndWPServiceRouteList RouteAndWPServiceRouteList::fromMessage(Message const
     }
 
     RouteAndWPServiceRouteList result;
+    result.time = message.time;
 
     result.start_route_id = (decode8(
         &message.payload[0]
@@ -5095,6 +5207,7 @@ RouteAndWPServiceRouteWPListAttributes RouteAndWPServiceRouteWPListAttributes::f
     }
 
     RouteAndWPServiceRouteWPListAttributes result;
+    result.time = message.time;
 
     result.database_id = (decode8(
         &message.payload[0]
@@ -5148,6 +5261,7 @@ RouteAndWPServiceRouteWPNamePosition RouteAndWPServiceRouteWPNamePosition::fromM
     }
 
     RouteAndWPServiceRouteWPNamePosition result;
+    result.time = message.time;
 
     result.start_rpsnumber = (decode8(
         &message.payload[0]
@@ -5195,6 +5309,7 @@ RouteAndWPServiceRouteWPName RouteAndWPServiceRouteWPName::fromMessage(Message c
     }
 
     RouteAndWPServiceRouteWPName result;
+    result.time = message.time;
 
     result.start_rpsnumber = (decode8(
         &message.payload[0]
@@ -5230,6 +5345,7 @@ RouteAndWPServiceXTELimitNavigationMethod RouteAndWPServiceXTELimitNavigationMet
     }
 
     RouteAndWPServiceXTELimitNavigationMethod result;
+    result.time = message.time;
 
     result.start_rpsnumber = (decode8(
         &message.payload[0]
@@ -5269,6 +5385,7 @@ RouteAndWPServiceWPComment RouteAndWPServiceWPComment::fromMessage(Message const
     }
 
     RouteAndWPServiceWPComment result;
+    result.time = message.time;
 
     result.start_id = (decode8(
         &message.payload[0]
@@ -5304,6 +5421,7 @@ RouteAndWPServiceRouteComment RouteAndWPServiceRouteComment::fromMessage(Message
     }
 
     RouteAndWPServiceRouteComment result;
+    result.time = message.time;
 
     result.start_route_id = (decode8(
         &message.payload[0]
@@ -5336,6 +5454,7 @@ RouteAndWPServiceDatabaseComment RouteAndWPServiceDatabaseComment::fromMessage(M
     }
 
     RouteAndWPServiceDatabaseComment result;
+    result.time = message.time;
 
     result.start_database_id = (decode8(
         &message.payload[0]
@@ -5365,6 +5484,7 @@ RouteAndWPServiceRadiusOfTurn RouteAndWPServiceRadiusOfTurn::fromMessage(Message
     }
 
     RouteAndWPServiceRadiusOfTurn result;
+    result.time = message.time;
 
     result.start_rpsnumber = (decode8(
         &message.payload[0]
@@ -5401,6 +5521,7 @@ RouteAndWPServiceWPListWPNamePosition RouteAndWPServiceWPListWPNamePosition::fro
     }
 
     RouteAndWPServiceWPListWPNamePosition result;
+    result.time = message.time;
 
     result.start_wp_id = (decode8(
         &message.payload[0]
@@ -5448,6 +5569,7 @@ WindData WindData::fromMessage(Message const& message) {
     }
 
     WindData result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -5484,6 +5606,7 @@ EnvironmentalParameters EnvironmentalParameters::fromMessage(Message const& mess
     }
 
     EnvironmentalParameters result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -5520,6 +5643,7 @@ EnvironmentalParameters1 EnvironmentalParameters1::fromMessage(Message const& me
     }
 
     EnvironmentalParameters1 result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -5559,6 +5683,7 @@ Temperature Temperature::fromMessage(Message const& message) {
     }
 
     Temperature result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -5595,6 +5720,7 @@ Humidity Humidity::fromMessage(Message const& message) {
     }
 
     Humidity result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -5625,6 +5751,7 @@ ActualPressure ActualPressure::fromMessage(Message const& message) {
     }
 
     ActualPressure result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -5652,6 +5779,7 @@ SetPressure SetPressure::fromMessage(Message const& message) {
     }
 
     SetPressure result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -5676,6 +5804,7 @@ TemperatureExtendedRange TemperatureExtendedRange::fromMessage(Message const& me
     }
 
     TemperatureExtendedRange result;
+    result.time = message.time;
 
     result.sid = (decode8(
         &message.payload[0]
@@ -5709,6 +5838,7 @@ TideStationData TideStationData::fromMessage(Message const& message) {
     }
 
     TideStationData result;
+    result.time = message.time;
 
     result.mode = (decode8(
         &message.payload[0]
@@ -5763,6 +5893,7 @@ SalinityStationData SalinityStationData::fromMessage(Message const& message) {
     }
 
     SalinityStationData result;
+    result.time = message.time;
 
     result.mode = (decode8(
         &message.payload[0]
@@ -5814,6 +5945,7 @@ CurrentStationData CurrentStationData::fromMessage(Message const& message) {
     }
 
     CurrentStationData result;
+    result.time = message.time;
 
     result.mode = (decode8(
         &message.payload[0]
@@ -5877,6 +6009,7 @@ MeteorologicalStationData MeteorologicalStationData::fromMessage(Message const& 
     }
 
     MeteorologicalStationData result;
+    result.time = message.time;
 
     result.mode = (decode8(
         &message.payload[0]
@@ -5946,6 +6079,7 @@ MooredBuoyStationData MooredBuoyStationData::fromMessage(Message const& message)
     }
 
     MooredBuoyStationData result;
+    result.time = message.time;
 
     result.mode = (decode8(
         &message.payload[0]
@@ -6032,6 +6166,7 @@ SmallCraftStatus SmallCraftStatus::fromMessage(Message const& message) {
     }
 
     SmallCraftStatus result;
+    result.time = message.time;
 
     result.port_trim_tab = (decode8(
         &message.payload[0]
@@ -6053,6 +6188,7 @@ DirectionData DirectionData::fromMessage(Message const& message) {
     }
 
     DirectionData result;
+    result.time = message.time;
 
     result.data_mode = (decode8(
         &message.payload[0]
@@ -6113,6 +6249,7 @@ VesselSpeedComponents VesselSpeedComponents::fromMessage(Message const& message)
     }
 
     VesselSpeedComponents result;
+    result.time = message.time;
 
     auto longitudinal_speed_water_referenced_raw = decode16(
         &message.payload[0]
@@ -6164,6 +6301,7 @@ SimradTextMessage SimradTextMessage::fromMessage(Message const& message) {
     }
 
     SimradTextMessage result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6211,6 +6349,7 @@ NavicoProductInformation NavicoProductInformation::fromMessage(Message const& me
     }
 
     NavicoProductInformation result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6255,6 +6394,7 @@ SimnetReprogramData SimnetReprogramData::fromMessage(Message const& message) {
     }
 
     SimnetReprogramData result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6288,6 +6428,7 @@ SimnetRequestReprogram SimnetRequestReprogram::fromMessage(Message const& messag
     }
 
     SimnetRequestReprogram result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6309,6 +6450,7 @@ SimnetReprogramStatus1 SimnetReprogramStatus1::fromMessage(Message const& messag
     }
 
     SimnetReprogramStatus1 result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6339,6 +6481,7 @@ LowranceUnknown LowranceUnknown::fromMessage(Message const& message) {
     }
 
     LowranceUnknown result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6378,6 +6521,7 @@ SimnetSetSerialNumber SimnetSetSerialNumber::fromMessage(Message const& message)
     }
 
     SimnetSetSerialNumber result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6399,6 +6543,7 @@ SuzukiEngineAndStorageDeviceConfig SuzukiEngineAndStorageDeviceConfig::fromMessa
     }
 
     SuzukiEngineAndStorageDeviceConfig result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6420,6 +6565,7 @@ SimnetFuelUsedHighResolution SimnetFuelUsedHighResolution::fromMessage(Message c
     }
 
     SimnetFuelUsedHighResolution result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6441,6 +6587,7 @@ SimnetEngineAndTankConfiguration SimnetEngineAndTankConfiguration::fromMessage(M
     }
 
     SimnetEngineAndTankConfiguration result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6462,6 +6609,7 @@ SimnetSetEngineAndTankConfiguration SimnetSetEngineAndTankConfiguration::fromMes
     }
 
     SimnetSetEngineAndTankConfiguration result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6483,6 +6631,7 @@ SimnetFluidLevelSensorConfiguration SimnetFluidLevelSensorConfiguration::fromMes
     }
 
     SimnetFluidLevelSensorConfiguration result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6534,6 +6683,7 @@ SimnetFuelFlowTurbineConfiguration SimnetFuelFlowTurbineConfiguration::fromMessa
     }
 
     SimnetFuelFlowTurbineConfiguration result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6555,6 +6705,7 @@ SimnetFluidLevelWarning SimnetFluidLevelWarning::fromMessage(Message const& mess
     }
 
     SimnetFluidLevelWarning result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6576,6 +6727,7 @@ SimnetPressureSensorConfiguration SimnetPressureSensorConfiguration::fromMessage
     }
 
     SimnetPressureSensorConfiguration result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6597,6 +6749,7 @@ SimnetDataUserGroupConfiguration SimnetDataUserGroupConfiguration::fromMessage(M
     }
 
     SimnetDataUserGroupConfiguration result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6618,6 +6771,7 @@ SimnetAISClassBStaticDataMsg24PartB SimnetAISClassBStaticDataMsg24PartB::fromMes
     }
 
     SimnetAISClassBStaticDataMsg24PartB result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6697,6 +6851,7 @@ SimnetAISClassBStaticDataMsg24PartA SimnetAISClassBStaticDataMsg24PartA::fromMes
     }
 
     SimnetAISClassBStaticDataMsg24PartA result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6738,6 +6893,7 @@ SimnetSonarStatusFrequencyAndDSPVoltage SimnetSonarStatusFrequencyAndDSPVoltage:
     }
 
     SimnetSonarStatusFrequencyAndDSPVoltage result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6759,6 +6915,7 @@ SimnetParameterHandle SimnetParameterHandle::fromMessage(Message const& message)
     }
 
     SimnetParameterHandle result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6813,6 +6970,7 @@ SimnetEventCommandAPCommand SimnetEventCommandAPCommand::fromMessage(Message con
     }
 
     SimnetEventCommandAPCommand result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6858,6 +7016,7 @@ SimnetEventCommandAlarm SimnetEventCommandAlarm::fromMessage(Message const& mess
     }
 
     SimnetEventCommandAlarm result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6903,6 +7062,7 @@ SimnetEventCommandUnknown SimnetEventCommandUnknown::fromMessage(Message const& 
     }
 
     SimnetEventCommandUnknown result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6939,6 +7099,7 @@ SimnetEventReplyAPCommand SimnetEventReplyAPCommand::fromMessage(Message const& 
     }
 
     SimnetEventReplyAPCommand result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -6984,6 +7145,7 @@ SimnetAlarmMessage SimnetAlarmMessage::fromMessage(Message const& message) {
     }
 
     SimnetAlarmMessage result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -7016,6 +7178,7 @@ AirmarAdditionalWeatherData AirmarAdditionalWeatherData::fromMessage(Message con
     }
 
     AirmarAdditionalWeatherData result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -7058,6 +7221,7 @@ AirmarHeaterControl AirmarHeaterControl::fromMessage(Message const& message) {
     }
 
     AirmarHeaterControl result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]
@@ -7100,6 +7264,7 @@ AirmarPOST AirmarPOST::fromMessage(Message const& message) {
     }
 
     AirmarPOST result;
+    result.time = message.time;
 
     result.reserved = (decode8(
         &message.payload[1]

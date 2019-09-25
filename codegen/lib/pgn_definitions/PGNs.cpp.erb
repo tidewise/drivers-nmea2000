@@ -17,6 +17,7 @@ const int <%= cxx_name %>::ID;
     }
 
     <%= cxx_name %> result;
+    result.time = message.time;
 
 <%
         Codegen.pgn_fields_to_cxx(pgn).each do |field, field_type, field_name|

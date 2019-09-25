@@ -9,7 +9,8 @@ struct PGNsTest : public ::testing::Test {
 };
 
 template<typename M>
-M parse_message(vector<uint8_t> const& payload, int size = 0);
+M parse_message(vector<uint8_t> const& payload, int size = 0,
+                base::Time const& time = base::Time::now());
 
 TEST_F(PGNsTest, it_generates_the_ID_constant) {
     ASSERT_EQ(59392, ISOAcknowledgement::ID);
@@ -38,6 +39,15 @@ TEST_F(PGNsTest, it_throws_if_the_message_has_too_many_payload_bytes) {
     message.pgn = ISOAcknowledgement::ID;
     message.size = ISOAcknowledgement::BYTE_LENGTH + 1;
     ASSERT_THROW(ISOAcknowledgement::fromMessage(message), std::invalid_argument);
+}
+
+
+TEST_F(PGNsTest, it_forwards_the_time_field) {
+    auto time = base::Time::fromSeconds(10);
+    auto parsed = parse_message<NMEARequestGroupFunction>(
+        { 0x0F, 0, 0, 0, 0, 0, 0, 0, 0 }, 9, time
+    );
+    ASSERT_EQ(time, parsed.time);
 }
 
 
@@ -213,7 +223,7 @@ TEST_F(PGNsTest, it_parses_UDbl_fields_without_offset) {
     auto parsed = parse_message<SystemTime>(
         { 0, 0, 0, 0, 0x12, 0x34, 0, 0 }
     );
-    ASSERT_FLOAT_EQ(0x3412 * 0.0001, parsed.time);
+    ASSERT_FLOAT_EQ(0x3412 * 0.0001, parsed.seconds_since_midnight);
 }
 
 TEST_F(PGNsTest, it_parses_UDbl_fields_with_offset) {
@@ -245,8 +255,9 @@ TEST_F(PGNsTest, it_parses_non_zero_terminated_ASCII_fields) {
 }
 
 template<typename M>
-M parse_message(vector<uint8_t> const& payload, int size) {
+M parse_message(vector<uint8_t> const& payload, int size, base::Time const& time) {
     Message message;
+    message.time = time;
     message.pgn = M::ID;
     message.size = size == 0 ? payload.size() : size;
     std::copy(payload.begin(), payload.end(), message.payload);

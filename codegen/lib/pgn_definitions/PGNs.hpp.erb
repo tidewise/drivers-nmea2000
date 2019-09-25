@@ -1,6 +1,7 @@
 #ifndef NMEA2000_PGNS_HPP
 #define NMEA2000_PGNS_HPP
 
+#include <base/Time.hpp>
 #include <nmea2000/Message.hpp>
 
 namespace nmea2000 {
@@ -12,6 +13,8 @@ namespace nmea2000 {
             static const int ID = <%= pgn.id %>;
 
             static <%= cxx_name %> fromMessage(Message const& message);
+
+            base::Time time;
 
 <%          Codegen.pgn_fields_to_cxx(pgn).each do |field, field_type, field_name| %>
             <%= field_type %> <%= field_name %>;

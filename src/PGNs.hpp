@@ -1,6 +1,7 @@
 #ifndef NMEA2000_PGNS_HPP
 #define NMEA2000_PGNS_HPP
 
+#include <base/Time.hpp>
 #include <nmea2000/Message.hpp>
 
 namespace nmea2000 {
@@ -10,6 +11,8 @@ namespace nmea2000 {
             static const int ID = 59392;
 
             static ISOAcknowledgement fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t control;
             uint8_t group_function;
@@ -22,6 +25,8 @@ namespace nmea2000 {
 
             static ISORequest fromMessage(Message const& message);
 
+            base::Time time;
+
             uint32_t pgn;
         };
         struct ISOAddressClaim {
@@ -29,6 +34,8 @@ namespace nmea2000 {
             static const int ID = 60928;
 
             static ISOAddressClaim fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t device_function;
             uint8_t device_class;
@@ -40,6 +47,8 @@ namespace nmea2000 {
             static const int ID = 65240;
 
             static ISOCommandedAddress fromMessage(Message const& message);
+
+            base::Time time;
 
             uint16_t manufacturer_code;
             uint8_t device_function;
@@ -55,6 +64,8 @@ namespace nmea2000 {
 
             static AirmarBootStateAcknowledgment fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
             uint8_t boot_state;
@@ -64,6 +75,8 @@ namespace nmea2000 {
             static const int ID = 65285;
 
             static LowranceTemperature fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -76,6 +89,8 @@ namespace nmea2000 {
 
             static AirmarBootStateRequest fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
         };
@@ -85,6 +100,8 @@ namespace nmea2000 {
 
             static SimnetConfigureTemperatureSensor fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
         };
@@ -93,6 +110,8 @@ namespace nmea2000 {
             static const int ID = 65287;
 
             static AirmarAccessLevel fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -107,6 +126,8 @@ namespace nmea2000 {
 
             static SimnetTrimTabSensorCalibration fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
         };
@@ -115,6 +136,8 @@ namespace nmea2000 {
             static const int ID = 65290;
 
             static SimnetPaddleWheelSpeedConfiguration fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -125,6 +148,8 @@ namespace nmea2000 {
 
             static SimnetClearFluidLevelWarnings fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
         };
@@ -133,6 +158,8 @@ namespace nmea2000 {
             static const int ID = 65293;
 
             static SimnetLGC2000Configuration fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -143,6 +170,8 @@ namespace nmea2000 {
 
             static SimnetReprogramStatus fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
         };
@@ -152,6 +181,8 @@ namespace nmea2000 {
 
             static SimnetAutopilotMode fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
         };
@@ -160,6 +191,8 @@ namespace nmea2000 {
             static const int ID = 65408;
 
             static AirmarDepthQualityFactor fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -171,6 +204,8 @@ namespace nmea2000 {
             static const int ID = 65410;
 
             static AirmarDeviceInformation fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -185,6 +220,8 @@ namespace nmea2000 {
 
             static SimnetAutopilotMode1 fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
         };
@@ -193,6 +230,8 @@ namespace nmea2000 {
             static const int ID = 126208;
 
             static NMEARequestGroupFunction fromMessage(Message const& message);
+
+            base::Time time;
 
             int8_t function_code;
             uint32_t pgn;
@@ -208,6 +247,8 @@ namespace nmea2000 {
 
             static NMEACommandGroupFunction fromMessage(Message const& message);
 
+            base::Time time;
+
             int8_t function_code;
             uint32_t pgn;
             uint8_t priority;
@@ -222,6 +263,8 @@ namespace nmea2000 {
 
             static NMEAAcknowledgeGroupFunction fromMessage(Message const& message);
 
+            base::Time time;
+
             int8_t function_code;
             uint32_t pgn;
             uint8_t pgn_error_code;
@@ -234,6 +277,8 @@ namespace nmea2000 {
             static const int ID = 126270;
 
             static MaretronSlaveResponse fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -248,6 +293,8 @@ namespace nmea2000 {
 
             static PGNListTransmitAndReceive fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t function_code;
             uint32_t pgn;
         };
@@ -256,6 +303,8 @@ namespace nmea2000 {
             static const int ID = 126720;
 
             static AirmarCalibrateCompass fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -279,6 +328,8 @@ namespace nmea2000 {
 
             static AirmarAttitudeOffset fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
             int8_t proprietary_id;
@@ -292,6 +343,8 @@ namespace nmea2000 {
 
             static AirmarTrueWindOptions fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
             int8_t proprietary_id;
@@ -304,6 +357,8 @@ namespace nmea2000 {
 
             static ManufacturerPropietaryAddressableMultiFrame fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
         };
@@ -312,6 +367,8 @@ namespace nmea2000 {
             static const int ID = 126720;
 
             static AirmarAddressableMultiFrame fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -323,16 +380,20 @@ namespace nmea2000 {
 
             static SystemTime fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t sid;
             uint8_t source;
             uint16_t date;
-            float time;
+            float seconds_since_midnight;
         };
         struct Heartbeat {
             static const int BYTE_LENGTH = 8;
             static const int ID = 126993;
 
             static Heartbeat fromMessage(Message const& message);
+
+            base::Time time;
 
             float interval;
             uint8_t status;
@@ -342,6 +403,8 @@ namespace nmea2000 {
             static const int ID = 126996;
 
             static ProductInformation fromMessage(Message const& message);
+
+            base::Time time;
 
             uint16_t nmea_2000_version;
             uint16_t product_code;
@@ -358,12 +421,16 @@ namespace nmea2000 {
 
             static ConfigurationInformation fromMessage(Message const& message);
 
+            base::Time time;
+
         };
         struct HeadingTrackControl {
             static const int BYTE_LENGTH = 21;
             static const int ID = 127237;
 
             static HeadingTrackControl fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t rudder_limit_exceeded;
             uint8_t off_heading_limit_exceeded;
@@ -390,6 +457,8 @@ namespace nmea2000 {
 
             static Rudder fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t direction_order;
             float angle_order;
             float position;
@@ -400,6 +469,8 @@ namespace nmea2000 {
             static const int ID = 127250;
 
             static VesselHeading fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t sid;
             float heading;
@@ -414,6 +485,8 @@ namespace nmea2000 {
 
             static RateOfTurn fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t sid;
             float rate;
         };
@@ -422,6 +495,8 @@ namespace nmea2000 {
             static const int ID = 127257;
 
             static Attitude fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t sid;
             float yaw;
@@ -434,6 +509,8 @@ namespace nmea2000 {
 
             static MagneticVariation fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t sid;
             uint8_t source;
             uint16_t age_of_service;
@@ -445,6 +522,8 @@ namespace nmea2000 {
 
             static EngineParametersRapidUpdate fromMessage(Message const& message);
 
+            base::Time time;
+
             float engine_speed;
             uint16_t engine_boost_pressure;
             int8_t engine_tilt_trim;
@@ -455,6 +534,8 @@ namespace nmea2000 {
             static const int ID = 127489;
 
             static EngineParametersDynamic fromMessage(Message const& message);
+
+            base::Time time;
 
             uint16_t oil_pressure;
             float oil_temperature;
@@ -476,6 +557,8 @@ namespace nmea2000 {
 
             static TransmissionParametersDynamic fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t transmission_gear;
             uint8_t reserved;
             uint16_t oil_pressure;
@@ -488,6 +571,8 @@ namespace nmea2000 {
 
             static TripParametersVessel fromMessage(Message const& message);
 
+            base::Time time;
+
             float time_to_empty;
             float distance_to_empty;
             uint16_t estimated_fuel_remaining;
@@ -498,6 +583,8 @@ namespace nmea2000 {
             static const int ID = 127497;
 
             static TripParametersEngine fromMessage(Message const& message);
+
+            base::Time time;
 
             uint16_t trip_fuel_used;
             float fuel_rate_average;
@@ -510,6 +597,8 @@ namespace nmea2000 {
 
             static EngineParametersStatic fromMessage(Message const& message);
 
+            base::Time time;
+
             uint16_t rated_engine_speed;
             uint8_t vin;
             uint16_t software_id;
@@ -520,6 +609,8 @@ namespace nmea2000 {
 
             static BinarySwitchBankStatus fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t indicator;
         };
         struct SwitchBankControl {
@@ -528,6 +619,8 @@ namespace nmea2000 {
 
             static SwitchBankControl fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t switch_state;
         };
         struct ACInputStatus {
@@ -535,6 +628,8 @@ namespace nmea2000 {
             static const int ID = 127503;
 
             static ACInputStatus fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t number_of_lines;
             uint8_t line;
@@ -554,6 +649,8 @@ namespace nmea2000 {
 
             static ACOutputStatus fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t number_of_lines;
             uint8_t line;
             uint8_t waveform;
@@ -572,6 +669,8 @@ namespace nmea2000 {
 
             static FluidLevel fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t type;
             float level;
             float capacity;
@@ -582,6 +681,8 @@ namespace nmea2000 {
             static const int ID = 127506;
 
             static DCDetailedStatus fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t sid;
             uint8_t dc_type;
@@ -596,6 +697,8 @@ namespace nmea2000 {
 
             static ChargerStatus fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t operating_state;
             uint8_t charge_mode;
             uint8_t charger_enable_disable;
@@ -609,6 +712,8 @@ namespace nmea2000 {
 
             static BatteryStatus fromMessage(Message const& message);
 
+            base::Time time;
+
             float voltage;
             float current;
             float temperature;
@@ -620,6 +725,8 @@ namespace nmea2000 {
 
             static InverterStatus fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t operating_state;
             uint8_t inverter;
         };
@@ -628,6 +735,8 @@ namespace nmea2000 {
             static const int ID = 127510;
 
             static ChargerConfigurationStatus fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t charger_enable_disable;
             uint8_t reserved;
@@ -645,6 +754,8 @@ namespace nmea2000 {
 
             static InverterConfigurationStatus fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t inverter_enable_disable;
             uint8_t inverter_mode;
             uint8_t load_sense_enable_disable;
@@ -657,6 +768,8 @@ namespace nmea2000 {
 
             static AGSConfigurationStatus fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t ags_mode;
         };
         struct BatteryConfigurationStatus {
@@ -664,6 +777,8 @@ namespace nmea2000 {
             static const int ID = 127513;
 
             static BatteryConfigurationStatus fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t battery_type;
             uint8_t supports_equalization;
@@ -681,6 +796,8 @@ namespace nmea2000 {
 
             static AGSStatus fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t ags_operating_state;
             uint8_t generator_state;
             uint8_t generator_on_reason;
@@ -691,6 +808,8 @@ namespace nmea2000 {
             static const int ID = 128259;
 
             static Speed fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t sid;
             float speed_water_referenced;
@@ -704,6 +823,8 @@ namespace nmea2000 {
 
             static WaterDepth fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t sid;
             float depth;
             float offset;
@@ -715,8 +836,10 @@ namespace nmea2000 {
 
             static DistanceLog fromMessage(Message const& message);
 
+            base::Time time;
+
             uint16_t date;
-            float time;
+            float seconds_since_midnight;
             uint32_t log;
             uint32_t trip_log;
         };
@@ -725,6 +848,8 @@ namespace nmea2000 {
             static const int ID = 128520;
 
             static TrackedTargetData fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t sid;
             uint8_t target_id_number;
@@ -748,6 +873,8 @@ namespace nmea2000 {
 
             static PositionRapidUpdate fromMessage(Message const& message);
 
+            base::Time time;
+
             float latitude;
             float longitude;
         };
@@ -756,6 +883,8 @@ namespace nmea2000 {
             static const int ID = 129026;
 
             static COGSOGRapidUpdate fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t sid;
             uint8_t cog_reference;
@@ -768,6 +897,8 @@ namespace nmea2000 {
 
             static PositionDeltaRapidUpdate fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t sid;
             uint16_t time_delta;
             uint16_t latitude_delta;
@@ -778,6 +909,8 @@ namespace nmea2000 {
             static const int ID = 129028;
 
             static AltitudeDeltaRapidUpdate fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t sid;
             uint16_t time_delta;
@@ -792,9 +925,11 @@ namespace nmea2000 {
 
             static GNSSPositionData fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t sid;
             uint16_t date;
-            float time;
+            float seconds_since_midnight;
             float latitude;
             float longitude;
             float altitude;
@@ -816,8 +951,10 @@ namespace nmea2000 {
 
             static TimeDate fromMessage(Message const& message);
 
+            base::Time time;
+
             uint16_t date;
-            float time;
+            float seconds_since_midnight;
             int16_t local_offset;
         };
         struct AISClassAPositionReport {
@@ -825,6 +962,8 @@ namespace nmea2000 {
             static const int ID = 129038;
 
             static AISClassAPositionReport fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t message_id;
             uint8_t repeat_indicator;
@@ -848,6 +987,8 @@ namespace nmea2000 {
             static const int ID = 129039;
 
             static AISClassBPositionReport fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t message_id;
             uint8_t repeat_indicator;
@@ -876,6 +1017,8 @@ namespace nmea2000 {
             static const int ID = 129040;
 
             static AISClassBExtendedPositionReport fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t message_id;
             uint8_t repeat_indicator;
@@ -907,6 +1050,8 @@ namespace nmea2000 {
 
             static Datum fromMessage(Message const& message);
 
+            base::Time time;
+
             std::string local_datum;
             float delta_latitude;
             float delta_longitude;
@@ -918,6 +1063,8 @@ namespace nmea2000 {
             static const int ID = 129045;
 
             static UserDatum fromMessage(Message const& message);
+
+            base::Time time;
 
             float delta_x;
             float delta_y;
@@ -936,6 +1083,8 @@ namespace nmea2000 {
 
             static CrossTrackError fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t sid;
             uint8_t xte_mode;
             uint8_t navigation_terminated;
@@ -946,6 +1095,8 @@ namespace nmea2000 {
             static const int ID = 129284;
 
             static NavigationData fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t sid;
             float distance_to_waypoint;
@@ -969,6 +1120,8 @@ namespace nmea2000 {
 
             static NavigationRouteWPInformation fromMessage(Message const& message);
 
+            base::Time time;
+
             uint16_t start_rpsnumber;
             uint16_t nitems;
             uint16_t database_id;
@@ -985,6 +1138,8 @@ namespace nmea2000 {
 
             static SetDriftRapidUpdate fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t sid;
             uint8_t set_reference;
             float set;
@@ -996,6 +1151,8 @@ namespace nmea2000 {
 
             static NavigationRouteTimeToFromMark fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t sid;
             float time_to_mark;
             uint8_t mark_type;
@@ -1006,6 +1163,8 @@ namespace nmea2000 {
             static const int ID = 129302;
 
             static BearingAndDistanceBetweenTwoMarks fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t sid;
             uint8_t bearing_reference;
@@ -1022,6 +1181,8 @@ namespace nmea2000 {
             static const int ID = 129538;
 
             static GNSSControlStatus fromMessage(Message const& message);
+
+            base::Time time;
 
             uint16_t sv_elevation_mask;
             float pdop_mask;
@@ -1040,6 +1201,8 @@ namespace nmea2000 {
 
             static GNSSDOPs fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t sid;
             uint8_t desired_mode;
             uint8_t actual_mode;
@@ -1052,6 +1215,8 @@ namespace nmea2000 {
             static const int ID = 129540;
 
             static GNSSSatsInView fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t sid;
             uint8_t mode;
@@ -1171,6 +1336,8 @@ namespace nmea2000 {
 
             static GPSAlmanacData fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t prn;
             uint8_t gps_week_number;
             uint8_t sv_health_bits;
@@ -1191,6 +1358,8 @@ namespace nmea2000 {
 
             static GNSSPseudorangeNoiseStatistics fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t sid;
             uint16_t rms_of_position_uncertainty;
             uint8_t std_of_major_axis;
@@ -1205,6 +1374,8 @@ namespace nmea2000 {
             static const int ID = 129545;
 
             static GNSSRAIMOutput fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t sid;
             uint8_t integrity_flag;
@@ -1222,6 +1393,8 @@ namespace nmea2000 {
 
             static GNSSRAIMSettings fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t radial_position_error_maximum_threshold;
             uint8_t probability_of_false_alarm;
             uint8_t probability_of_missed_detection;
@@ -1232,6 +1405,8 @@ namespace nmea2000 {
             static const int ID = 129547;
 
             static GNSSPseudorangeErrorStatistics fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t sid;
             uint16_t rms_std_dev_of_range_inputs;
@@ -1247,6 +1422,8 @@ namespace nmea2000 {
             static const int ID = 129549;
 
             static DGNSSCorrections fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t sid;
             uint16_t reference_station_id;
@@ -1266,6 +1443,8 @@ namespace nmea2000 {
 
             static GNSSDifferentialCorrectionReceiverInterface fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t channel;
             uint8_t frequency;
             uint8_t serial_interface_bit_rate;
@@ -1278,6 +1457,8 @@ namespace nmea2000 {
             static const int ID = 129551;
 
             static GNSSDifferentialCorrectionReceiverSignal fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t sid;
             uint8_t channel;
@@ -1300,6 +1481,8 @@ namespace nmea2000 {
 
             static GLONASSAlmanacData fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t prn;
             uint8_t na;
             uint8_t cna;
@@ -1320,6 +1503,8 @@ namespace nmea2000 {
 
             static AISDGNSSBroadcastBinaryMessage fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t message_id;
             uint8_t repeat_indicator;
             uint8_t source_id;
@@ -1338,6 +1523,8 @@ namespace nmea2000 {
 
             static AISUTCAndDateReport fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t message_id;
             uint8_t repeat_indicator;
             int32_t user_id;
@@ -1355,6 +1542,8 @@ namespace nmea2000 {
             static const int ID = 129794;
 
             static AISClassAStaticAndVoyageRelatedData fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t message_id;
             uint8_t repeat_indicator;
@@ -1382,6 +1571,8 @@ namespace nmea2000 {
 
             static AISAddressedBinaryMessage fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t message_id;
             uint8_t repeat_indicator;
             int32_t source_id;
@@ -1397,6 +1588,8 @@ namespace nmea2000 {
 
             static AISAcknowledge fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t message_id;
             uint8_t repeat_indicator;
             uint32_t source_id;
@@ -1409,6 +1602,8 @@ namespace nmea2000 {
 
             static AISBinaryBroadcastMessage fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t message_id;
             uint8_t repeat_indicator;
             uint32_t source_id;
@@ -1420,6 +1615,8 @@ namespace nmea2000 {
             static const int ID = 129798;
 
             static AISSARAircraftPositionReport fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t message_id;
             uint8_t repeat_indicator;
@@ -1442,6 +1639,8 @@ namespace nmea2000 {
 
             static RadioFrequencyModePower fromMessage(Message const& message);
 
+            base::Time time;
+
             float rx_frequency;
             float tx_frequency;
             uint8_t radio_channel;
@@ -1455,6 +1654,8 @@ namespace nmea2000 {
 
             static AISUTCDateInquiry fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t message_id;
             uint8_t repeat_indicator;
             uint32_t source_id;
@@ -1466,6 +1667,8 @@ namespace nmea2000 {
             static const int ID = 129801;
 
             static AISAddressedSafetyRelatedMessage fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t message_id;
             uint8_t repeat_indicator;
@@ -1482,6 +1685,8 @@ namespace nmea2000 {
 
             static AISSafetyRelatedBroadcastMessage fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t message_id;
             uint8_t repeat_indicator;
             uint8_t ais_transceiver_information;
@@ -1491,6 +1696,8 @@ namespace nmea2000 {
             static const int ID = 129803;
 
             static AISInterrogation fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t message_id;
             uint8_t repeat_indicator;
@@ -1503,6 +1710,8 @@ namespace nmea2000 {
             static const int ID = 129804;
 
             static AISAssignmentModeCommand fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t message_id;
             uint8_t repeat_indicator;
@@ -1518,6 +1727,8 @@ namespace nmea2000 {
 
             static AISDataLinkManagementMessage fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t message_id;
             uint8_t repeat_indicator;
             uint8_t ais_transceiver_information;
@@ -1527,6 +1738,8 @@ namespace nmea2000 {
             static const int ID = 129806;
 
             static AISChannelManagement fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t message_id;
             uint8_t repeat_indicator;
@@ -1548,6 +1761,8 @@ namespace nmea2000 {
 
             static AISClassBGroupAssignment fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t message_id;
             uint8_t repeat_indicator;
             float north_east_longitude_corner_1;
@@ -1564,6 +1779,8 @@ namespace nmea2000 {
             static const int ID = 129808;
 
             static DSCCallInformation fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t dsc_format_symbol;
             uint8_t dsc_category_symbol;
@@ -1593,6 +1810,8 @@ namespace nmea2000 {
 
             static AISClassBStaticDataMsg24PartA fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t message_id;
             uint8_t repeat_indicator;
             int32_t user_id;
@@ -1603,6 +1822,8 @@ namespace nmea2000 {
             static const int ID = 129810;
 
             static AISClassBStaticDataMsg24PartB fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t message_id;
             uint8_t repeat_indicator;
@@ -1622,6 +1843,8 @@ namespace nmea2000 {
 
             static RouteAndWPServiceDatabaseList fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t start_database_id;
             uint8_t nitems;
             uint8_t number_of_databases_available;
@@ -1640,6 +1863,8 @@ namespace nmea2000 {
 
             static RouteAndWPServiceRouteList fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t start_route_id;
             uint8_t nitems;
             uint8_t number_of_routes_in_database;
@@ -1654,6 +1879,8 @@ namespace nmea2000 {
             static const int ID = 130066;
 
             static RouteAndWPServiceRouteWPListAttributes fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t database_id;
             uint8_t route_id;
@@ -1674,6 +1901,8 @@ namespace nmea2000 {
 
             static RouteAndWPServiceRouteWPNamePosition fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t start_rpsnumber;
             uint8_t nitems;
             uint16_t number_of_wps_in_the_route_wp_list;
@@ -1690,6 +1919,8 @@ namespace nmea2000 {
 
             static RouteAndWPServiceRouteWPName fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t start_rpsnumber;
             uint8_t nitems;
             uint16_t number_of_wps_in_the_route_wp_list;
@@ -1703,6 +1934,8 @@ namespace nmea2000 {
             static const int ID = 130069;
 
             static RouteAndWPServiceXTELimitNavigationMethod fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t start_rpsnumber;
             uint8_t nitems;
@@ -1719,6 +1952,8 @@ namespace nmea2000 {
 
             static RouteAndWPServiceWPComment fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t start_id;
             uint8_t nitems;
             uint16_t number_of_wps_with_comments;
@@ -1733,6 +1968,8 @@ namespace nmea2000 {
 
             static RouteAndWPServiceRouteComment fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t start_route_id;
             uint8_t nitems;
             uint16_t number_of_routes_with_comments;
@@ -1746,6 +1983,8 @@ namespace nmea2000 {
 
             static RouteAndWPServiceDatabaseComment fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t start_database_id;
             uint8_t nitems;
             uint16_t number_of_databases_with_comments;
@@ -1757,6 +1996,8 @@ namespace nmea2000 {
             static const int ID = 130073;
 
             static RouteAndWPServiceRadiusOfTurn fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t start_rpsnumber;
             uint8_t nitems;
@@ -1771,6 +2012,8 @@ namespace nmea2000 {
             static const int ID = 130074;
 
             static RouteAndWPServiceWPListWPNamePosition fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t start_wp_id;
             uint8_t nitems;
@@ -1788,6 +2031,8 @@ namespace nmea2000 {
 
             static WindData fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t sid;
             float wind_speed;
             float wind_angle;
@@ -1800,6 +2045,8 @@ namespace nmea2000 {
 
             static EnvironmentalParameters fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t sid;
             float water_temperature;
             float outside_ambient_air_temperature;
@@ -1811,6 +2058,8 @@ namespace nmea2000 {
             static const int ID = 130311;
 
             static EnvironmentalParameters1 fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t sid;
             uint8_t temperature_instance;
@@ -1825,6 +2074,8 @@ namespace nmea2000 {
 
             static Temperature fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t sid;
             uint8_t temperature_source;
             float actual_temperature;
@@ -1836,6 +2087,8 @@ namespace nmea2000 {
             static const int ID = 130313;
 
             static Humidity fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t sid;
             uint8_t humidity_source;
@@ -1849,6 +2102,8 @@ namespace nmea2000 {
 
             static ActualPressure fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t sid;
             uint8_t pressure_source;
             float pressure;
@@ -1858,6 +2113,8 @@ namespace nmea2000 {
             static const int ID = 130315;
 
             static SetPressure fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t sid;
             uint8_t pressure_source;
@@ -1869,6 +2126,8 @@ namespace nmea2000 {
 
             static TemperatureExtendedRange fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t sid;
             uint8_t temperature_source;
             float actual_temperature;
@@ -1879,6 +2138,8 @@ namespace nmea2000 {
             static const int ID = 130320;
 
             static TideStationData fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t mode;
             uint8_t tide_tendency;
@@ -1895,6 +2156,8 @@ namespace nmea2000 {
 
             static SalinityStationData fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t mode;
             uint16_t measurement_date;
             float measurement_time;
@@ -1908,6 +2171,8 @@ namespace nmea2000 {
             static const int ID = 130322;
 
             static CurrentStationData fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t mode;
             uint16_t measurement_date;
@@ -1924,6 +2189,8 @@ namespace nmea2000 {
             static const int ID = 130323;
 
             static MeteorologicalStationData fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t mode;
             uint16_t measurement_date;
@@ -1942,6 +2209,8 @@ namespace nmea2000 {
             static const int ID = 130324;
 
             static MooredBuoyStationData fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t mode;
             uint16_t measurement_date;
@@ -1966,6 +2235,8 @@ namespace nmea2000 {
 
             static SmallCraftStatus fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t port_trim_tab;
             uint8_t starboard_trim_tab;
         };
@@ -1974,6 +2245,8 @@ namespace nmea2000 {
             static const int ID = 130577;
 
             static DirectionData fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t data_mode;
             uint8_t cog_reference;
@@ -1991,6 +2264,8 @@ namespace nmea2000 {
 
             static VesselSpeedComponents fromMessage(Message const& message);
 
+            base::Time time;
+
             float longitudinal_speed_water_referenced;
             float transverse_speed_water_referenced;
             float longitudinal_speed_ground_referenced;
@@ -2003,6 +2278,8 @@ namespace nmea2000 {
             static const int ID = 130816;
 
             static SimradTextMessage fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -2021,6 +2298,8 @@ namespace nmea2000 {
 
             static NavicoProductInformation fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
             int16_t product_code;
@@ -2038,6 +2317,8 @@ namespace nmea2000 {
 
             static SimnetReprogramData fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
             int16_t version;
@@ -2049,6 +2330,8 @@ namespace nmea2000 {
 
             static SimnetRequestReprogram fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
         };
@@ -2057,6 +2340,8 @@ namespace nmea2000 {
             static const int ID = 130820;
 
             static SimnetReprogramStatus1 fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -2069,6 +2354,8 @@ namespace nmea2000 {
             static const int ID = 130827;
 
             static LowranceUnknown fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -2085,6 +2372,8 @@ namespace nmea2000 {
 
             static SimnetSetSerialNumber fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
         };
@@ -2093,6 +2382,8 @@ namespace nmea2000 {
             static const int ID = 130831;
 
             static SuzukiEngineAndStorageDeviceConfig fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -2103,6 +2394,8 @@ namespace nmea2000 {
 
             static SimnetFuelUsedHighResolution fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
         };
@@ -2111,6 +2404,8 @@ namespace nmea2000 {
             static const int ID = 130834;
 
             static SimnetEngineAndTankConfiguration fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -2121,6 +2416,8 @@ namespace nmea2000 {
 
             static SimnetSetEngineAndTankConfiguration fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
         };
@@ -2129,6 +2426,8 @@ namespace nmea2000 {
             static const int ID = 130836;
 
             static SimnetFluidLevelSensorConfiguration fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -2147,6 +2446,8 @@ namespace nmea2000 {
 
             static SimnetFuelFlowTurbineConfiguration fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
         };
@@ -2155,6 +2456,8 @@ namespace nmea2000 {
             static const int ID = 130838;
 
             static SimnetFluidLevelWarning fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -2165,6 +2468,8 @@ namespace nmea2000 {
 
             static SimnetPressureSensorConfiguration fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
         };
@@ -2174,6 +2479,8 @@ namespace nmea2000 {
 
             static SimnetDataUserGroupConfiguration fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
         };
@@ -2182,6 +2489,8 @@ namespace nmea2000 {
             static const int ID = 130842;
 
             static SimnetAISClassBStaticDataMsg24PartB fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -2206,6 +2515,8 @@ namespace nmea2000 {
 
             static SimnetAISClassBStaticDataMsg24PartA fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
             uint8_t message_id;
@@ -2221,6 +2532,8 @@ namespace nmea2000 {
 
             static SimnetSonarStatusFrequencyAndDSPVoltage fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
         };
@@ -2229,6 +2542,8 @@ namespace nmea2000 {
             static const int ID = 130845;
 
             static SimnetParameterHandle fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -2250,6 +2565,8 @@ namespace nmea2000 {
 
             static SimnetEventCommandAPCommand fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
             uint8_t ap_command;
@@ -2265,6 +2582,8 @@ namespace nmea2000 {
             static const int ID = 130850;
 
             static SimnetEventCommandAlarm fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -2282,6 +2601,8 @@ namespace nmea2000 {
 
             static SimnetEventCommandUnknown fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
             uint16_t a;
@@ -2295,6 +2616,8 @@ namespace nmea2000 {
             static const int ID = 130851;
 
             static SimnetEventReplyAPCommand fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -2312,6 +2635,8 @@ namespace nmea2000 {
 
             static SimnetAlarmMessage fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
             uint16_t message_id;
@@ -2324,6 +2649,8 @@ namespace nmea2000 {
             static const int ID = 130880;
 
             static AirmarAdditionalWeatherData fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
@@ -2338,6 +2665,8 @@ namespace nmea2000 {
 
             static AirmarHeaterControl fromMessage(Message const& message);
 
+            base::Time time;
+
             uint8_t reserved;
             uint8_t industry_code;
             uint8_t c;
@@ -2350,6 +2679,8 @@ namespace nmea2000 {
             static const int ID = 130944;
 
             static AirmarPOST fromMessage(Message const& message);
+
+            base::Time time;
 
             uint8_t reserved;
             uint8_t industry_code;
