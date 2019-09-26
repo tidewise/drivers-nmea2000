@@ -1,0 +1,55 @@
+#include <nmea2000/PGNs.hpp>
+#include <nmea2000/Decode.hpp>
+
+using namespace nmea2000::decode;
+using namespace nmea2000::pgns;
+
+<% definitions.each do |cxx_name, pgn| %>
+const int <%= cxx_name %>::BYTE_LENGTH;
+const int <%= cxx_name %>::ID;
+
+<%= cxx_name %> <%= cxx_name %>::fromMessage(Message const& message) {
+    if (message.pgn != ID) {
+        throw std::invalid_argument("unexpected PGN ID");
+    }
+    else if (message.size != BYTE_LENGTH) {
+        throw std::invalid_argument("unexpected payload size");
+    }
+
+    <%= cxx_name %> result;
+    result.time = message.time;
+
+<%
+        Codegen.pgn_fields_to_cxx(pgn).each do |field, field_type, field_name|
+            bit_offset = field.bit_offset
+            byte_offset = field.byte_offset
+            relative_bit_offset = field.relative_bit_offset
+            byte_length_in_bits = field.byte_length * 8;
+%>
+<%          if field.ascii? %>
+    result.<%= field_name %> = decodeString(&message.payload[<%= byte_offset %>],
+                                            <%= field.byte_length%>);
+<%          elsif field.unsigned? && !field.float? %>
+    result.<%= field_name %> = (decode<%= byte_length_in_bits %>(
+        &message.payload[<%= byte_offset %>]
+    ) >> <%= relative_bit_offset %>) & 0x<%= (2**field.bit_length - 1).to_s(16) %>;
+<%          elsif field.float? %>
+    auto <%= field_name %>_raw = decode<%= byte_length_in_bits %>(
+        &message.payload[<%= byte_offset %>]
+    );
+<%              integer_field_type = "#{'u' if field.unsigned?}int#{byte_length_in_bits}_t" %>
+    <%= integer_field_type %> <%= field_name %>_iraw =
+        reinterpret_cast<<%= integer_field_type %> const&>(<%= field_name %>_raw);
+    result.<%= field_name %> = <%= field_name %>_iraw * <%= field.scale %> + <%= field.offset %>;
+<%          else %>
+    auto <%= field_name %>_raw = decode<%= byte_length_in_bits %>(
+        &message.payload[<%= byte_offset %>]
+    );
+    result.<%= field_name %> = reinterpret_cast<<%= field_type %> const&>(
+        <%= field_name %>_raw
+    );
+<%          end %>
+<%      end %>
+    return result;
+}
+<% end %>

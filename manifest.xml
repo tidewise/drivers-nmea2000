@@ -1,19 +1,12 @@
 <package>
   <description brief="NMEA2000 protocol support">
-  
   </description>
+
   <author>Sylvain Joyeux/sylvain.joyeux@tidewise.io</author>
-  <license></license>
-  <url>http://</url>
-  <logo>http://</logo>
+  <license>BSD 3-clause</license>
   <depend package="base/cmake" />
-  <!--
-   To add any dependencies use the depend tag
-  <depend package="dummy-dependency-0" />
-	...
-  <depend package="dummy-dependency-n-1" />
-  <depend package="dummy-dependency-n" />
-  -->
   <depend package="drivers/canbus" />
   <depend package="base/types" />
+
+  <test_depend package="google-test" />
 </package>

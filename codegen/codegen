@@ -1,0 +1,18 @@
+#! /usr/bin/env ruby
+
+require 'pgn_definitions'
+require 'pathname'
+
+library_path = ARGV.shift
+target_dir   = Pathname.new(ARGV.shift)
+
+library = PGNDefinitions::Library.read(library_path)
+hpp = PGNDefinitions::Codegen.generate_pgns_hpp(library)
+cpp = PGNDefinitions::Codegen.generate_pgns_cpp(library)
+
+(target_dir / 'PGNs.hpp').open('w') do |io|
+    io.write hpp
+end
+(target_dir / 'PGNs.cpp').open('w') do |io|
+    io.write cpp
+end
