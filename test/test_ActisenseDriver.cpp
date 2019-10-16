@@ -131,3 +131,19 @@ TEST_F(ActisenseDriverTest, it_handles_partial_buffers_with_escapes) {
     }
     driver.readMessage();
 }
+
+TEST_F(ActisenseDriverTest, it_writes_down_a_command) {
+
+    uint8_t message[4] = { 1, 2, 3, 4 };
+    driver.writeCommand(ActisenseDriver::ACTISENSE_CMD_SEND, message, 4);
+    auto bytes = readDataFromDriver();
+
+    vector<uint8_t> expected {
+        0x10, 0x02, 0xA1,
+        4,
+        1, 2, 3, 4,
+        81,
+        0x10, 0x03
+    };
+    ASSERT_EQ(expected, bytes);
+}

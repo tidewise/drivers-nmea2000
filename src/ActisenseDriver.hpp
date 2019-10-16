@@ -22,8 +22,10 @@ namespace nmea2000 {
         static const uint8_t END_OF_TEXT = 0x03;
 
         static const uint8_t N2K_MSG_RECEIVED = 0x93;
-        static const uint8_t N2K_MSG_SEND = 0x94;
         static const uint8_t ACTISENSE_CMD_RECEIVED = 0xA0;
+
+    public:
+        static const uint8_t N2K_MSG_SEND = 0x94;
         static const uint8_t ACTISENSE_CMD_SEND = 0xA1;
 
     protected:
@@ -32,6 +34,19 @@ namespace nmea2000 {
 
     public:
         ActisenseDriver();
+
+        /** Send a message to tell the Actisense gateway that we want to receive
+         */
+        void sendStartupSequence();
+
+        /** Send a command understood by the Actisense gateway itself
+         *
+         * @param command one of N2K_MSG_SEND or ACTISENSE_CMD_SEND
+         * @param message the command payload
+         * @param message_size number of bytes in \c message
+         */
+        void writeCommand(uint8_t command, uint8_t const* message,
+                          uint8_t message_size);
 
         Message readMessage();
     };

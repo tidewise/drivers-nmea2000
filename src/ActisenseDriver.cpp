@@ -6,6 +6,50 @@ ActisenseDriver::ActisenseDriver()
     : iodrivers_base::Driver(INTERNAL_BUFFER_SIZE) {
 }
 
+static uint8_t STARTUP_SEQUENCE[] = {
+    0x11, /* msg byte 1, meaning ? */
+    0x02, /* msg byte 2, meaning ? */
+    0x00  /* msg byte 3, meaning ? */
+};
+
+void ActisenseDriver::sendStartupSequence() {
+    writeCommand(ACTISENSE_CMD_SEND, STARTUP_SEQUENCE, sizeof(STARTUP_SEQUENCE));
+
+}
+
+void ActisenseDriver::writeCommand(uint8_t command, uint8_t const* message,
+                                   uint8_t message_size) {
+    uint8_t out_buffer[512];
+    out_buffer[0] = ESCAPE;
+    out_buffer[1] = START_OF_TEXT;
+    out_buffer[2] = command;
+    out_buffer[3] = message_size;
+
+    uint8_t crc = command + message_size;
+    uint8_t out = 4;
+    if (message_size == ESCAPE) {
+        out_buffer[out++] = ESCAPE;
+    }
+
+    for (uint8_t in = 0; in < message_size; ++in, ++out) {
+        uint8_t b = message[in];
+        out_buffer[out] = b;
+        if (b == ESCAPE) {
+            out_buffer[++out] = ESCAPE;
+        }
+        crc += b;
+    }
+    crc = 256 - (int)crc;
+    out_buffer[out++] = crc;
+    if (crc == ESCAPE) {
+        out_buffer[out++] = ESCAPE;
+    }
+    out_buffer[out++] = ESCAPE;
+    out_buffer[out++] = END_OF_TEXT;
+
+    writePacket(out_buffer, out);
+}
+
 int ActisenseDriver::extractPacket(uint8_t const* buffer, size_t buffer_size) const {
     if (buffer_size < 3) {
         return 0;
