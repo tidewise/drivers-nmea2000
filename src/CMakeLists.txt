@@ -12,6 +12,6 @@ rock_library(nmea2000
             ActisenseDriver.hpp
     DEPS_PKGCONFIG canbus base-types)
 
-rock_executable(nmea2000_bin Main.cpp
+rock_executable(nmea2000_actisense_ctl ActisenseMain.cpp
     DEPS nmea2000)
 
