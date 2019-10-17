@@ -6,60 +6,128 @@ ActisenseDriver::ActisenseDriver()
     : iodrivers_base::Driver(INTERNAL_BUFFER_SIZE) {
 }
 
+static uint8_t STARTUP_SEQUENCE[] = {
+    0x11, /* msg byte 1, meaning ? */
+    0x02, /* msg byte 2, meaning ? */
+    0x00  /* msg byte 3, meaning ? */
+};
+
+void ActisenseDriver::sendStartupSequence() {
+    writeCommand(ACTISENSE_CMD_SEND, STARTUP_SEQUENCE, sizeof(STARTUP_SEQUENCE));
+
+}
+
+void ActisenseDriver::writeCommand(uint8_t command, uint8_t const* message,
+                                   uint8_t message_size) {
+    uint8_t out_buffer[512];
+    out_buffer[0] = ESCAPE;
+    out_buffer[1] = START_OF_TEXT;
+    out_buffer[2] = command;
+    out_buffer[3] = message_size;
+
+    uint8_t crc = command + message_size;
+    uint8_t out = 4;
+    if (message_size == ESCAPE) {
+        out_buffer[out++] = ESCAPE;
+    }
+
+    for (uint8_t in = 0; in < message_size; ++in, ++out) {
+        uint8_t b = message[in];
+        out_buffer[out] = b;
+        if (b == ESCAPE) {
+            out_buffer[++out] = ESCAPE;
+        }
+        crc += b;
+    }
+    crc = 256 - (int)crc;
+    out_buffer[out++] = crc;
+    if (crc == ESCAPE) {
+        out_buffer[out++] = ESCAPE;
+    }
+    out_buffer[out++] = ESCAPE;
+    out_buffer[out++] = END_OF_TEXT;
+
+    writePacket(out_buffer, out);
+}
+
 int ActisenseDriver::extractPacket(uint8_t const* buffer, size_t buffer_size) const {
-    if (buffer_size < PRELUDE_SIZE) {
+    if (buffer_size < 3) {
         return 0;
     }
-
-    if (buffer[0] != ESCAPE ||
-        buffer[1] != START_OF_TEXT ||
-        buffer[2] != N2K_DATA_RECEIVED) {
+    else if (buffer[0] != ESCAPE || buffer[1] != START_OF_TEXT) {
+        return -1;
+    }
+    else if (buffer[2] != N2K_MSG_RECEIVED) {
         return -1;
     }
 
-    uint8_t message_length = buffer[3];
-    if (message_length < HEADER_SIZE - PRELUDE_SIZE + 1) {
-        return -1;
+    for (size_t i = 2; i < buffer_size - 1; ++i) {
+        if (buffer[i] == ESCAPE && buffer[i + 1] == START_OF_TEXT) {
+            return -i;
+        }
+        if (buffer[i] == ESCAPE && buffer[i + 1] == END_OF_TEXT) {
+            return validateFramedPacket(buffer, i + 2);
+        }
+
     }
 
-    size_t epilog_index = PRELUDE_SIZE + message_length;
-    if (buffer_size < epilog_index + EPILOG_SIZE) {
-        return 0;
-    }
-    else if (buffer[epilog_index] != ESCAPE ||
-             buffer[epilog_index + 1] != END_OF_TEXT) {
-        return -1;
-    }
+    return 0;
+}
 
-    uint8_t payload_length = buffer[14];
-    if (payload_length != message_length - 12) {
-        return -1; // two lengths do not agree
-    }
+int ActisenseDriver::validateFramedPacket(uint8_t const* buffer, size_t length) const {
+    // First validate the message length. We need to count the actual payload
+    // bytes to compute the CRC anyways
+    size_t count = 0;
+    uint8_t crc = 0;
+    for (size_t i = 2; i < length - EPILOGUE_SIZE; ++i, ++count) {
+        uint8_t b = buffer[i];
+        crc += b;
+        if (b == ESCAPE) {
+            ++i;
+        }
 
-    int sum = 0;
-    for (size_t i = PRELUDE_SIZE; i < epilog_index; ++i) {
-        sum += buffer[i];
+        if (count == 12) {
+            if (b + 11 != buffer[3]) {
+                return -length;
+            }
+        }
     }
-    if ((sum & 0xFF) != 0) { // invalid CRC
-        return -1;
-    }
+    count -= 2; // counted the command and length bytes
 
-    return PRELUDE_SIZE + message_length + EPILOG_SIZE;
+    if (((crc + buffer[length - EPILOGUE_SIZE]) & 0xFF) != 0) {
+        return -length;
+    }
+    else if (count != buffer[3]) {
+        return -length;
+    }
+    return length;
 }
 
 Message ActisenseDriver::readMessage() {
     uint8_t buffer[INTERNAL_BUFFER_SIZE];
-    readPacket(buffer, INTERNAL_BUFFER_SIZE);
+    size_t length = readPacket(buffer, INTERNAL_BUFFER_SIZE);
+
+    size_t out = 0;
+    // Decode the ESCAPE + ESCAPE patterns once and for all
+    // Only keep the "useful" parts
+    for (size_t in = 2; in < length - 3; ++in, ++out) {
+        uint8_t b = buffer[in];
+        buffer[out] = b;
+        if (b == ESCAPE) {
+            ++in;
+        }
+    }
 
     Message message;
     message.time = base::Time::now();
-    message.priority = buffer[4];
-    message.pgn = buffer[5] |
-                  static_cast<uint32_t>(buffer[6]) << 8 |
-                  static_cast<uint32_t>(buffer[7]) << 16;
-    message.destination = buffer[8];
-    message.source = buffer[9];
-    message.size = buffer[14];
-    std::copy(buffer + 15, buffer + 15 + message.size, message.payload);
+    message.priority = buffer[2];
+    message.pgn = buffer[3] |
+                  static_cast<uint32_t>(buffer[4]) << 8 |
+                  static_cast<uint32_t>(buffer[5]) << 16;
+    message.destination = buffer[6];
+    message.source = buffer[7];
+    message.size = buffer[12];
+    std::copy(buffer + 13, buffer + 13 + message.size, message.payload);
+
     return message;
 }
