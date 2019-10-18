@@ -39,6 +39,13 @@ namespace nmea2000 {
          */
         void sendStartupSequence();
 
+        /** Query the product information of all devices on the bus */
+        void queryDeviceEnumeration();
+
+        /** Send a N2K message
+         */
+        void writeMessage(Message const& message);
+
         /** Send a command understood by the Actisense gateway itself
          *
          * @param command one of N2K_MSG_SEND or ACTISENSE_CMD_SEND
