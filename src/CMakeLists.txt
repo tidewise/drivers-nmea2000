@@ -7,11 +7,11 @@ add_custom_target(regen-pgns
 
 rock_library(nmea2000
     SOURCES Receiver.cpp Message.cpp PGNLibrary.cpp PGNInfo.cpp PGNs.cpp
-            ActisenseDriver.cpp
+            ActisenseDriver.cpp Adapters.cpp
     HEADERS Receiver.hpp Message.hpp PGNLibrary.hpp PGNInfo.hpp PGNs.hpp
-            ActisenseDriver.hpp
+            ActisenseDriver.hpp Adapters.hpp
     DEPS_PKGCONFIG canbus base-types)
 
-rock_executable(nmea2000_actisense_ctl ActisenseMain.cpp
+rock_executable(nmea2000_ctl Main.cpp
     DEPS nmea2000)
 

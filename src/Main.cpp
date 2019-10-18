@@ -1,13 +1,20 @@
 #include <iostream>
-#include <nmea2000/ActisenseDriver.hpp>
 #include <nmea2000/PGNs.hpp>
+#include <nmea2000/Adapters.hpp>
+#include <iodrivers_base/Driver.hpp>
 
 using namespace std;
 using namespace nmea2000;
 
 void usage(ostream& stream) {
-    cerr << "usage: nmea2000_actisense_ctl URI CMD\n";
-    cerr << "where CMD is:";
+    cerr << "usage: nmea2000_ctl TYPE CONNECTION_NAME CMD\n";
+    cerr << "\n";
+    cerr << "TYPE is either can or actisense\n";
+    cerr << "with 'can', the connection name must be the socket-can interface name\n";
+    cerr << "with 'actisense', the connection name must be the connection URI (e.g.\n";
+    cerr << "   serial:///dev/ttyUSB0:115200)\n";
+    cerr << "\n";
+    cerr << "CMD is:";
     cerr << "  log    display the received NMEA messages";
     cerr << "  enumerate    display the devices present on the bus";
     cerr << flush;
@@ -15,30 +22,39 @@ void usage(ostream& stream) {
 
 int main(int argc, char** argv)
 {
-    if (argc != 3) {
+    if (argc < 4) {
+        usage(cout);
+        return 0;
+    }
+
+    string type = argv[1];
+    string uri = argv[2];
+    string cmd = argv[3];
+
+    adapters::Interface* interface = nullptr;
+    if (type == "can") {
+        interface = new adapters::CAN(uri, "socket");
+    }
+    else if (type == "actisense") {
+        interface = new adapters::Actisense(uri);
+    }
+    else {
+        cerr << "unknown connection type '" << type << "'\n\n";
         usage(cerr);
         return 1;
     }
 
-    string uri = argv[1];
-    string cmd = argv[2];
-
     if (cmd == "enumerate") {
-        ActisenseDriver driver;
-        driver.setReadTimeout(base::Time::fromSeconds(1));
-        driver.openURI(uri);
-        driver.sendStartupSequence();
-
         base::Time refresh_deadline = base::Time();
 
         while (true) {
             if (refresh_deadline < base::Time::now()) {
-                driver.queryDeviceEnumeration();
+                interface->queryAddressClaim();
                 refresh_deadline = base::Time::now() + base::Time::fromSeconds(10);
             }
 
             try {
-                auto msg = driver.readMessage();
+                auto msg = interface->readMessage();
                 if (msg.pgn == pgns::ISOAddressClaim::ID) {
                     auto info = pgns::ISOAddressClaim::fromMessage(msg);
                     std::cout
@@ -67,15 +83,10 @@ int main(int argc, char** argv)
         }
     }
     if (cmd == "log") {
-        ActisenseDriver driver;
-        driver.setReadTimeout(base::Time::fromSeconds(1));
-        driver.openURI(uri);
-        driver.sendStartupSequence();
-
         cout << "# time PGN priority size\n";
         while (true) {
             try {
-                auto msg = driver.readMessage();
+                auto msg = interface->readMessage();
                 cout << msg.time << " " << msg.pgn << " "
                      << msg.priority << " " << msg.size << endl;
             }
