@@ -11,7 +11,15 @@ namespace nmea2000 {
         std::vector<PGNInfo> m_pgns;
 
     public:
+        PGNLibrary();
+
         PGNLibrary(std::vector<PGNInfo> const& pgns);
+
+        /** Whether this library is empty */
+        bool empty() const;
+
+        /** Number of PGNs definitions in this library */
+        size_t size() const;
 
         /** Return info for this PGN */
         PGNInfo const* find(uint32_t pgn) const;

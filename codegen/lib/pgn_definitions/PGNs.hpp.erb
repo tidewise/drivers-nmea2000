@@ -1,11 +1,18 @@
 #ifndef NMEA2000_PGNS_HPP
 #define NMEA2000_PGNS_HPP
 
+/** This file is auto-generated using the codegen script
+ * DO NOT MODIFY
+ */
+
 #include <base/Time.hpp>
 #include <nmea2000/Message.hpp>
+#include <nmea2000/PGNLibrary.hpp>
 
 namespace nmea2000 {
     namespace pgns {
+        PGNLibrary const& getLibrary();
+
 <%      existing_structs = Set.new %>
 <%      definitions.each do |cxx_name, pgn| %>
         struct <%= cxx_name %> {
