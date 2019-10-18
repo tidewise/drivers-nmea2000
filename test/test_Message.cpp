@@ -46,3 +46,38 @@ TEST_F(MessageTest, it_copies_the_package_time_data_and_length) {
         ASSERT_EQ(i + 1, msg.payload[i]);
     }
 }
+
+TEST_F(MessageTest, it_creates_a_CAN_id_from_a_message_in_PDU1) {
+    Message msg;
+    msg.priority = 0b111;
+    msg.pgn = 60416;
+    msg.destination = 0x52;
+    msg.source = 0x3d;
+    auto can = msg.toCAN();
+    ASSERT_EQ(0x1CEC523D, can.can_id);
+}
+
+TEST_F(MessageTest, it_creates_a_CAN_id_from_a_message_in_PDU2) {
+    Message msg;
+    msg.priority = 0b011;
+    msg.pgn = 0x3fe6c;
+    msg.destination = 0xff;
+    msg.source = 238;
+    auto can = msg.toCAN();
+    ASSERT_EQ(0xFFE6CEE, can.can_id);
+}
+
+TEST_F(MessageTest, it_copies_the_package_time_data_and_length_to_the_CAN_frame) {
+    Message msg;
+    msg.time = base::Time::fromMilliseconds(1000);
+    msg.size = 5;
+    uint8_t data[5] = { 1, 2, 3, 4, 5 };
+    memcpy(msg.payload, data, 5);
+
+    canbus::Message can = msg.toCAN();
+    ASSERT_EQ(base::Time::fromMilliseconds(1000), can.time);
+    ASSERT_EQ(5, can.size);
+    for (int i = 0; i < 5; ++i) {
+        ASSERT_EQ(i + 1, can.data[i]);
+    }
+}
