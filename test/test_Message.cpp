@@ -54,7 +54,7 @@ TEST_F(MessageTest, it_creates_a_CAN_id_from_a_message_in_PDU1) {
     msg.destination = 0x52;
     msg.source = 0x3d;
     auto can = msg.toCAN();
-    ASSERT_EQ(0x1CEC523D, can.can_id);
+    ASSERT_EQ(0x1CEC523D | canbus::FLAG_EXTENDED_FRAME, can.can_id);
 }
 
 TEST_F(MessageTest, it_creates_a_CAN_id_from_a_message_in_PDU2) {
@@ -64,7 +64,7 @@ TEST_F(MessageTest, it_creates_a_CAN_id_from_a_message_in_PDU2) {
     msg.destination = 0xff;
     msg.source = 238;
     auto can = msg.toCAN();
-    ASSERT_EQ(0xFFE6CEE, can.can_id);
+    ASSERT_EQ(0xFFE6CEE | canbus::FLAG_EXTENDED_FRAME, can.can_id);
 }
 
 TEST_F(MessageTest, it_copies_the_package_time_data_and_length_to_the_CAN_frame) {

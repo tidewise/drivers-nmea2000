@@ -19,7 +19,7 @@ canbus::Message Message::toCAN() const {
     if (!pdu2) {
         can_id |= (static_cast<uint32_t>(destination) << 8);
     }
-    can.can_id = can_id;
+    can.can_id = can_id | canbus::FLAG_EXTENDED_FRAME;
     return can;
 }
 

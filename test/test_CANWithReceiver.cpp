@@ -19,7 +19,7 @@ struct CANWithReceiverTest : public ::testing::Test {
 
     canbus::Message makeCANMessage(uint32_t can_id, std::vector<uint8_t> const& data) {
         canbus::Message can;
-        can.can_id = can_id;
+        can.can_id = can_id | canbus::FLAG_EXTENDED_FRAME;
         can.size = data.size();
         copy(data.begin(), data.end(), can.data);
         return can;
