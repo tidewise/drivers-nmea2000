@@ -1,6 +1,7 @@
 #include <nmea2000/Adapters.hpp>
 #include <nmea2000/ActisenseDriver.hpp>
 #include <canbus/Driver.hpp>
+#include <iostream>
 
 using namespace base;
 using namespace nmea2000::adapters;
@@ -17,6 +18,10 @@ void Interface::setReadTimeout(base::Time const& timeout) {
 
 void Interface::queryAddressClaim() {
     writeMessage(Receiver::queryAddressClaim());
+}
+
+void Interface::queryProductInformation(int target) {
+    writeMessage(Receiver::queryProductInformation(target));
 }
 
 CAN::CAN(std::string const& name, std::string const& type)
@@ -46,7 +51,7 @@ nmea2000::Message CAN::readMessage() {
 
         canbus::Message msg = m_driver->read();
         auto state = m_receiver.process(Message::fromCAN(msg));
-        if (state.first == Receiver::COMPLETE) {
+        if (state.first >= Receiver::COMPLETE) {
             return state.second;
         }
 

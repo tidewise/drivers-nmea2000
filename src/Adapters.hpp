@@ -39,6 +39,8 @@ namespace nmea2000 {
             virtual void writeMessage(Message const& msg) = 0;
             virtual Message readMessage() = 0;
 
+            void queryProductInformation(int target);
+
             void queryAddressClaim();
         };
 
