@@ -8,5 +8,6 @@
   <depend package="drivers/canbus" />
   <depend package="base/types" />
 
+  <test_depend package="ruby" />
   <test_depend package="google-test" />
 </package>
