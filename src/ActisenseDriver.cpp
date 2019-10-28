@@ -31,7 +31,11 @@ void ActisenseDriver::queryDeviceEnumeration() {
 }
 
 void ActisenseDriver::writeMessage(Message const& message) {
-    uint8_t encoded[256];
+    if (message.size > Message::MAX_PAYLOAD_LENGTH) {
+        throw std::invalid_argument("message payload is above maximum payload length");
+    }
+
+    uint8_t encoded[MAX_RAW_MESSAGE_SIZE];
     encoded[0] = message.priority;
     encoded[1] = message.pgn & 0xFF;
     encoded[2] = (message.pgn >> 8) & 0xFF;
@@ -43,14 +47,14 @@ void ActisenseDriver::writeMessage(Message const& message) {
     encoded[8] = 0;
     encoded[9] = 0;
     encoded[10] = message.size;
-    std::copy(message.payload, message.payload + message.size, encoded + 11);
+    std::copy(message.payload, message.payload + message.size, encoded + HEADER_SIZE);
 
     writeCommand(N2K_MSG_SEND, encoded, message.size + 11);
 }
 
 void ActisenseDriver::writeCommand(uint8_t command, uint8_t const* message,
                                    uint8_t message_size) {
-    uint8_t out_buffer[512];
+    uint8_t out_buffer[MAX_ESCAPED_MESSAGE_SIZE];
     out_buffer[0] = ESCAPE;
     out_buffer[1] = START_OF_TEXT;
     out_buffer[2] = command;

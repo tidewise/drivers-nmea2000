@@ -132,6 +132,42 @@ TEST_F(ActisenseDriverTest, it_handles_partial_buffers_with_escapes) {
     driver.readMessage();
 }
 
+TEST_F(ActisenseDriverTest, it_writes_a_message) {
+    Message message;
+    message.priority = 7;
+    message.pgn = 0x123456;
+    message.destination = 5;
+    message.source = 2;
+    message.size = 4;
+    message.payload[0] = 1;
+    message.payload[1] = 2;
+    message.payload[2] = 3;
+    message.payload[3] = 4;
+    driver.writeMessage(message);
+    auto bytes = readDataFromDriver();
+
+    vector<uint8_t> expected {
+        0x10, 0x02, 0x94,
+        15,
+        7, 0x56, 0x34, 0x12,
+        5, 2, 0, 0, 0, 0,
+        4,
+        1, 2, 3, 4,
+        0xa5, 0x10, 0x03
+    };
+    ASSERT_EQ(expected, bytes);
+}
+
+TEST_F(ActisenseDriverTest, it_throws_if_the_message_is_over_max_payload_length_bytes) {
+    Message message;
+    message.priority = 7;
+    message.pgn = 0x123456;
+    message.destination = 5;
+    message.source = 2;
+    message.size = Message::MAX_PAYLOAD_LENGTH + 1;
+    ASSERT_THROW(driver.writeMessage(message), std::invalid_argument);
+}
+
 TEST_F(ActisenseDriverTest, it_writes_down_a_command) {
 
     uint8_t message[4] = { 1, 2, 3, 4 };
