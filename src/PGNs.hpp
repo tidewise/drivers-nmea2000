@@ -1,11 +1,18 @@
 #ifndef NMEA2000_PGNS_HPP
 #define NMEA2000_PGNS_HPP
 
+/** This file is auto-generated using the codegen script
+ * DO NOT MODIFY
+ */
+
 #include <base/Time.hpp>
 #include <nmea2000/Message.hpp>
+#include <nmea2000/PGNLibrary.hpp>
 
 namespace nmea2000 {
     namespace pgns {
+        PGNLibrary const& getLibrary();
+
         struct ISOAcknowledgement {
             static const int BYTE_LENGTH = 8;
             static const int ID = 59392;

@@ -57,7 +57,7 @@ struct ReceiverFastPacketReassemblyTest : ReceiverTest {
         message.pgn = 3;
         message.size = 8;
         message.payload[0] = 0xA0;
-        message.payload[1] = 2;
+        message.payload[1] = 12;
         for (int i = 0; i < 6; ++i) {
             message.payload[i + 2] = i;
         }
@@ -127,11 +127,17 @@ TEST_F(ReceiverFastPacketReassemblyTest, it_rejects_a_second_packet_whose_source
     ASSERT_EQ(Receiver::INVALID_SEQUENCE_NUMBER, result.first);
 }
 
-TEST_F(ReceiverFastPacketReassemblyTest, it_rejects_bytes_above_the_expected_size) {
+TEST_F(ReceiverFastPacketReassemblyTest, it_truncates_the_last_message_size_to_the_expected_size) {
     receiver.process(message);
 
-    message.size = 8;
+    message.size = 10;
     message.payload[0] = 0xA1;
+    message.payload[7] = rand();
+    message.payload[8] = rand();
+    message.payload[9] = rand();
     auto result = receiver.process(message);
-    ASSERT_EQ(Receiver::TOO_MANY_BYTES, result.first);
+    ASSERT_EQ(Receiver::COMPLETE, result.first);
+    for (int i = 0; i < 3; ++i) {
+        ASSERT_NE(message.payload[7 + i], result.second.payload[12 + i]);
+    }
 }

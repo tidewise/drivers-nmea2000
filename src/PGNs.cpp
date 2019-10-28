@@ -1,6 +1,10 @@
 #include <nmea2000/PGNs.hpp>
 #include <nmea2000/Decode.hpp>
 
+/** This file is auto-generated using the codegen script
+ * DO NOT MODIFY
+ */
+
 using namespace nmea2000::decode;
 using namespace nmea2000::pgns;
 
@@ -7285,4 +7289,181 @@ AirmarPOST AirmarPOST::fromMessage(Message const& message) {
         &message.payload[5]
     ) >> 3) & 0xff;
     return result;
+}
+
+nmea2000::PGNLibrary const& nmea2000::pgns::getLibrary() {
+    static nmea2000::PGNLibrary library;
+
+    if (library.empty()) {
+        std::vector<PGNInfo> known_pgns;
+        known_pgns.reserve(165);
+                known_pgns.push_back({ 59392, 8 });
+                known_pgns.push_back({ 59904, 3 });
+                known_pgns.push_back({ 60928, 8 });
+                known_pgns.push_back({ 65240, 10 });
+                known_pgns.push_back({ 65285, 3 });
+                known_pgns.push_back({ 65285, 5 });
+                known_pgns.push_back({ 65286, 2 });
+                known_pgns.push_back({ 65287, 2 });
+                known_pgns.push_back({ 65287, 7 });
+                known_pgns.push_back({ 65289, 2 });
+                known_pgns.push_back({ 65290, 2 });
+                known_pgns.push_back({ 65292, 2 });
+                known_pgns.push_back({ 65293, 2 });
+                known_pgns.push_back({ 65325, 2 });
+                known_pgns.push_back({ 65341, 2 });
+                known_pgns.push_back({ 65408, 4 });
+                known_pgns.push_back({ 65410, 8 });
+                known_pgns.push_back({ 65480, 2 });
+                known_pgns.push_back({ 126208, 9 });
+                known_pgns.push_back({ 126208, 9 });
+                known_pgns.push_back({ 126208, 7 });
+                known_pgns.push_back({ 126270, 8 });
+                known_pgns.push_back({ 126464, 4 });
+                known_pgns.push_back({ 126720, 24 });
+                known_pgns.push_back({ 126720, 9 });
+                known_pgns.push_back({ 126720, 24 });
+                known_pgns.push_back({ 126720, 2 });
+                known_pgns.push_back({ 126720, 3 });
+                known_pgns.push_back({ 126992, 8 });
+                known_pgns.push_back({ 126993, 8 });
+                known_pgns.push_back({ 126996, 134 });
+                known_pgns.push_back({ 126998, 0 });
+                known_pgns.push_back({ 127237, 21 });
+                known_pgns.push_back({ 127245, 6 });
+                known_pgns.push_back({ 127250, 8 });
+                known_pgns.push_back({ 127251, 5 });
+                known_pgns.push_back({ 127257, 7 });
+                known_pgns.push_back({ 127258, 6 });
+                known_pgns.push_back({ 127488, 8 });
+                known_pgns.push_back({ 127489, 26 });
+                known_pgns.push_back({ 127493, 7 });
+                known_pgns.push_back({ 127496, 14 });
+                known_pgns.push_back({ 127497, 9 });
+                known_pgns.push_back({ 127498, 6 });
+                known_pgns.push_back({ 127501, 2 });
+                known_pgns.push_back({ 127502, 2 });
+                known_pgns.push_back({ 127503, 20 });
+                known_pgns.push_back({ 127504, 20 });
+                known_pgns.push_back({ 127505, 8 });
+                known_pgns.push_back({ 127506, 9 });
+                known_pgns.push_back({ 127507, 7 });
+                known_pgns.push_back({ 127508, 8 });
+                known_pgns.push_back({ 127509, 4 });
+                known_pgns.push_back({ 127510, 12 });
+                known_pgns.push_back({ 127511, 8 });
+                known_pgns.push_back({ 127512, 3 });
+                known_pgns.push_back({ 127513, 8 });
+                known_pgns.push_back({ 127514, 6 });
+                known_pgns.push_back({ 128259, 6 });
+                known_pgns.push_back({ 128267, 8 });
+                known_pgns.push_back({ 128275, 14 });
+                known_pgns.push_back({ 128520, 280 });
+                known_pgns.push_back({ 129025, 8 });
+                known_pgns.push_back({ 129026, 8 });
+                known_pgns.push_back({ 129027, 7 });
+                known_pgns.push_back({ 129028, 10 });
+                known_pgns.push_back({ 129029, 45 });
+                known_pgns.push_back({ 129033, 8 });
+                known_pgns.push_back({ 129038, 28 });
+                known_pgns.push_back({ 129039, 26 });
+                known_pgns.push_back({ 129040, 54 });
+                known_pgns.push_back({ 129044, 20 });
+                known_pgns.push_back({ 129045, 40 });
+                known_pgns.push_back({ 129283, 6 });
+                known_pgns.push_back({ 129284, 34 });
+                known_pgns.push_back({ 129285, 530 });
+                known_pgns.push_back({ 129291, 6 });
+                known_pgns.push_back({ 129301, 10 });
+                known_pgns.push_back({ 129302, 17 });
+                known_pgns.push_back({ 129538, 14 });
+                known_pgns.push_back({ 129539, 8 });
+                known_pgns.push_back({ 129540, 219 });
+                known_pgns.push_back({ 129541, 13 });
+                known_pgns.push_back({ 129542, 9 });
+                known_pgns.push_back({ 129545, 9 });
+                known_pgns.push_back({ 129546, 4 });
+                known_pgns.push_back({ 129547, 9 });
+                known_pgns.push_back({ 129549, 13 });
+                known_pgns.push_back({ 129550, 6 });
+                known_pgns.push_back({ 129551, 14 });
+                known_pgns.push_back({ 129556, 13 });
+                known_pgns.push_back({ 129792, 19 });
+                known_pgns.push_back({ 129793, 25 });
+                known_pgns.push_back({ 129794, 75 });
+                known_pgns.push_back({ 129795, 21 });
+                known_pgns.push_back({ 129796, 12 });
+                known_pgns.push_back({ 129797, 263 });
+                known_pgns.push_back({ 129798, 31 });
+                known_pgns.push_back({ 129799, 12 });
+                known_pgns.push_back({ 129800, 10 });
+                known_pgns.push_back({ 129801, 266 });
+                known_pgns.push_back({ 129802, 42 });
+                known_pgns.push_back({ 129803, 16 });
+                known_pgns.push_back({ 129804, 14 });
+                known_pgns.push_back({ 129805, 11 });
+                known_pgns.push_back({ 129806, 30 });
+                known_pgns.push_back({ 129807, 29 });
+                known_pgns.push_back({ 129808, 37 });
+                known_pgns.push_back({ 129809, 25 });
+                known_pgns.push_back({ 129810, 33 });
+                known_pgns.push_back({ 130064, 25 });
+                known_pgns.push_back({ 130065, 14 });
+                known_pgns.push_back({ 130066, 23 });
+                known_pgns.push_back({ 130067, 23 });
+                known_pgns.push_back({ 130068, 15 });
+                known_pgns.push_back({ 130069, 10 });
+                known_pgns.push_back({ 130070, 15 });
+                known_pgns.push_back({ 130071, 14 });
+                known_pgns.push_back({ 130072, 13 });
+                known_pgns.push_back({ 130073, 9 });
+                known_pgns.push_back({ 130074, 23 });
+                known_pgns.push_back({ 130306, 6 });
+                known_pgns.push_back({ 130310, 7 });
+                known_pgns.push_back({ 130311, 8 });
+                known_pgns.push_back({ 130312, 8 });
+                known_pgns.push_back({ 130313, 8 });
+                known_pgns.push_back({ 130314, 8 });
+                known_pgns.push_back({ 130315, 8 });
+                known_pgns.push_back({ 130316, 8 });
+                known_pgns.push_back({ 130320, 23 });
+                known_pgns.push_back({ 130321, 25 });
+                known_pgns.push_back({ 130322, 29 });
+                known_pgns.push_back({ 130323, 30 });
+                known_pgns.push_back({ 130324, 42 });
+                known_pgns.push_back({ 130576, 2 });
+                known_pgns.push_back({ 130577, 14 });
+                known_pgns.push_back({ 130578, 12 });
+                known_pgns.push_back({ 130816, 42 });
+                known_pgns.push_back({ 130817, 113 });
+                known_pgns.push_back({ 130818, 261 });
+                known_pgns.push_back({ 130819, 2 });
+                known_pgns.push_back({ 130820, 7 });
+                known_pgns.push_back({ 130827, 10 });
+                known_pgns.push_back({ 130828, 2 });
+                known_pgns.push_back({ 130831, 2 });
+                known_pgns.push_back({ 130832, 2 });
+                known_pgns.push_back({ 130834, 2 });
+                known_pgns.push_back({ 130835, 2 });
+                known_pgns.push_back({ 130836, 14 });
+                known_pgns.push_back({ 130837, 2 });
+                known_pgns.push_back({ 130838, 2 });
+                known_pgns.push_back({ 130839, 2 });
+                known_pgns.push_back({ 130840, 2 });
+                known_pgns.push_back({ 130842, 37 });
+                known_pgns.push_back({ 130842, 29 });
+                known_pgns.push_back({ 130843, 2 });
+                known_pgns.push_back({ 130845, 13 });
+                known_pgns.push_back({ 130850, 12 });
+                known_pgns.push_back({ 130850, 12 });
+                known_pgns.push_back({ 130850, 12 });
+                known_pgns.push_back({ 130851, 12 });
+                known_pgns.push_back({ 130856, 261 });
+                known_pgns.push_back({ 130880, 9 });
+                known_pgns.push_back({ 130881, 9 });
+                known_pgns.push_back({ 130944, 7 });
+                library = PGNLibrary(known_pgns);
+    }
+
+    return library;
 }

@@ -10,10 +10,21 @@ static bool comparePGN(PGNInfo const& a, PGNInfo const& b) {
     return a.pgn < b.pgn;
 }
 
+PGNLibrary::PGNLibrary() {
+}
+
 PGNLibrary::PGNLibrary(vector<PGNInfo> const& pgns) {
     vector<PGNInfo> sorted_pgns(pgns);
     sort(sorted_pgns.begin(), sorted_pgns.end(), comparePGN);
     m_pgns = move(sorted_pgns);
+}
+
+bool PGNLibrary::empty() const {
+    return m_pgns.empty();
+}
+
+size_t PGNLibrary::size() const {
+    return m_pgns.size();
 }
 
 PGNInfo const* PGNLibrary::find(uint32_t pgn) const {

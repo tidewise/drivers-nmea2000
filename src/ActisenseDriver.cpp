@@ -1,4 +1,5 @@
 #include <nmea2000/ActisenseDriver.hpp>
+#include <nmea2000/PGNs.hpp>
 
 using namespace nmea2000;
 
@@ -14,12 +15,46 @@ static uint8_t STARTUP_SEQUENCE[] = {
 
 void ActisenseDriver::sendStartupSequence() {
     writeCommand(ACTISENSE_CMD_SEND, STARTUP_SEQUENCE, sizeof(STARTUP_SEQUENCE));
+}
 
+void ActisenseDriver::queryDeviceEnumeration() {
+    Message iso_request;
+    iso_request.priority = 1;
+    iso_request.source = 255;
+    iso_request.destination = 255;
+    iso_request.pgn = pgns::ISORequest::ID;
+    iso_request.size = 3;
+    iso_request.payload[0] = (pgns::ISOAddressClaim::ID >> 16) & 0xFF;
+    iso_request.payload[1] = (pgns::ISOAddressClaim::ID >> 8) & 0xFF;
+    iso_request.payload[2] = (pgns::ISOAddressClaim::ID >> 0) & 0xFF;
+    writeMessage(iso_request);
+}
+
+void ActisenseDriver::writeMessage(Message const& message) {
+    if (message.size > Message::MAX_PAYLOAD_LENGTH) {
+        throw std::invalid_argument("message payload is above maximum payload length");
+    }
+
+    uint8_t encoded[MAX_RAW_MESSAGE_SIZE];
+    encoded[0] = message.priority;
+    encoded[1] = message.pgn & 0xFF;
+    encoded[2] = (message.pgn >> 8) & 0xFF;
+    encoded[3] = (message.pgn >> 16) & 0xFF;
+    encoded[4] = message.destination;
+    encoded[5] = message.source;
+    encoded[6] = 0;
+    encoded[7] = 0;
+    encoded[8] = 0;
+    encoded[9] = 0;
+    encoded[10] = message.size;
+    std::copy(message.payload, message.payload + message.size, encoded + HEADER_SIZE);
+
+    writeCommand(N2K_MSG_SEND, encoded, message.size + 11);
 }
 
 void ActisenseDriver::writeCommand(uint8_t command, uint8_t const* message,
                                    uint8_t message_size) {
-    uint8_t out_buffer[512];
+    uint8_t out_buffer[MAX_ESCAPED_MESSAGE_SIZE];
     out_buffer[0] = ESCAPE;
     out_buffer[1] = START_OF_TEXT;
     out_buffer[2] = command;

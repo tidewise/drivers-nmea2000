@@ -1,6 +1,10 @@
 #include <nmea2000/PGNs.hpp>
 #include <nmea2000/Decode.hpp>
 
+/** This file is auto-generated using the codegen script
+ * DO NOT MODIFY
+ */
+
 using namespace nmea2000::decode;
 using namespace nmea2000::pgns;
 
@@ -53,3 +57,18 @@ const int <%= cxx_name %>::ID;
     return result;
 }
 <% end %>
+
+nmea2000::PGNLibrary const& nmea2000::pgns::getLibrary() {
+    static nmea2000::PGNLibrary library;
+
+    if (library.empty()) {
+        std::vector<PGNInfo> known_pgns;
+        known_pgns.reserve(<%= definitions.size %>);
+        <% definitions.each do |_, pgn| %>
+        known_pgns.push_back({ <%= pgn.id %>, <%= pgn.byte_length %> });
+        <% end %>
+        library = PGNLibrary(known_pgns);
+    }
+
+    return library;
+}

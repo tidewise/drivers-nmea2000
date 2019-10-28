@@ -19,6 +19,7 @@ namespace nmea2000 {
         uint8_t size = 0;
         uint8_t payload[MAX_PAYLOAD_LENGTH];
 
+        canbus::Message toCAN() const;
         static Message fromCAN(canbus::Message const& can);
 
         bool operator == (Message const& other) const;
