@@ -43,9 +43,24 @@ void CAN::writeMessage(Message const& message) {
     m_driver->write(message.toCAN());
 }
 
+struct CANReadTimeoutGuard {
+    canbus::Driver& m_driver;
+    base::Time m_original_timeout;
+
+    CANReadTimeoutGuard(canbus::Driver& driver)
+        : m_driver(driver)
+        , m_original_timeout(base::Time::fromMilliseconds(driver.getReadTimeout())) {
+    }
+
+    ~CANReadTimeoutGuard() {
+        m_driver.setReadTimeout(m_original_timeout.toMilliseconds());
+    }
+};
+
 nmea2000::Message CAN::readMessage() {
     auto deadline = Time::now() + m_read_timeout;
     Time remaining = m_read_timeout;
+    CANReadTimeoutGuard guard(*m_driver);
     while (true) {
         m_driver->setReadTimeout(remaining.toMilliseconds());
 
