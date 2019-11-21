@@ -16,7 +16,7 @@ const int <%= cxx_name %>::ID;
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
