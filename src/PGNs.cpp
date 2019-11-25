@@ -15,7 +15,7 @@ ISOAcknowledgement ISOAcknowledgement::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -43,7 +43,7 @@ ISORequest ISORequest::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -62,7 +62,7 @@ ISOAddressClaim ISOAddressClaim::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -90,7 +90,7 @@ ISOCommandedAddress ISOCommandedAddress::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -127,7 +127,7 @@ AirmarBootStateAcknowledgment AirmarBootStateAcknowledgment::fromMessage(Message
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -152,7 +152,7 @@ LowranceTemperature LowranceTemperature::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -183,7 +183,7 @@ AirmarBootStateRequest AirmarBootStateRequest::fromMessage(Message const& messag
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -205,7 +205,7 @@ SimnetConfigureTemperatureSensor SimnetConfigureTemperatureSensor::fromMessage(M
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -227,7 +227,7 @@ AirmarAccessLevel AirmarAccessLevel::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -264,7 +264,7 @@ SimnetTrimTabSensorCalibration SimnetTrimTabSensorCalibration::fromMessage(Messa
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -286,7 +286,7 @@ SimnetPaddleWheelSpeedConfiguration SimnetPaddleWheelSpeedConfiguration::fromMes
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -308,7 +308,7 @@ SimnetClearFluidLevelWarnings SimnetClearFluidLevelWarnings::fromMessage(Message
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -330,7 +330,7 @@ SimnetLGC2000Configuration SimnetLGC2000Configuration::fromMessage(Message const
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -352,7 +352,7 @@ SimnetReprogramStatus SimnetReprogramStatus::fromMessage(Message const& message)
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -374,7 +374,7 @@ SimnetAutopilotMode SimnetAutopilotMode::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -396,7 +396,7 @@ AirmarDepthQualityFactor AirmarDepthQualityFactor::fromMessage(Message const& me
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -424,7 +424,7 @@ AirmarDeviceInformation AirmarDeviceInformation::fromMessage(Message const& mess
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -464,7 +464,7 @@ SimnetAutopilotMode1 SimnetAutopilotMode1::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -486,7 +486,7 @@ NMEARequestGroupFunction NMEARequestGroupFunction::fromMessage(Message const& me
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -532,7 +532,7 @@ NMEACommandGroupFunction NMEACommandGroupFunction::fromMessage(Message const& me
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -578,7 +578,7 @@ NMEAAcknowledgeGroupFunction NMEAAcknowledgeGroupFunction::fromMessage(Message c
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -618,7 +618,7 @@ MaretronSlaveResponse MaretronSlaveResponse::fromMessage(Message const& message)
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -652,7 +652,7 @@ PGNListTransmitAndReceive PGNListTransmitAndReceive::fromMessage(Message const& 
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -674,7 +674,7 @@ AirmarCalibrateCompass AirmarCalibrateCompass::fromMessage(Message const& messag
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -768,7 +768,7 @@ AirmarAttitudeOffset AirmarAttitudeOffset::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -814,7 +814,7 @@ AirmarTrueWindOptions AirmarTrueWindOptions::fromMessage(Message const& message)
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -848,7 +848,7 @@ ManufacturerPropietaryAddressableMultiFrame ManufacturerPropietaryAddressableMul
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -870,7 +870,7 @@ AirmarAddressableMultiFrame AirmarAddressableMultiFrame::fromMessage(Message con
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -898,7 +898,7 @@ SystemTime SystemTime::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -929,7 +929,7 @@ Heartbeat Heartbeat::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -954,7 +954,7 @@ ProductInformation ProductInformation::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -990,7 +990,7 @@ ConfigurationInformation ConfigurationInformation::fromMessage(Message const& me
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1006,7 +1006,7 @@ HeadingTrackControl HeadingTrackControl::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1100,7 +1100,7 @@ Rudder Rudder::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1134,7 +1134,7 @@ VesselHeading VesselHeading::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1177,7 +1177,7 @@ RateOfTurn RateOfTurn::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1202,7 +1202,7 @@ Attitude Attitude::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1239,7 +1239,7 @@ MagneticVariation MagneticVariation::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1270,7 +1270,7 @@ EngineParametersRapidUpdate EngineParametersRapidUpdate::fromMessage(Message con
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1304,7 +1304,7 @@ EngineParametersDynamic EngineParametersDynamic::fromMessage(Message const& mess
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1383,7 +1383,7 @@ TransmissionParametersDynamic TransmissionParametersDynamic::fromMessage(Message
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1420,7 +1420,7 @@ TripParametersVessel TripParametersVessel::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1457,7 +1457,7 @@ TripParametersEngine TripParametersEngine::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1494,7 +1494,7 @@ EngineParametersStatic EngineParametersStatic::fromMessage(Message const& messag
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1519,7 +1519,7 @@ BinarySwitchBankStatus BinarySwitchBankStatus::fromMessage(Message const& messag
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1538,7 +1538,7 @@ SwitchBankControl SwitchBankControl::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1557,7 +1557,7 @@ ACInputStatus ACInputStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1627,7 +1627,7 @@ ACOutputStatus ACOutputStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1697,7 +1697,7 @@ FluidLevel FluidLevel::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1731,7 +1731,7 @@ DCDetailedStatus DCDetailedStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1768,7 +1768,7 @@ ChargerStatus ChargerStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1802,7 +1802,7 @@ BatteryStatus BatteryStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1839,7 +1839,7 @@ InverterStatus InverterStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1861,7 +1861,7 @@ ChargerConfigurationStatus ChargerConfigurationStatus::fromMessage(Message const
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1910,7 +1910,7 @@ InverterConfigurationStatus InverterConfigurationStatus::fromMessage(Message con
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1941,7 +1941,7 @@ AGSConfigurationStatus AGSConfigurationStatus::fromMessage(Message const& messag
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -1960,7 +1960,7 @@ BatteryConfigurationStatus BatteryConfigurationStatus::fromMessage(Message const
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -2003,7 +2003,7 @@ AGSStatus AGSStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -2031,7 +2031,7 @@ Speed Speed::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -2068,7 +2068,7 @@ WaterDepth WaterDepth::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -2105,7 +2105,7 @@ DistanceLog DistanceLog::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -2136,7 +2136,7 @@ TrackedTargetData TrackedTargetData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -2217,7 +2217,7 @@ PositionRapidUpdate PositionRapidUpdate::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -2245,7 +2245,7 @@ COGSOGRapidUpdate COGSOGRapidUpdate::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -2279,7 +2279,7 @@ PositionDeltaRapidUpdate PositionDeltaRapidUpdate::fromMessage(Message const& me
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -2307,7 +2307,7 @@ AltitudeDeltaRapidUpdate AltitudeDeltaRapidUpdate::fromMessage(Message const& me
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -2344,7 +2344,7 @@ GNSSPositionData GNSSPositionData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -2435,7 +2435,7 @@ TimeDate TimeDate::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -2466,7 +2466,7 @@ AISClassAPositionReport AISClassAPositionReport::fromMessage(Message const& mess
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -2551,7 +2551,7 @@ AISClassBPositionReport AISClassBPositionReport::fromMessage(Message const& mess
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -2648,7 +2648,7 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -2762,7 +2762,7 @@ Datum Datum::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -2800,7 +2800,7 @@ UserDatum UserDatum::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -2872,7 +2872,7 @@ CrossTrackError CrossTrackError::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -2903,7 +2903,7 @@ NavigationData NavigationData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -2985,7 +2985,7 @@ NavigationRouteWPInformation NavigationRouteWPInformation::fromMessage(Message c
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -3034,7 +3034,7 @@ SetDriftRapidUpdate SetDriftRapidUpdate::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -3068,7 +3068,7 @@ NavigationRouteTimeToFromMark NavigationRouteTimeToFromMark::fromMessage(Message
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -3099,7 +3099,7 @@ BearingAndDistanceBetweenTwoMarks BearingAndDistanceBetweenTwoMarks::fromMessage
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -3148,7 +3148,7 @@ GNSSControlStatus GNSSControlStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -3206,7 +3206,7 @@ GNSSDOPs GNSSDOPs::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -3249,7 +3249,7 @@ GNSSSatsInView GNSSSatsInView::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -3760,7 +3760,7 @@ GPSAlmanacData GPSAlmanacData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -3815,7 +3815,7 @@ GNSSPseudorangeNoiseStatistics GNSSPseudorangeNoiseStatistics::fromMessage(Messa
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -3855,7 +3855,7 @@ GNSSRAIMOutput GNSSRAIMOutput::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -3898,7 +3898,7 @@ GNSSRAIMSettings GNSSRAIMSettings::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -3926,7 +3926,7 @@ GNSSPseudorangeErrorStatistics GNSSPseudorangeErrorStatistics::fromMessage(Messa
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -3966,7 +3966,7 @@ DGNSSCorrections DGNSSCorrections::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -4015,7 +4015,7 @@ GNSSDifferentialCorrectionReceiverInterface GNSSDifferentialCorrectionReceiverIn
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -4049,7 +4049,7 @@ GNSSDifferentialCorrectionReceiverSignal GNSSDifferentialCorrectionReceiverSigna
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -4107,7 +4107,7 @@ GLONASSAlmanacData GLONASSAlmanacData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -4162,7 +4162,7 @@ AISDGNSSBroadcastBinaryMessage AISDGNSSBroadcastBinaryMessage::fromMessage(Messa
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -4211,7 +4211,7 @@ AISUTCAndDateReport AISUTCAndDateReport::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -4272,7 +4272,7 @@ AISClassAStaticAndVoyageRelatedData AISClassAStaticAndVoyageRelatedData::fromMes
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -4366,7 +4366,7 @@ AISAddressedBinaryMessage AISAddressedBinaryMessage::fromMessage(Message const& 
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -4415,7 +4415,7 @@ AISAcknowledge AISAcknowledge::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -4446,7 +4446,7 @@ AISBinaryBroadcastMessage AISBinaryBroadcastMessage::fromMessage(Message const& 
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -4477,7 +4477,7 @@ AISSARAircraftPositionReport AISSARAircraftPositionReport::fromMessage(Message c
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -4553,7 +4553,7 @@ RadioFrequencyModePower RadioFrequencyModePower::fromMessage(Message const& mess
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -4593,7 +4593,7 @@ AISUTCDateInquiry AISUTCDateInquiry::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -4624,7 +4624,7 @@ AISAddressedSafetyRelatedMessage AISAddressedSafetyRelatedMessage::fromMessage(M
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -4663,7 +4663,7 @@ AISSafetyRelatedBroadcastMessage AISSafetyRelatedBroadcastMessage::fromMessage(M
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -4688,7 +4688,7 @@ AISInterrogation AISInterrogation::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -4725,7 +4725,7 @@ AISAssignmentModeCommand AISAssignmentModeCommand::fromMessage(Message const& me
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -4774,7 +4774,7 @@ AISDataLinkManagementMessage AISDataLinkManagementMessage::fromMessage(Message c
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -4799,7 +4799,7 @@ AISChannelManagement AISChannelManagement::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -4869,7 +4869,7 @@ AISClassBGroupAssignment AISClassBGroupAssignment::fromMessage(Message const& me
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -4927,7 +4927,7 @@ DSCCallInformation DSCCallInformation::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5021,7 +5021,7 @@ AISClassBStaticDataMsg24PartA AISClassBStaticDataMsg24PartA::fromMessage(Message
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5051,7 +5051,7 @@ AISClassBStaticDataMsg24PartB AISClassBStaticDataMsg24PartB::fromMessage(Message
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5116,7 +5116,7 @@ RouteAndWPServiceDatabaseList RouteAndWPServiceDatabaseList::fromMessage(Message
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5167,7 +5167,7 @@ RouteAndWPServiceRouteList RouteAndWPServiceRouteList::fromMessage(Message const
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5206,7 +5206,7 @@ RouteAndWPServiceRouteWPListAttributes RouteAndWPServiceRouteWPListAttributes::f
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5260,7 +5260,7 @@ RouteAndWPServiceRouteWPNamePosition RouteAndWPServiceRouteWPNamePosition::fromM
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5308,7 +5308,7 @@ RouteAndWPServiceRouteWPName RouteAndWPServiceRouteWPName::fromMessage(Message c
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5344,7 +5344,7 @@ RouteAndWPServiceXTELimitNavigationMethod RouteAndWPServiceXTELimitNavigationMet
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5384,7 +5384,7 @@ RouteAndWPServiceWPComment RouteAndWPServiceWPComment::fromMessage(Message const
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5420,7 +5420,7 @@ RouteAndWPServiceRouteComment RouteAndWPServiceRouteComment::fromMessage(Message
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5453,7 +5453,7 @@ RouteAndWPServiceDatabaseComment RouteAndWPServiceDatabaseComment::fromMessage(M
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5483,7 +5483,7 @@ RouteAndWPServiceRadiusOfTurn RouteAndWPServiceRadiusOfTurn::fromMessage(Message
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5520,7 +5520,7 @@ RouteAndWPServiceWPListWPNamePosition RouteAndWPServiceWPListWPNamePosition::fro
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5568,7 +5568,7 @@ WindData WindData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5605,7 +5605,7 @@ EnvironmentalParameters EnvironmentalParameters::fromMessage(Message const& mess
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5642,7 +5642,7 @@ EnvironmentalParameters1 EnvironmentalParameters1::fromMessage(Message const& me
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5682,7 +5682,7 @@ Temperature Temperature::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5719,7 +5719,7 @@ Humidity Humidity::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5750,7 +5750,7 @@ ActualPressure ActualPressure::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5778,7 +5778,7 @@ SetPressure SetPressure::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5803,7 +5803,7 @@ TemperatureExtendedRange TemperatureExtendedRange::fromMessage(Message const& me
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5837,7 +5837,7 @@ TideStationData TideStationData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5892,7 +5892,7 @@ SalinityStationData SalinityStationData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -5944,7 +5944,7 @@ CurrentStationData CurrentStationData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6008,7 +6008,7 @@ MeteorologicalStationData MeteorologicalStationData::fromMessage(Message const& 
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6078,7 +6078,7 @@ MooredBuoyStationData MooredBuoyStationData::fromMessage(Message const& message)
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6165,7 +6165,7 @@ SmallCraftStatus SmallCraftStatus::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6187,7 +6187,7 @@ DirectionData DirectionData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6248,7 +6248,7 @@ VesselSpeedComponents VesselSpeedComponents::fromMessage(Message const& message)
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6300,7 +6300,7 @@ SimradTextMessage SimradTextMessage::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6348,7 +6348,7 @@ NavicoProductInformation NavicoProductInformation::fromMessage(Message const& me
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6393,7 +6393,7 @@ SimnetReprogramData SimnetReprogramData::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6427,7 +6427,7 @@ SimnetRequestReprogram SimnetRequestReprogram::fromMessage(Message const& messag
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6449,7 +6449,7 @@ SimnetReprogramStatus1 SimnetReprogramStatus1::fromMessage(Message const& messag
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6480,7 +6480,7 @@ LowranceUnknown LowranceUnknown::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6520,7 +6520,7 @@ SimnetSetSerialNumber SimnetSetSerialNumber::fromMessage(Message const& message)
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6542,7 +6542,7 @@ SuzukiEngineAndStorageDeviceConfig SuzukiEngineAndStorageDeviceConfig::fromMessa
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6564,7 +6564,7 @@ SimnetFuelUsedHighResolution SimnetFuelUsedHighResolution::fromMessage(Message c
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6586,7 +6586,7 @@ SimnetEngineAndTankConfiguration SimnetEngineAndTankConfiguration::fromMessage(M
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6608,7 +6608,7 @@ SimnetSetEngineAndTankConfiguration SimnetSetEngineAndTankConfiguration::fromMes
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6630,7 +6630,7 @@ SimnetFluidLevelSensorConfiguration SimnetFluidLevelSensorConfiguration::fromMes
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6682,7 +6682,7 @@ SimnetFuelFlowTurbineConfiguration SimnetFuelFlowTurbineConfiguration::fromMessa
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6704,7 +6704,7 @@ SimnetFluidLevelWarning SimnetFluidLevelWarning::fromMessage(Message const& mess
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6726,7 +6726,7 @@ SimnetPressureSensorConfiguration SimnetPressureSensorConfiguration::fromMessage
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6748,7 +6748,7 @@ SimnetDataUserGroupConfiguration SimnetDataUserGroupConfiguration::fromMessage(M
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6770,7 +6770,7 @@ SimnetAISClassBStaticDataMsg24PartB SimnetAISClassBStaticDataMsg24PartB::fromMes
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6850,7 +6850,7 @@ SimnetAISClassBStaticDataMsg24PartA SimnetAISClassBStaticDataMsg24PartA::fromMes
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6892,7 +6892,7 @@ SimnetSonarStatusFrequencyAndDSPVoltage SimnetSonarStatusFrequencyAndDSPVoltage:
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6914,7 +6914,7 @@ SimnetParameterHandle SimnetParameterHandle::fromMessage(Message const& message)
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -6969,7 +6969,7 @@ SimnetEventCommandAPCommand SimnetEventCommandAPCommand::fromMessage(Message con
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -7015,7 +7015,7 @@ SimnetEventCommandAlarm SimnetEventCommandAlarm::fromMessage(Message const& mess
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -7061,7 +7061,7 @@ SimnetEventCommandUnknown SimnetEventCommandUnknown::fromMessage(Message const& 
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -7098,7 +7098,7 @@ SimnetEventReplyAPCommand SimnetEventReplyAPCommand::fromMessage(Message const& 
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -7144,7 +7144,7 @@ SimnetAlarmMessage SimnetAlarmMessage::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -7177,7 +7177,7 @@ AirmarAdditionalWeatherData AirmarAdditionalWeatherData::fromMessage(Message con
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -7220,7 +7220,7 @@ AirmarHeaterControl AirmarHeaterControl::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 
@@ -7263,7 +7263,7 @@ AirmarPOST AirmarPOST::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
-    else if (message.size != BYTE_LENGTH) {
+    else if (message.size < BYTE_LENGTH) {
         throw std::invalid_argument("unexpected payload size");
     }
 

@@ -34,11 +34,11 @@ TEST_F(PGNsTest, it_throws_if_the_message_has_too_few_payload_bytes) {
     ASSERT_THROW(ISOAcknowledgement::fromMessage(message), std::invalid_argument);
 }
 
-TEST_F(PGNsTest, it_throws_if_the_message_has_too_many_payload_bytes) {
+TEST_F(PGNsTest, it_lets_the_message_have_too_many_payload_bytes) {
     Message message;
     message.pgn = ISOAcknowledgement::ID;
     message.size = ISOAcknowledgement::BYTE_LENGTH + 1;
-    ASSERT_THROW(ISOAcknowledgement::fromMessage(message), std::invalid_argument);
+    ISOAcknowledgement::fromMessage(message);
 }
 
 
@@ -49,8 +49,6 @@ TEST_F(PGNsTest, it_forwards_the_time_field) {
     );
     ASSERT_EQ(time, parsed.time);
 }
-
-
 
 TEST_F(PGNsTest, it_parses_byte_aligned_positive_int8_fields) {
     auto parsed = parse_message<NMEARequestGroupFunction>(
