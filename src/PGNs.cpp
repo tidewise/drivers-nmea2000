@@ -2090,12 +2090,12 @@ WaterDepth WaterDepth::fromMessage(Message const& message) {
     int16_t offset_iraw =
         reinterpret_cast<int16_t const&>(offset_raw);
     result.offset = offset_iraw * 0.001 + 0.0;
-    auto offset1_raw = decode8(
+    auto range_raw = decode8(
         &message.payload[7]
     );
-    int8_t offset1_iraw =
-        reinterpret_cast<int8_t const&>(offset1_raw);
-    result.offset1 = offset1_iraw * 10.0 + 0.0;
+    int8_t range_iraw =
+        reinterpret_cast<int8_t const&>(range_raw);
+    result.range = range_iraw * 10.0 + 0.0;
     return result;
 }
 const int DistanceLog::BYTE_LENGTH;
@@ -5635,10 +5635,10 @@ EnvironmentalParameters EnvironmentalParameters::fromMessage(Message const& mess
     ) >> 0) & 0xff;
     return result;
 }
-const int EnvironmentalParameters1::BYTE_LENGTH;
-const int EnvironmentalParameters1::ID;
+const int EnvironmentalParametersExt::BYTE_LENGTH;
+const int EnvironmentalParametersExt::ID;
 
-EnvironmentalParameters1 EnvironmentalParameters1::fromMessage(Message const& message) {
+EnvironmentalParametersExt EnvironmentalParametersExt::fromMessage(Message const& message) {
     if (message.pgn != ID) {
         throw std::invalid_argument("unexpected PGN ID");
     }
@@ -5646,7 +5646,7 @@ EnvironmentalParameters1 EnvironmentalParameters1::fromMessage(Message const& me
         throw std::invalid_argument("unexpected payload size");
     }
 
-    EnvironmentalParameters1 result;
+    EnvironmentalParametersExt result;
     result.time = message.time;
 
     result.sid = (decode8(
