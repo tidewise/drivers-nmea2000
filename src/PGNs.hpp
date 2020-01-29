@@ -835,7 +835,7 @@ namespace nmea2000 {
             uint8_t sid;
             float depth;
             float offset;
-            float offset1;
+            float range;
         };
         struct DistanceLog {
             static const int BYTE_LENGTH = 14;
@@ -2060,11 +2060,11 @@ namespace nmea2000 {
             uint16_t atmospheric_pressure;
             uint8_t reserved;
         };
-        struct EnvironmentalParameters1 {
+        struct EnvironmentalParametersExt {
             static const int BYTE_LENGTH = 8;
             static const int ID = 130311;
 
-            static EnvironmentalParameters1 fromMessage(Message const& message);
+            static EnvironmentalParametersExt fromMessage(Message const& message);
 
             base::Time time;
 

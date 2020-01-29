@@ -2303,7 +2303,7 @@
           <BitLength>16</BitLength>
           <Scale>0.001</Scale>
         </DblField>
-        <DblField Name="Offset">
+        <DblField Name="Range">
           <Description>Measurement range</Description>
           <BitOffset>56</BitOffset>
           <BitLength>8</BitLength>
@@ -7055,7 +7055,7 @@
       </Fields>
     </PGNDefn>
     <PGNDefn PGN="130311">
-      <Name>Environmental Parameters</Name>
+      <Name>Environmental Parameters Ext</Name>
       <ByteLength>8</ByteLength>
       <Fields>
         <UIntField Name="SID">
