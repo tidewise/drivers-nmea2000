@@ -9,7 +9,7 @@ struct MessageTest : public ::testing::Test {
 TEST_F(MessageTest, it_initializes_a_Message_from_a_CAN_frame_in_PDU1) {
     // Example taken from https://michael.chtoen.com/convert-j1939-id-to-pgn.php
     uint32_t id = 0x1CEC523D;
-    canbus::Message can;
+    auto can = canbus::Message::Zeroed();
     can.can_id = id;
     Message msg = Message::fromCAN(can);
     ASSERT_EQ(0b111, msg.priority);
@@ -20,7 +20,7 @@ TEST_F(MessageTest, it_initializes_a_Message_from_a_CAN_frame_in_PDU1) {
 
 TEST_F(MessageTest, it_initializes_a_Message_from_a_CAN_frame_in_PDU2) {
     uint32_t id = 0xFFE6CEE;
-    canbus::Message can;
+    auto can = canbus::Message::Zeroed();
     can.can_id = id;
     Message msg = Message::fromCAN(can);
 
@@ -32,7 +32,7 @@ TEST_F(MessageTest, it_initializes_a_Message_from_a_CAN_frame_in_PDU2) {
 }
 
 TEST_F(MessageTest, it_copies_the_package_time_data_and_length) {
-    canbus::Message can;
+    auto can = canbus::Message::Zeroed();
     can.can_id = 0x1234;
     can.time = base::Time::fromMilliseconds(1000);
     can.size = 5;

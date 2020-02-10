@@ -21,21 +21,28 @@ struct ReceiverTest : public ::testing::Test {
         : library(knownPGNs)
         , receiver(library) {
     }
+
+    Message randomMessage(int size) {
+        Message msg;
+        msg.size = size;
+        for (int i = 0; i < size; ++i) {
+            msg.payload[i] = rand();
+        }
+        return msg;
+    }
 };
 
 TEST_F(ReceiverTest, it_returns_a_single_packet_PGN_right_away) {
-    Message message;
+    auto message = randomMessage(5);
     message.pgn = 1;
-    message.size = 5;
     auto result = receiver.process(message);
     ASSERT_EQ(Receiver::COMPLETE, result.first);
     ASSERT_EQ(message, result.second);
 }
 
 TEST_F(ReceiverTest, it_rejects_a_first_packet_whose_sequence_number_is_not_zero) {
-    Message message;
+    auto message = randomMessage(8);
     message.pgn = 3;
-    message.size = 8;
     message.payload[0] = 0xA1;
     message.payload[1] = 2;
     auto result = receiver.process(message);
@@ -137,7 +144,5 @@ TEST_F(ReceiverFastPacketReassemblyTest, it_truncates_the_last_message_size_to_t
     message.payload[9] = rand();
     auto result = receiver.process(message);
     ASSERT_EQ(Receiver::COMPLETE, result.first);
-    for (int i = 0; i < 3; ++i) {
-        ASSERT_NE(message.payload[7 + i], result.second.payload[12 + i]);
-    }
+    ASSERT_EQ(result.second.size, 12);
 }
