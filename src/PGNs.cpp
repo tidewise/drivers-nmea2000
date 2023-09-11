@@ -69,12 +69,21 @@ ISOAddressClaim ISOAddressClaim::fromMessage(Message const& message) {
     ISOAddressClaim result;
     result.time = message.time;
 
+    result.device_instance_lower = (decode8(
+        &message.payload[4]
+    ) >> 0) & 0x7;
+    result.device_instance_upper = (decode8(
+        &message.payload[4]
+    ) >> 3) & 0x1f;
     result.device_function = (decode8(
         &message.payload[5]
     ) >> 0) & 0xff;
     result.device_class = (decode8(
         &message.payload[6]
     ) >> 1) & 0x7f;
+    result.system_instance = (decode8(
+        &message.payload[7]
+    ) >> 0) & 0xf;
     result.industry_group = (decode8(
         &message.payload[7]
     ) >> 4) & 0x7;
@@ -100,6 +109,12 @@ ISOCommandedAddress ISOCommandedAddress::fromMessage(Message const& message) {
     result.manufacturer_code = (decode16(
         &message.payload[2]
     ) >> 5) & 0x7ff;
+    result.device_instance_lower = (decode8(
+        &message.payload[4]
+    ) >> 0) & 0x7;
+    result.device_instance_upper = (decode8(
+        &message.payload[4]
+    ) >> 3) & 0x1f;
     result.device_function = (decode8(
         &message.payload[5]
     ) >> 0) & 0xff;
@@ -109,6 +124,9 @@ ISOCommandedAddress ISOCommandedAddress::fromMessage(Message const& message) {
     result.device_class = (decode8(
         &message.payload[6]
     ) >> 1) & 0x7f;
+    result.system_instance = (decode8(
+        &message.payload[7]
+    ) >> 0) & 0xf;
     result.industry_code = (decode8(
         &message.payload[7]
     ) >> 4) & 0x7;
@@ -165,6 +183,9 @@ LowranceTemperature LowranceTemperature::fromMessage(Message const& message) {
     result.industry_code = (decode8(
         &message.payload[1]
     ) >> 5) & 0x7;
+    result.temperature_instance = (decode8(
+        &message.payload[2]
+    ) >> 0) & 0xf;
     result.temperature_source = (decode8(
         &message.payload[2]
     ) >> 4) & 0xf;
@@ -1107,6 +1128,9 @@ Rudder Rudder::fromMessage(Message const& message) {
     Rudder result;
     result.time = message.time;
 
+    result.instance = (decode8(
+        &message.payload[0]
+    ) >> 0) & 0xff;
     result.direction_order = (decode8(
         &message.payload[1]
     ) >> 0) & 0x7;
@@ -1277,6 +1301,9 @@ EngineParametersRapidUpdate EngineParametersRapidUpdate::fromMessage(Message con
     EngineParametersRapidUpdate result;
     result.time = message.time;
 
+    result.engine_instance = (decode8(
+        &message.payload[0]
+    ) >> 0) & 0xff;
     auto engine_speed_raw = decode16(
         &message.payload[1]
     );
@@ -1311,6 +1338,9 @@ EngineParametersDynamic EngineParametersDynamic::fromMessage(Message const& mess
     EngineParametersDynamic result;
     result.time = message.time;
 
+    result.engine_instance = (decode8(
+        &message.payload[0]
+    ) >> 0) & 0xff;
     result.oil_pressure = (decode16(
         &message.payload[1]
     ) >> 0) & 0xffff;
@@ -1390,6 +1420,9 @@ TransmissionParametersDynamic TransmissionParametersDynamic::fromMessage(Message
     TransmissionParametersDynamic result;
     result.time = message.time;
 
+    result.engine_instance = (decode8(
+        &message.payload[0]
+    ) >> 0) & 0xff;
     result.transmission_gear = (decode8(
         &message.payload[1]
     ) >> 0) & 0x3;
@@ -1464,6 +1497,9 @@ TripParametersEngine TripParametersEngine::fromMessage(Message const& message) {
     TripParametersEngine result;
     result.time = message.time;
 
+    result.engine_instance = (decode8(
+        &message.payload[0]
+    ) >> 0) & 0xff;
     result.trip_fuel_used = (decode16(
         &message.payload[1]
     ) >> 0) & 0xffff;
@@ -1501,6 +1537,9 @@ EngineParametersStatic EngineParametersStatic::fromMessage(Message const& messag
     EngineParametersStatic result;
     result.time = message.time;
 
+    result.engine_instance = (decode8(
+        &message.payload[0]
+    ) >> 0) & 0xff;
     result.rated_engine_speed = (decode16(
         &message.payload[1]
     ) >> 0) & 0xffff;
@@ -1526,6 +1565,9 @@ BinarySwitchBankStatus BinarySwitchBankStatus::fromMessage(Message const& messag
     BinarySwitchBankStatus result;
     result.time = message.time;
 
+    result.indicator_bank_instance = (decode8(
+        &message.payload[0]
+    ) >> 0) & 0xff;
     result.indicator = (decode8(
         &message.payload[1]
     ) >> 0) & 0x3;
@@ -1545,6 +1587,9 @@ SwitchBankControl SwitchBankControl::fromMessage(Message const& message) {
     SwitchBankControl result;
     result.time = message.time;
 
+    result.switch_bank_instance = (decode8(
+        &message.payload[0]
+    ) >> 0) & 0xff;
     result.switch_state = (decode8(
         &message.payload[1]
     ) >> 0) & 0x3;
@@ -1564,6 +1609,9 @@ ACInputStatus ACInputStatus::fromMessage(Message const& message) {
     ACInputStatus result;
     result.time = message.time;
 
+    result.ac_instance = (decode8(
+        &message.payload[0]
+    ) >> 0) & 0xff;
     result.number_of_lines = (decode8(
         &message.payload[1]
     ) >> 0) & 0xff;
@@ -1634,6 +1682,9 @@ ACOutputStatus ACOutputStatus::fromMessage(Message const& message) {
     ACOutputStatus result;
     result.time = message.time;
 
+    result.ac_instance = (decode8(
+        &message.payload[0]
+    ) >> 0) & 0xff;
     result.number_of_lines = (decode8(
         &message.payload[1]
     ) >> 0) & 0xff;
@@ -1704,6 +1755,9 @@ FluidLevel FluidLevel::fromMessage(Message const& message) {
     FluidLevel result;
     result.time = message.time;
 
+    result.instance = (decode8(
+        &message.payload[0]
+    ) >> 0) & 0xf;
     result.type = (decode8(
         &message.payload[0]
     ) >> 4) & 0xf;
@@ -1741,6 +1795,9 @@ DCDetailedStatus DCDetailedStatus::fromMessage(Message const& message) {
     result.sid = (decode8(
         &message.payload[0]
     ) >> 0) & 0xff;
+    result.dc_instance = (decode8(
+        &message.payload[1]
+    ) >> 0) & 0xff;
     result.dc_type = (decode8(
         &message.payload[2]
     ) >> 0) & 0xff;
@@ -1775,6 +1832,12 @@ ChargerStatus ChargerStatus::fromMessage(Message const& message) {
     ChargerStatus result;
     result.time = message.time;
 
+    result.charger_instance = (decode8(
+        &message.payload[0]
+    ) >> 0) & 0xff;
+    result.battery_instance = (decode8(
+        &message.payload[1]
+    ) >> 0) & 0xff;
     result.operating_state = (decode8(
         &message.payload[2]
     ) >> 0) & 0xff;
@@ -1809,6 +1872,9 @@ BatteryStatus BatteryStatus::fromMessage(Message const& message) {
     BatteryStatus result;
     result.time = message.time;
 
+    result.battery_instance = (decode8(
+        &message.payload[0]
+    ) >> 0) & 0xff;
     auto voltage_raw = decode16(
         &message.payload[1]
     );
@@ -1846,6 +1912,15 @@ InverterStatus InverterStatus::fromMessage(Message const& message) {
     InverterStatus result;
     result.time = message.time;
 
+    result.inverter_instance = (decode8(
+        &message.payload[0]
+    ) >> 0) & 0xff;
+    result.ac_instance = (decode8(
+        &message.payload[1]
+    ) >> 0) & 0xff;
+    result.dc_instance = (decode8(
+        &message.payload[2]
+    ) >> 0) & 0xff;
     result.operating_state = (decode8(
         &message.payload[3]
     ) >> 0) & 0xf;
@@ -1868,6 +1943,12 @@ ChargerConfigurationStatus ChargerConfigurationStatus::fromMessage(Message const
     ChargerConfigurationStatus result;
     result.time = message.time;
 
+    result.charger_instance = (decode8(
+        &message.payload[0]
+    ) >> 0) & 0xff;
+    result.battery_instance = (decode8(
+        &message.payload[1]
+    ) >> 0) & 0xff;
     result.charger_enable_disable = (decode8(
         &message.payload[2]
     ) >> 0) & 0x3;
@@ -1917,6 +1998,15 @@ InverterConfigurationStatus InverterConfigurationStatus::fromMessage(Message con
     InverterConfigurationStatus result;
     result.time = message.time;
 
+    result.inverter_instance = (decode8(
+        &message.payload[0]
+    ) >> 0) & 0xff;
+    result.ac_instance = (decode8(
+        &message.payload[1]
+    ) >> 0) & 0xff;
+    result.dc_instance = (decode8(
+        &message.payload[2]
+    ) >> 0) & 0xff;
     result.inverter_enable_disable = (decode8(
         &message.payload[3]
     ) >> 0) & 0x3;
@@ -1948,6 +2038,12 @@ AGSConfigurationStatus AGSConfigurationStatus::fromMessage(Message const& messag
     AGSConfigurationStatus result;
     result.time = message.time;
 
+    result.ags_instance = (decode8(
+        &message.payload[0]
+    ) >> 0) & 0xff;
+    result.generator_instance = (decode8(
+        &message.payload[1]
+    ) >> 0) & 0xff;
     result.ags_mode = (decode8(
         &message.payload[2]
     ) >> 0) & 0xff;
@@ -1967,6 +2063,9 @@ BatteryConfigurationStatus BatteryConfigurationStatus::fromMessage(Message const
     BatteryConfigurationStatus result;
     result.time = message.time;
 
+    result.battery_instance = (decode8(
+        &message.payload[0]
+    ) >> 0) & 0xff;
     result.battery_type = (decode8(
         &message.payload[1]
     ) >> 0) & 0xf;
@@ -2010,6 +2109,12 @@ AGSStatus AGSStatus::fromMessage(Message const& message) {
     AGSStatus result;
     result.time = message.time;
 
+    result.ags_instance = (decode8(
+        &message.payload[0]
+    ) >> 0) & 0xff;
+    result.generator_instance = (decode8(
+        &message.payload[1]
+    ) >> 0) & 0xff;
     result.ags_operating_state = (decode8(
         &message.payload[2]
     ) >> 0) & 0xff;
@@ -5692,6 +5797,9 @@ Temperature Temperature::fromMessage(Message const& message) {
     result.sid = (decode8(
         &message.payload[0]
     ) >> 0) & 0xff;
+    result.temperature_instance = (decode8(
+        &message.payload[1]
+    ) >> 0) & 0xff;
     result.temperature_source = (decode8(
         &message.payload[2]
     ) >> 0) & 0xff;
@@ -5729,6 +5837,9 @@ Humidity Humidity::fromMessage(Message const& message) {
     result.sid = (decode8(
         &message.payload[0]
     ) >> 0) & 0xff;
+    result.humidity_instance = (decode8(
+        &message.payload[1]
+    ) >> 0) & 0xff;
     result.humidity_source = (decode8(
         &message.payload[2]
     ) >> 0) & 0xff;
@@ -5760,6 +5871,9 @@ ActualPressure ActualPressure::fromMessage(Message const& message) {
     result.sid = (decode8(
         &message.payload[0]
     ) >> 0) & 0xff;
+    result.pressure_instance = (decode8(
+        &message.payload[1]
+    ) >> 0) & 0xff;
     result.pressure_source = (decode8(
         &message.payload[2]
     ) >> 0) & 0xff;
@@ -5788,6 +5902,9 @@ SetPressure SetPressure::fromMessage(Message const& message) {
     result.sid = (decode8(
         &message.payload[0]
     ) >> 0) & 0xff;
+    result.pressure_instance = (decode8(
+        &message.payload[1]
+    ) >> 0) & 0xff;
     result.pressure_source = (decode8(
         &message.payload[2]
     ) >> 0) & 0xff;
@@ -5812,6 +5929,9 @@ TemperatureExtendedRange TemperatureExtendedRange::fromMessage(Message const& me
 
     result.sid = (decode8(
         &message.payload[0]
+    ) >> 0) & 0xff;
+    result.temperature_instance = (decode8(
+        &message.payload[1]
     ) >> 0) & 0xff;
     result.temperature_source = (decode8(
         &message.payload[2]
@@ -6652,6 +6772,9 @@ SimnetFluidLevelSensorConfiguration SimnetFluidLevelSensorConfiguration::fromMes
     result.device = reinterpret_cast<int8_t const&>(
         device_raw
     );
+    result.instance = (decode8(
+        &message.payload[4]
+    ) >> 0) & 0xff;
     result.f = (decode8(
         &message.payload[5]
     ) >> 0) & 0xf;
