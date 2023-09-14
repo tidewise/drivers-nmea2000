@@ -30,7 +30,7 @@ module PGNDefinitions
         end
 
         SUPPORTED_FIELD_TYPES = %w[
-            ASCIIField EnumField IntField UIntField DblField UDblField
+            ASCIIField EnumField IntField UIntField DblField UDblField InstanceField
         ].freeze
 
         def supported?
@@ -39,7 +39,7 @@ module PGNDefinitions
         end
 
         def integer?
-            %w[EnumField IntField UIntField].include?(@xml.name)
+            %w[EnumField IntField UIntField InstanceField].include?(@xml.name)
         end
 
         def float?
@@ -47,11 +47,15 @@ module PGNDefinitions
         end
 
         def unsigned?
-            @xml.name.start_with?('U') || enum?
+            @xml.name.start_with?('U') || enum? || instance_field?
         end
 
         def ascii?
             %w[ASCIIField].include?(@xml.name)
+        end
+
+        def instance_field?
+            @xml.name == "InstanceField"
         end
 
         def enum?

@@ -44,8 +44,11 @@ namespace nmea2000 {
 
             base::Time time;
 
+            uint8_t device_instance_lower;
+            uint8_t device_instance_upper;
             uint8_t device_function;
             uint8_t device_class;
+            uint8_t system_instance;
             uint8_t industry_group;
             uint8_t iso_self_configurable;
         };
@@ -58,9 +61,12 @@ namespace nmea2000 {
             base::Time time;
 
             uint16_t manufacturer_code;
+            uint8_t device_instance_lower;
+            uint8_t device_instance_upper;
             uint8_t device_function;
             uint8_t reserved;
             uint8_t device_class;
+            uint8_t system_instance;
             uint8_t industry_code;
             uint8_t iso_self_configurable;
             uint8_t new_source_address;
@@ -87,6 +93,7 @@ namespace nmea2000 {
 
             uint8_t reserved;
             uint8_t industry_code;
+            uint8_t temperature_instance;
             uint8_t temperature_source;
             float actual_temperature;
         };
@@ -466,6 +473,7 @@ namespace nmea2000 {
 
             base::Time time;
 
+            uint8_t instance;
             uint8_t direction_order;
             float angle_order;
             float position;
@@ -531,6 +539,7 @@ namespace nmea2000 {
 
             base::Time time;
 
+            uint8_t engine_instance;
             float engine_speed;
             uint16_t engine_boost_pressure;
             int8_t engine_tilt_trim;
@@ -544,6 +553,7 @@ namespace nmea2000 {
 
             base::Time time;
 
+            uint8_t engine_instance;
             uint16_t oil_pressure;
             float oil_temperature;
             float temperature;
@@ -566,6 +576,7 @@ namespace nmea2000 {
 
             base::Time time;
 
+            uint8_t engine_instance;
             uint8_t transmission_gear;
             uint8_t reserved;
             uint16_t oil_pressure;
@@ -593,6 +604,7 @@ namespace nmea2000 {
 
             base::Time time;
 
+            uint8_t engine_instance;
             uint16_t trip_fuel_used;
             float fuel_rate_average;
             float fuel_rate_economy;
@@ -606,6 +618,7 @@ namespace nmea2000 {
 
             base::Time time;
 
+            uint8_t engine_instance;
             uint16_t rated_engine_speed;
             uint8_t vin;
             uint16_t software_id;
@@ -618,6 +631,7 @@ namespace nmea2000 {
 
             base::Time time;
 
+            uint8_t indicator_bank_instance;
             uint8_t indicator;
         };
         struct SwitchBankControl {
@@ -628,6 +642,7 @@ namespace nmea2000 {
 
             base::Time time;
 
+            uint8_t switch_bank_instance;
             uint8_t switch_state;
         };
         struct ACInputStatus {
@@ -638,6 +653,7 @@ namespace nmea2000 {
 
             base::Time time;
 
+            uint8_t ac_instance;
             uint8_t number_of_lines;
             uint8_t line;
             uint8_t acceptability;
@@ -658,6 +674,7 @@ namespace nmea2000 {
 
             base::Time time;
 
+            uint8_t ac_instance;
             uint8_t number_of_lines;
             uint8_t line;
             uint8_t waveform;
@@ -678,6 +695,7 @@ namespace nmea2000 {
 
             base::Time time;
 
+            uint8_t instance;
             uint8_t type;
             float level;
             float capacity;
@@ -692,6 +710,7 @@ namespace nmea2000 {
             base::Time time;
 
             uint8_t sid;
+            uint8_t dc_instance;
             uint8_t dc_type;
             uint8_t state_of_charge;
             uint8_t state_of_health;
@@ -706,6 +725,8 @@ namespace nmea2000 {
 
             base::Time time;
 
+            uint8_t charger_instance;
+            uint8_t battery_instance;
             uint8_t operating_state;
             uint8_t charge_mode;
             uint8_t charger_enable_disable;
@@ -721,6 +742,7 @@ namespace nmea2000 {
 
             base::Time time;
 
+            uint8_t battery_instance;
             float voltage;
             float current;
             float temperature;
@@ -734,6 +756,9 @@ namespace nmea2000 {
 
             base::Time time;
 
+            uint8_t inverter_instance;
+            uint8_t ac_instance;
+            uint8_t dc_instance;
             uint8_t operating_state;
             uint8_t inverter;
         };
@@ -745,6 +770,8 @@ namespace nmea2000 {
 
             base::Time time;
 
+            uint8_t charger_instance;
+            uint8_t battery_instance;
             uint8_t charger_enable_disable;
             uint8_t reserved;
             float charge_current_limit;
@@ -763,6 +790,9 @@ namespace nmea2000 {
 
             base::Time time;
 
+            uint8_t inverter_instance;
+            uint8_t ac_instance;
+            uint8_t dc_instance;
             uint8_t inverter_enable_disable;
             uint8_t inverter_mode;
             uint8_t load_sense_enable_disable;
@@ -777,6 +807,8 @@ namespace nmea2000 {
 
             base::Time time;
 
+            uint8_t ags_instance;
+            uint8_t generator_instance;
             uint8_t ags_mode;
         };
         struct BatteryConfigurationStatus {
@@ -787,6 +819,7 @@ namespace nmea2000 {
 
             base::Time time;
 
+            uint8_t battery_instance;
             uint8_t battery_type;
             uint8_t supports_equalization;
             uint8_t reserved;
@@ -805,6 +838,8 @@ namespace nmea2000 {
 
             base::Time time;
 
+            uint8_t ags_instance;
+            uint8_t generator_instance;
             uint8_t ags_operating_state;
             uint8_t generator_state;
             uint8_t generator_on_reason;
@@ -2084,6 +2119,7 @@ namespace nmea2000 {
             base::Time time;
 
             uint8_t sid;
+            uint8_t temperature_instance;
             uint8_t temperature_source;
             float actual_temperature;
             float set_temperature;
@@ -2098,6 +2134,7 @@ namespace nmea2000 {
             base::Time time;
 
             uint8_t sid;
+            uint8_t humidity_instance;
             uint8_t humidity_source;
             uint16_t actual_humidity;
             uint16_t set_humidity;
@@ -2112,6 +2149,7 @@ namespace nmea2000 {
             base::Time time;
 
             uint8_t sid;
+            uint8_t pressure_instance;
             uint8_t pressure_source;
             float pressure;
         };
@@ -2124,6 +2162,7 @@ namespace nmea2000 {
             base::Time time;
 
             uint8_t sid;
+            uint8_t pressure_instance;
             uint8_t pressure_source;
             uint32_t set_pressure;
         };
@@ -2136,6 +2175,7 @@ namespace nmea2000 {
             base::Time time;
 
             uint8_t sid;
+            uint8_t temperature_instance;
             uint8_t temperature_source;
             float actual_temperature;
             float set_temperature;
@@ -2440,6 +2480,7 @@ namespace nmea2000 {
             uint8_t industry_code;
             uint8_t c;
             int8_t device;
+            uint8_t instance;
             uint8_t f;
             uint8_t tank_type;
             float capacity;
