@@ -45,9 +45,11 @@ namespace nmea2000 {
         static const uint8_t N2K_MSG_SEND = 0x94;
         static const uint8_t ACTISENSE_CMD_SEND = 0xA1;
 
+        static int protocolExtractFramedPacket(uint8_t const* buffer, size_t buffer_size);
+        static int protocolValidateFramedPacket(uint8_t const* buffer, size_t length);
+
     protected:
         virtual int extractPacket(uint8_t const* buffer, size_t buffer_size) const;
-        int validateFramedPacket(uint8_t const* buffer, size_t length) const;
 
     public:
         ActisenseDriver();

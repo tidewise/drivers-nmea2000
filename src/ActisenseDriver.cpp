@@ -93,10 +93,36 @@ void ActisenseDriver::writeCommand(uint8_t command,
 
 int ActisenseDriver::extractPacket(uint8_t const* buffer, size_t buffer_size) const
 {
+    int i = protocolExtractFramedPacket(buffer, buffer_size);
+    if (i <= 0) {
+        return i;
+    }
+
+    return protocolValidateFramedPacket(buffer, i);
+}
+
+static bool isEscape(uint8_t c) {
+    return c == 0x10 || c == 0x1B;
+}
+
+static bool isStart(uint8_t c) {
+    return c == 0x02 || c == 0x01;
+}
+
+static bool isEnd(uint8_t c) {
+    return c == 0x03 || c == 0x0A;
+}
+
+int ActisenseDriver::protocolExtractFramedPacket(uint8_t const* buffer,
+    size_t buffer_size)
+{
     if (buffer_size < 3) {
         return 0;
     }
-    else if (buffer[0] != ESCAPE || buffer[1] != START_OF_TEXT) {
+    else if (isEscape(buffer[0]) && isEscape(buffer[1])) {
+        return -2;
+    }
+    else if (!isEscape(buffer[0]) || !isStart(buffer[1])) {
         return -1;
     }
     else if (buffer[2] != N2K_MSG_RECEIVED) {
@@ -104,19 +130,23 @@ int ActisenseDriver::extractPacket(uint8_t const* buffer, size_t buffer_size) co
     }
 
     for (size_t i = 2; i < buffer_size - 1; ++i) {
-        if (buffer[i] == ESCAPE && buffer[i + 1] == START_OF_TEXT) {
+        if (isEscape(buffer[i]) && isEscape(buffer[i + 1])) {
+            ++i;
+            continue;
+        }
+        else if (isEscape(buffer[i]) && isStart(buffer[i + 1])) {
             return -i;
         }
-        if (buffer[i] == ESCAPE && buffer[i + 1] == END_OF_TEXT) {
-            return validateFramedPacket(buffer, i + 2);
+        if (isEscape(buffer[i]) && isEnd(buffer[i + 1])) {
+            return i + 2;
         }
-
     }
 
     return 0;
 }
 
-int ActisenseDriver::validateFramedPacket(uint8_t const* buffer, size_t length) const {
+int ActisenseDriver::protocolValidateFramedPacket(uint8_t const* buffer, size_t length)
+{
     // First validate the message length. We need to count the actual payload
     // bytes to compute the CRC anyways
     size_t count = 0;
@@ -137,10 +167,10 @@ int ActisenseDriver::validateFramedPacket(uint8_t const* buffer, size_t length) 
     count -= 2; // counted the command and length bytes
 
     if (((crc + buffer[length - EPILOGUE_SIZE]) & 0xFF) != 0) {
-        return -length;
+        return -1;
     }
     else if (count != buffer[3]) {
-        return -length;
+        return -1;
     }
     return length;
 }
