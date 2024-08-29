@@ -4,7 +4,8 @@
 using namespace nmea2000;
 
 ActisenseDriver::ActisenseDriver()
-    : iodrivers_base::Driver(INTERNAL_BUFFER_SIZE) {
+    : iodrivers_base::Driver(INTERNAL_BUFFER_SIZE)
+{
 }
 
 static uint8_t STARTUP_SEQUENCE[] = {
@@ -13,11 +14,13 @@ static uint8_t STARTUP_SEQUENCE[] = {
     0x00  /* msg byte 3, meaning ? */
 };
 
-void ActisenseDriver::sendStartupSequence() {
+void ActisenseDriver::sendStartupSequence()
+{
     writeCommand(ACTISENSE_CMD_SEND, STARTUP_SEQUENCE, sizeof(STARTUP_SEQUENCE));
 }
 
-void ActisenseDriver::queryDeviceEnumeration() {
+void ActisenseDriver::queryDeviceEnumeration()
+{
     Message iso_request;
     iso_request.priority = 1;
     iso_request.source = 255;
@@ -30,7 +33,8 @@ void ActisenseDriver::queryDeviceEnumeration() {
     writeMessage(iso_request);
 }
 
-void ActisenseDriver::writeMessage(Message const& message) {
+void ActisenseDriver::writeMessage(Message const& message)
+{
     if (message.size > Message::MAX_PAYLOAD_LENGTH) {
         throw std::invalid_argument("message payload is above maximum payload length");
     }
@@ -52,8 +56,10 @@ void ActisenseDriver::writeMessage(Message const& message) {
     writeCommand(N2K_MSG_SEND, encoded, message.size + 11);
 }
 
-void ActisenseDriver::writeCommand(uint8_t command, uint8_t const* message,
-                                   uint8_t message_size) {
+void ActisenseDriver::writeCommand(uint8_t command,
+    uint8_t const* message,
+    uint8_t message_size)
+{
     uint8_t out_buffer[MAX_ESCAPED_MESSAGE_SIZE];
     out_buffer[0] = ESCAPE;
     out_buffer[1] = START_OF_TEXT;
@@ -85,7 +91,8 @@ void ActisenseDriver::writeCommand(uint8_t command, uint8_t const* message,
     writePacket(out_buffer, out);
 }
 
-int ActisenseDriver::extractPacket(uint8_t const* buffer, size_t buffer_size) const {
+int ActisenseDriver::extractPacket(uint8_t const* buffer, size_t buffer_size) const
+{
     if (buffer_size < 3) {
         return 0;
     }
@@ -138,7 +145,8 @@ int ActisenseDriver::validateFramedPacket(uint8_t const* buffer, size_t length) 
     return length;
 }
 
-Message ActisenseDriver::readMessage() {
+Message ActisenseDriver::readMessage()
+{
     uint8_t buffer[INTERNAL_BUFFER_SIZE];
     size_t length = readPacket(buffer, INTERNAL_BUFFER_SIZE);
 
@@ -156,8 +164,7 @@ Message ActisenseDriver::readMessage() {
     Message message;
     message.time = base::Time::now();
     message.priority = buffer[2];
-    message.pgn = buffer[3] |
-                  static_cast<uint32_t>(buffer[4]) << 8 |
+    message.pgn = buffer[3] | static_cast<uint32_t>(buffer[4]) << 8 |
                   static_cast<uint32_t>(buffer[5]) << 16;
     message.destination = buffer[6];
     message.source = buffer[7];
