@@ -9,6 +9,11 @@ int main(int argc, char** argv)
 {
     if (argc < 2) {
         cerr << "usage: " << argv[0] << " RAW STREAM\n";
+        cerr <<
+            "This tool parses a file containing traffic coming from a NMEA2000-USB adapter\n"
+            "from actisense, and displays the byte offsets and reason of every rejected packet\n"
+            "It is meant as a way to debug the driver, verifying whether the rejected data\n"
+            "was really meant to be rejected\n";
         return 1;
     }
     string path = argv[1];
