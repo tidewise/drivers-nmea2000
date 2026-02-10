@@ -1,5 +1,6 @@
 #include <vector>
 #include <algorithm>
+#include <stdexcept>
 
 #include <nmea2000/PGNLibrary.hpp>
 
