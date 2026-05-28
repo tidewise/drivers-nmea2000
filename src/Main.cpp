@@ -62,8 +62,8 @@ int main(int argc, char** argv)
                 else {
                     interface->queryProductInformation(pending_product_info.back());
                     pending_product_info.pop_back();
+                    address_claim = true;
                 }
-                address_claim = !address_claim;
                 refresh_deadline = base::Time::now() + base::Time::fromSeconds(10);
             }
 
