@@ -10,6 +10,8 @@ namespace nmea2000 {
         static const int MAX_PAYLOAD_LENGTH = 223; // with fast packet
         static const int NO_DESTINATION = 0xFF;    // with fast packet
         static constexpr uint8_t MAX_CAN_PAYLOAD_SIZE{8};
+        static constexpr uint8_t FAST_PACKET_FIRST_PAYLOAD_LENGTH{6};
+        static constexpr uint8_t FAST_PACKET_SUBSEQUENT_PAYLOAD_LENGTH{7};
 
         base::Time time;
 
@@ -29,6 +31,7 @@ namespace nmea2000 {
 
     private:
         std::vector<canbus::Message> fastPacketFrames() const;
+        static std::uint8_t fastPacketSequenceNumber();
     };
 }
 
