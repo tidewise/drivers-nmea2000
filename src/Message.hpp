@@ -8,7 +8,8 @@ namespace nmea2000 {
     /** A NMEA2000 message */
     struct Message {
         static const int MAX_PAYLOAD_LENGTH = 223; // with fast packet
-        static const int NO_DESTINATION = 0xFF; // with fast packet
+        static const int NO_DESTINATION = 0xFF;    // with fast packet
+        static constexpr uint8_t MAX_CAN_PAYLOAD_SIZE{8};
 
         base::Time time;
 
@@ -19,10 +20,15 @@ namespace nmea2000 {
         uint8_t size = 0;
         uint8_t payload[MAX_PAYLOAD_LENGTH];
 
-        canbus::Message toCAN() const;
+        uint32_t canID() const;
+        std::vector<canbus::Message> toCAN() const;
         static Message fromCAN(canbus::Message const& can);
 
-        bool operator == (Message const& other) const;
+        bool operator==(Message const& other) const;
+        bool fastPacket() const;
+
+    private:
+        std::vector<canbus::Message> fastPacketFrames() const;
     };
 }
 

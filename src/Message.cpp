@@ -1,26 +1,47 @@
-#include <nmea2000/Message.hpp>
+#include <canbus/Message.hpp>
+#include <cmath>
 #include <cstring>
+#include <nmea2000/Message.hpp>
 
 using namespace nmea2000;
 
-canbus::Message Message::toCAN() const {
-    canbus::Message can;
+std::vector<canbus::Message> Message::toCAN() const
+{
+    std::vector<canbus::Message> msgs(0);
+    if (fastPacket()) {
+        msgs = fastPacketFrames();
+    }
+    else {
+        canbus::Message can;
+        can.size = size;
+        std::memcpy(can.data, payload, size);
+        msgs = {can};
+    }
 
-    can.time = time;
-    can.size = size;
-    std::memcpy(can.data, payload, size);
+    const uint32_t can_id = canID();
+    for (auto& can : msgs) {
+        can.time = time;
+        can.can_id = can_id;
+    }
 
-    uint32_t can_id =
-        source |
-        (priority & 0x7) << 26 |
-        pgn << 8;
+    return msgs;
+}
+
+uint32_t Message::canID() const
+{
+    uint32_t can_id = source | (priority & 0x7) << 26 | pgn << 8;
 
     bool pdu2 = 0xF000 == (pgn & 0xF000);
     if (!pdu2) {
         can_id |= (static_cast<uint32_t>(destination) << 8);
     }
-    can.can_id = can_id | canbus::FLAG_EXTENDED_FRAME;
-    return can;
+
+    return can_id | canbus::FLAG_EXTENDED_FRAME;
+}
+
+bool Message::fastPacket() const
+{
+    return size > MAX_CAN_PAYLOAD_SIZE;
 }
 
 Message Message::fromCAN(canbus::Message const& can) {

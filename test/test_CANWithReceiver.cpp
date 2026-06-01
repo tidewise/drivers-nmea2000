@@ -47,7 +47,9 @@ TEST_F(CANWithReceiverTest, it_decodes_a_fluid_level_message_from_CAN) {
 }
 
 TEST_F(CANWithReceiverTest, it_returns_an_address_claim_query) {
-    auto can = receiver.queryAddressClaim().toCAN();
+    auto to_can = receiver.queryAddressClaim().toCAN();
+    ASSERT_EQ(1, to_can.size());
+    canbus::Message& can = to_can.at(0);
     auto expected = makeCANMessage(0x1CEAFF00, { 0, 0xee, 0 });
     ASSERT_EQ(can.can_id, expected.can_id);
     ASSERT_EQ(can.size, expected.size);
@@ -56,7 +58,9 @@ TEST_F(CANWithReceiverTest, it_returns_an_address_claim_query) {
 }
 
 TEST_F(CANWithReceiverTest, it_returns_a_product_information_query) {
-    auto can = receiver.queryProductInformation(144).toCAN();
+    auto to_can = receiver.queryProductInformation(144).toCAN();
+    ASSERT_EQ(1, to_can.size());
+    canbus::Message& can = to_can.at(0);
     auto expected = makeCANMessage(0x1CEA9000, { 0x14, 0xf0, 0x1 });
     ASSERT_EQ(can.can_id, expected.can_id);
     ASSERT_EQ(can.size, expected.size);

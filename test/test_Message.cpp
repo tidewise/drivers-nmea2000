@@ -54,7 +54,8 @@ TEST_F(MessageTest, it_creates_a_CAN_id_from_a_message_in_PDU1) {
     msg.destination = 0x52;
     msg.source = 0x3d;
     auto can = msg.toCAN();
-    ASSERT_EQ(0x1CEC523D | canbus::FLAG_EXTENDED_FRAME, can.can_id);
+    ASSERT_EQ(1, can.size());
+    ASSERT_EQ(0x1CEC523D | canbus::FLAG_EXTENDED_FRAME, can.at(0).can_id);
 }
 
 TEST_F(MessageTest, it_creates_a_CAN_id_from_a_message_in_PDU2) {
@@ -64,7 +65,8 @@ TEST_F(MessageTest, it_creates_a_CAN_id_from_a_message_in_PDU2) {
     msg.destination = 0xff;
     msg.source = 238;
     auto can = msg.toCAN();
-    ASSERT_EQ(0xFFE6CEE | canbus::FLAG_EXTENDED_FRAME, can.can_id);
+    ASSERT_EQ(1, can.size());
+    ASSERT_EQ(0xFFE6CEE | canbus::FLAG_EXTENDED_FRAME, can.at(0).can_id);
 }
 
 TEST_F(MessageTest, it_copies_the_package_time_data_and_length_to_the_CAN_frame) {
@@ -74,7 +76,9 @@ TEST_F(MessageTest, it_copies_the_package_time_data_and_length_to_the_CAN_frame)
     uint8_t data[5] = { 1, 2, 3, 4, 5 };
     memcpy(msg.payload, data, 5);
 
-    canbus::Message can = msg.toCAN();
+    std::vector<canbus::Message> to_can = msg.toCAN();
+    ASSERT_EQ(1, to_can.size());
+    auto const& can = to_can.at(0);
     ASSERT_EQ(base::Time::fromMilliseconds(1000), can.time);
     ASSERT_EQ(5, can.size);
     for (int i = 0; i < 5; ++i) {
