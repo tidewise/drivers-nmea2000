@@ -1,3 +1,4 @@
+#include <atomic>
 #include <canbus/Message.hpp>
 #include <cmath>
 #include <cstring>
@@ -100,9 +101,8 @@ std::vector<canbus::Message> Message::fastPacketFrames() const
 
 std::uint8_t Message::fastPacketSequenceNumber()
 {
-    static uint8_t seq{0xff};
-    seq = (seq + 1) % 8;
-    return seq;
+    static std::atomic<uint8_t> seq{0};
+    return (seq++) % 8;
 }
 
 Message Message::fromCAN(canbus::Message const& can)
