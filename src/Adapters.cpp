@@ -30,6 +30,13 @@ CAN::CAN(std::string const& name, std::string const& type)
     , m_receiver(m_library) {
 }
 
+CAN::CAN(std::string const& name, PGNLibrary const& library, std::string const& type)
+    : m_driver{canbus::openCanDevice(name, type)}
+    , m_library{library}
+    , m_receiver(m_library)
+{
+}
+
 CAN::~CAN() {
     m_driver->close();
     delete m_driver;

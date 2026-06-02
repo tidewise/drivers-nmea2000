@@ -59,6 +59,9 @@ namespace nmea2000 {
              *      for more information
              */
             CAN(std::string const& name, std::string const& type = "socket");
+            CAN(std::string const& name,
+                PGNLibrary const& library,
+                std::string const& type = "socket");
             ~CAN();
 
             void writeMessage(Message const& msg);
