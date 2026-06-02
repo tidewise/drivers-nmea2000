@@ -2,6 +2,7 @@
 #define NMEA2000_PGNLIBRARY_HPP
 
 #include <map>
+#include <vector>
 #include <nmea2000/PGNInfo.hpp>
 
 namespace nmea2000 {
