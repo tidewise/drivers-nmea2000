@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <nmea2000/Message.hpp>
 #include <nmea2000/Receiver.hpp>
+#include <thread>
 
 using namespace nmea2000;
 
@@ -123,13 +124,13 @@ TEST_F(MessageTest, it_produces_fast_packet_messages)
     });
 
     Receiver recv(lib);
-    auto[s0, m0] = recv.process(Message::fromCAN(can.at(0)));
+    auto [s0, m0] = recv.process(Message::fromCAN(can.at(0)));
     EXPECT_EQ(Receiver::State::PROCESSED, s0);
 
-    auto[s1, m1] = recv.process(Message::fromCAN(can.at(1)));
+    auto [s1, m1] = recv.process(Message::fromCAN(can.at(1)));
     EXPECT_EQ(Receiver::State::PROCESSED, s1);
 
-    auto[s2, m2] = recv.process(Message::fromCAN(can.at(2)));
+    auto [s2, m2] = recv.process(Message::fromCAN(can.at(2)));
     EXPECT_EQ(Receiver::State::COMPLETE, s2);
     ASSERT_EQ(19, m2.size);
     assertEqual("first1second2third3", m2.payload, 19);
@@ -150,7 +151,28 @@ TEST_F(MessageTest, it_increments_the_sequence_number)
 
     auto second = msg.toCAN();
     uint8_t second_seq_num = (first_seq_num + 1) % 8;
-    for(auto const& can_msg : second) {
+    for (auto const& can_msg : second) {
         EXPECT_EQ(second_seq_num, can_msg.data[0] >> 5);
+    }
+}
+
+TEST_F(MessageTest, it_thread_safely_generates_fast_packet_sequence_numbers)
+{
+    ASSERT_NE(Message::fastPacketSequenceNumber(), Message::fastPacketSequenceNumber());
+
+    std::vector<std::thread> threads(8);
+    std::array<uint8_t, 8> seq;
+    for (std::size_t n = 0; n < 13; n++) {
+        seq = {0, 0, 0, 0, 0, 0, 0, 0};
+        for (std::size_t t = 0; t < 8; t++) {
+            threads[t] =
+                std::thread([&seq]() { seq[Message::fastPacketSequenceNumber()]++; });
+        }
+        for (auto& thread : threads) {
+            thread.join();
+        }
+        for (uint8_t s : seq) {
+            EXPECT_EQ(1, s);
+        }
     }
 }

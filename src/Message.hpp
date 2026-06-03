@@ -29,9 +29,16 @@ namespace nmea2000 {
         bool operator==(Message const& other) const;
         bool fastPacket() const;
 
+        /**
+         *  sequence number generation for fast packet messages
+         *
+         * it is public for testing purposes only, the user shouldn't need to ever
+         * call this
+         */
+        static std::uint8_t fastPacketSequenceNumber();
+
     private:
         std::vector<canbus::Message> fastPacketFrames() const;
-        static std::uint8_t fastPacketSequenceNumber();
     };
 }
 
