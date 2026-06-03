@@ -141,7 +141,7 @@ TEST_F(MessageTest, it_increments_the_sequence_number)
 
     uint8_t payload[] = "first1second2third3";
     msg.size = sizeof(payload) - 1; // -1 -> do not copy '/0'
-    std::copy((char*)&payload, (char*)&payload + msg.size, msg.payload);
+    std::copy(payload, payload + msg.size, msg.payload);
 
     auto first = msg.toCAN();
     EXPECT_EQ(first.at(0).data[0] >> 5, first.at(1).data[0] >> 5);

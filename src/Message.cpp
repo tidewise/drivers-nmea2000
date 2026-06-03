@@ -51,50 +51,34 @@ std::vector<canbus::Message> Message::fastPacketFrames() const
         throw "Fast packet messages size must be grater than 8 bytes";
     }
 
-    const uint8_t num_msgs =
-        1 + std::ceil(static_cast<float>(size - FAST_PACKET_FIRST_PAYLOAD_LENGTH) /
-                      FAST_PACKET_SUBSEQUENT_PAYLOAD_LENGTH);
-    std::vector<canbus::Message> msgs(num_msgs);
+    const uint8_t subsequent_size = size - FAST_PACKET_FIRST_PAYLOAD_LENGTH;
+    const uint8_t subsequent_msgs =
+        (subsequent_size + FAST_PACKET_SUBSEQUENT_PAYLOAD_LENGTH - 1) /
+        FAST_PACKET_SUBSEQUENT_PAYLOAD_LENGTH;
+    std::vector<canbus::Message> msgs(1 + subsequent_msgs);
 
     const uint8_t seq_num = fastPacketSequenceNumber();
-    uint8_t frame_count{0};
-    uint8_t const* it = (uint8_t*)(&payload);
-    {
-        canbus::Message& msg0 = msgs[frame_count];
-
-        msg0.data[0] = (seq_num << 5) | frame_count;
+    { // 0th frame
+        canbus::Message& msg0 = msgs[0];
+        msg0.data[0] = (seq_num << 5);
         msg0.data[1] = size;
-        std::copy(it,
-            (it + FAST_PACKET_FIRST_PAYLOAD_LENGTH),
-            ((uint8_t*)&msg0.data) + 2);
-
-        it += FAST_PACKET_FIRST_PAYLOAD_LENGTH;
-        frame_count++;
+        std::copy(payload, (payload + FAST_PACKET_FIRST_PAYLOAD_LENGTH), msg0.data + 2);
+        msg0.size = 8;
     }
 
-    while (frame_count < num_msgs - 1) {
-        canbus::Message& msg = msgs[frame_count];
+    uint8_t const* subsequent_payload = payload + FAST_PACKET_FIRST_PAYLOAD_LENGTH;
+    for (uint8_t i = 0; i < subsequent_msgs; i++) {
+        canbus::Message& msg = msgs[i + 1];
+        msg.data[0] = (seq_num << 5) | (i + 1);
 
-        msg.data[0] = (seq_num << 5) | frame_count;
-        std::copy(it,
-            it + FAST_PACKET_SUBSEQUENT_PAYLOAD_LENGTH,
-            ((uint8_t*)&msg.data) + 1);
-
-        it += FAST_PACKET_SUBSEQUENT_PAYLOAD_LENGTH;
-        frame_count++;
+        const uint8_t n = FAST_PACKET_SUBSEQUENT_PAYLOAD_LENGTH;
+        const uint8_t offset = i * n;
+        const uint8_t this_payload_size = std::min<uint8_t>(n, subsequent_size - offset);
+        std::copy(subsequent_payload + offset,
+            subsequent_payload + offset + this_payload_size,
+            msg.data + 1);
+        msg.size = this_payload_size + 1;
     }
-
-    const uint8_t last_message_payload_size = size - (it - (uint8_t*)&payload);
-    {
-        canbus::Message& last = msgs[frame_count];
-        last.data[0] = (seq_num << 5) | frame_count;
-        std::copy(it, it + last_message_payload_size, ((uint8_t*)&last.data) + 1);
-    }
-
-    for (auto& msg : msgs) {
-        msg.size = MAX_CAN_PAYLOAD_SIZE;
-    }
-    msgs.back().size = last_message_payload_size + 1;
 
     return msgs;
 }
