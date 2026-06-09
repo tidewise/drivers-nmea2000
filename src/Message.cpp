@@ -49,7 +49,7 @@ std::vector<canbus::Message> Message::fastPacketFrames() const
 {
     if (size <= MAX_CAN_PAYLOAD_SIZE || size > MAX_PAYLOAD_LENGTH) {
         throw std::invalid_argument(
-            "Fast packet messages size must be grater than 8 bytes");
+            "Fast packet messages must have (8, 223] size");
     }
 
     const uint8_t subsequent_size = size - FAST_PACKET_FIRST_PAYLOAD_LENGTH;
