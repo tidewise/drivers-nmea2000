@@ -31,12 +31,12 @@ int main(int argc, char** argv)
     string uri = argv[2];
     string cmd = argv[3];
 
-    adapters::Interface* interface = nullptr;
+    std::unique_ptr<adapters::Interface> interface ;
     if (type == "can") {
-        interface = new adapters::CAN(uri, "socket");
+        interface = std::make_unique<adapters::CAN>(uri, "socket");
     }
     else if (type == "actisense") {
-        interface = new adapters::Actisense(uri);
+        interface = std::make_unique<adapters::Actisense>(uri);
     }
     else {
         cerr << "unknown connection type '" << type << "'\n\n";

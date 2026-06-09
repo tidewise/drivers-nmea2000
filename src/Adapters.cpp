@@ -1,7 +1,6 @@
-#include <nmea2000/Adapters.hpp>
-#include <nmea2000/ActisenseDriver.hpp>
 #include <canbus/Driver.hpp>
 #include <iostream>
+#include <nmea2000/Adapters.hpp>
 
 using namespace base;
 using namespace nmea2000::adapters;
@@ -30,9 +29,15 @@ CAN::CAN(std::string const& name, std::string const& type)
     , m_receiver(m_library) {
 }
 
+CAN::CAN(std::string const& name, PGNLibrary const& library, std::string const& type)
+    : m_driver{canbus::openCanDevice(name, type)}
+    , m_library{library}
+    , m_receiver{m_library}
+{
+}
+
 CAN::~CAN() {
     m_driver->close();
-    delete m_driver;
 }
 
 void CAN::writeMessage(Message const& message) {
@@ -89,7 +94,6 @@ Actisense::Actisense(std::string const& uri)
 
 Actisense::~Actisense() {
     m_driver->close();
-    delete m_driver;
 }
 
 void Actisense::writeMessage(Message const& message) {

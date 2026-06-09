@@ -1,18 +1,18 @@
 #ifndef NMEA2000_ADAPTERS_HPP
 #define NMEA2000_ADAPTERS_HPP
 
+#include "ActisenseDriver.hpp"
+#include <canbus/Driver.hpp>
 #include <nmea2000/Message.hpp>
 #include <nmea2000/PGNLibrary.hpp>
 #include <nmea2000/Receiver.hpp>
-#include <canbus/Driver.hpp>
+#include <memory>
 
 namespace canbus {
     class Driver;
 }
 
 namespace nmea2000 {
-    class ActisenseDriver;
-
     /**
      * Ready-to-use classes for NMEA2000 access
      *
@@ -46,7 +46,7 @@ namespace nmea2000 {
 
         /** CAN interface */
         class CAN : public Interface {
-            canbus::Driver* m_driver = nullptr;
+            std::unique_ptr<canbus::Driver> m_driver;
             PGNLibrary m_library;
             Receiver m_receiver;
 
@@ -59,6 +59,9 @@ namespace nmea2000 {
              *      for more information
              */
             CAN(std::string const& name, std::string const& type = "socket");
+            CAN(std::string const& name,
+                PGNLibrary const& library,
+                std::string const& type = "socket");
             ~CAN();
 
             void writeMessage(Message const& msg);
@@ -67,7 +70,7 @@ namespace nmea2000 {
 
         /** CAN interface */
         class Actisense : public Interface {
-            ActisenseDriver* m_driver = nullptr;
+            std::unique_ptr<ActisenseDriver> m_driver;
 
         public:
             /** Open an Actisense interface
