@@ -8,7 +8,10 @@ namespace nmea2000 {
     /** A NMEA2000 message */
     struct Message {
         static const int MAX_PAYLOAD_LENGTH = 223; // with fast packet
-        static const int NO_DESTINATION = 0xFF; // with fast packet
+        static const int NO_DESTINATION = 0xFF;    // with fast packet
+        static constexpr uint8_t MAX_CAN_PAYLOAD_SIZE{8};
+        static constexpr uint8_t FAST_PACKET_FIRST_PAYLOAD_LENGTH{6};
+        static constexpr uint8_t FAST_PACKET_SUBSEQUENT_PAYLOAD_LENGTH{7};
 
         base::Time time;
 
@@ -19,10 +22,23 @@ namespace nmea2000 {
         uint8_t size = 0;
         uint8_t payload[MAX_PAYLOAD_LENGTH];
 
-        canbus::Message toCAN() const;
+        uint32_t canID() const;
+        std::vector<canbus::Message> toCAN() const;
         static Message fromCAN(canbus::Message const& can);
 
-        bool operator == (Message const& other) const;
+        bool operator==(Message const& other) const;
+        bool fastPacket() const;
+
+        /**
+         *  sequence number generation for fast packet messages
+         *
+         * it is public for testing purposes only, the user shouldn't need to ever
+         * call this
+         */
+        static std::uint8_t fastPacketSequenceNumber();
+
+    private:
+        std::vector<canbus::Message> fastPacketFrames() const;
     };
 }
 

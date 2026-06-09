@@ -40,12 +40,11 @@ CAN::~CAN() {
     m_driver->close();
 }
 
-void CAN::writeMessage(Message const& message) {
-    if (message.size > 8) {
-        throw Unsupported("writing to CAN does not suoport fast packet messages");
+void CAN::writeMessage(Message const& message)
+{
+    for (auto const& can_msg : message.toCAN()) {
+        m_driver->write(can_msg);
     }
-
-    m_driver->write(message.toCAN());
 }
 
 struct CANReadTimeoutGuard {
