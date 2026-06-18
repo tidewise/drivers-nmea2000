@@ -1,6 +1,7 @@
 #ifndef NMEA2000_MESSAGE_HPP
 #define NMEA2000_MESSAGE_HPP
 
+#include <cstdint>
 #include <base/Time.hpp>
 #include <canbus/Message.hpp>
 
