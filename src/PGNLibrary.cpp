@@ -1,5 +1,5 @@
-#include <vector>
 #include <algorithm>
+#include <set>
 #include <stdexcept>
 
 #include <nmea2000/PGNLibrary.hpp>
@@ -50,10 +50,28 @@ PGNInfo const& PGNLibrary::get(uint32_t pgn) const {
     }
 }
 
-bool PGNLibrary::isKnown(uint32_t pgn) const {
+bool PGNLibrary::isKnown(uint32_t pgn) const
+{
     return find(pgn);
 }
 
-bool PGNLibrary::isFastPacket(uint32_t pgn) const {
+bool PGNLibrary::isFastPacket(uint32_t pgn) const
+{
     return get(pgn).size > 8;
+}
+
+void PGNLibrary::augment(std::vector<PGNInfo> const& other_pgns)
+{
+    if (other_pgns.empty()) {
+        return;
+    }
+
+    std::set augmented{m_pgns.begin(), m_pgns.end(), comparePGN};
+    for (auto const& pgn : other_pgns) {
+        augmented.insert(pgn);
+    }
+
+    m_pgns.resize(augmented.size());
+    m_pgns.clear();
+    m_pgns.assign(augmented.begin(), augmented.end());
 }
