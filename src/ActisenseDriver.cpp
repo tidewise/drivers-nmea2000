@@ -35,6 +35,8 @@ void ActisenseDriver::queryDeviceEnumeration()
 
 void ActisenseDriver::writeMessage(Message const& message)
 {
+    // TODO: Message has support for fast packet now. Figure out how to use it here. Also
+    // reuse the nmea2000 can header already calculated by Message::canID
     if (message.size > Message::MAX_PAYLOAD_LENGTH) {
         throw std::invalid_argument("message payload is above maximum payload length");
     }

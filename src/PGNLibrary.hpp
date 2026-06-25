@@ -2,15 +2,15 @@
 #define NMEA2000_PGNLIBRARY_HPP
 
 #include <map>
-#include <vector>
 #include <nmea2000/PGNInfo.hpp>
+#include <vector>
 
+struct PGNLibraryTest;
 namespace nmea2000 {
     /** Information about known PGNs
      */
     class PGNLibrary {
         std::vector<PGNInfo> m_pgns;
-
     public:
         PGNLibrary();
 
@@ -33,6 +33,8 @@ namespace nmea2000 {
 
         /** Tests whether this PGN uses fast packet */
         bool isFastPacket(uint32_t pgn) const;
+
+        void augment(std::vector<PGNInfo> const& other_pgns);
     };
 }
 
