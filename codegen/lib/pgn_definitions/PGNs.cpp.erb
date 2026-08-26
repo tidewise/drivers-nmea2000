@@ -28,11 +28,11 @@ const int <%= cxx_name %>::ID;
             bit_offset = field.bit_offset
             byte_offset = field.byte_offset
             relative_bit_offset = field.relative_bit_offset
-            byte_length_in_bits = field.byte_length * 8;
+            byte_length_in_bits = field.integer_decoding_byte_length * 8;
 %>
 <%          if field.ascii? %>
     result.<%= field_name %> = decodeString(&message.payload[<%= byte_offset %>],
-                                            <%= field.byte_length%>);
+                                            <%= field.raw_byte_length %>);
 <%          elsif field.unsigned? && !field.float? %>
     result.<%= field_name %> = (decode<%= byte_length_in_bits %>(
         &message.payload[<%= byte_offset %>]
@@ -41,7 +41,7 @@ const int <%= cxx_name %>::ID;
     auto <%= field_name %>_raw = decode<%= byte_length_in_bits %>(
         &message.payload[<%= byte_offset %>]
     );
-<%              integer_field_type = "#{'u' if field.unsigned?}int#{byte_length_in_bits}_t" %>
+<%              integer_field_type = "#{'u' if field.unsigned?}int#{field.field_byte_length * 8}_t" %>
     <%= integer_field_type %> <%= field_name %>_iraw =
         reinterpret_cast<<%= integer_field_type %> const&>(<%= field_name %>_raw);
     result.<%= field_name %> = <%= field_name %>_iraw * <%= field.scale %> + <%= field.offset %>;

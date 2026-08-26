@@ -28,10 +28,10 @@ ISOAcknowledgement ISOAcknowledgement::fromMessage(Message const& message) {
     result.group_function = (decode8(
         &message.payload[1]
     ) >> 0) & 0xff;
-    result.reserved = (decode32(
+    result.reserved = (decode24(
         &message.payload[2]
     ) >> 0) & 0xffffff;
-    result.pgn = (decode32(
+    result.pgn = (decode24(
         &message.payload[5]
     ) >> 0) & 0xffffff;
     return result;
@@ -50,7 +50,7 @@ ISORequest ISORequest::fromMessage(Message const& message) {
     ISORequest result;
     result.time = message.time;
 
-    result.pgn = (decode32(
+    result.pgn = (decode24(
         &message.payload[0]
     ) >> 0) & 0xffffff;
     return result;
@@ -520,7 +520,7 @@ NMEARequestGroupFunction NMEARequestGroupFunction::fromMessage(Message const& me
     result.function_code = reinterpret_cast<int8_t const&>(
         function_code_raw
     );
-    result.pgn = (decode32(
+    result.pgn = (decode24(
         &message.payload[1]
     ) >> 0) & 0xffffff;
     result.transmission_interval = (decode8(
@@ -566,7 +566,7 @@ NMEACommandGroupFunction NMEACommandGroupFunction::fromMessage(Message const& me
     result.function_code = reinterpret_cast<int8_t const&>(
         function_code_raw
     );
-    result.pgn = (decode32(
+    result.pgn = (decode24(
         &message.payload[1]
     ) >> 0) & 0xffffff;
     result.priority = (decode8(
@@ -612,7 +612,7 @@ NMEAAcknowledgeGroupFunction NMEAAcknowledgeGroupFunction::fromMessage(Message c
     result.function_code = reinterpret_cast<int8_t const&>(
         function_code_raw
     );
-    result.pgn = (decode32(
+    result.pgn = (decode24(
         &message.payload[1]
     ) >> 0) & 0xffffff;
     result.pgn_error_code = (decode8(
@@ -683,7 +683,7 @@ PGNListTransmitAndReceive PGNListTransmitAndReceive::fromMessage(Message const& 
     result.function_code = (decode8(
         &message.payload[0]
     ) >> 0) & 0xff;
-    result.pgn = (decode32(
+    result.pgn = (decode24(
         &message.payload[1]
     ) >> 0) & 0xffffff;
     return result;
@@ -857,7 +857,7 @@ AirmarTrueWindOptions AirmarTrueWindOptions::fromMessage(Message const& message)
     result.cog_substition_for_hdg = (decode8(
         &message.payload[3]
     ) >> 0) & 0x3;
-    result.calibration_status = (decode8(
+    result.calibration_status = (decode16(
         &message.payload[3]
     ) >> 2) & 0xff;
     return result;
@@ -2010,16 +2010,16 @@ InverterConfigurationStatus InverterConfigurationStatus::fromMessage(Message con
     result.inverter_enable_disable = (decode8(
         &message.payload[3]
     ) >> 0) & 0x3;
-    result.inverter_mode = (decode8(
+    result.inverter_mode = (decode16(
         &message.payload[3]
     ) >> 2) & 0xff;
-    result.load_sense_enable_disable = (decode8(
+    result.load_sense_enable_disable = (decode16(
         &message.payload[4]
     ) >> 2) & 0xff;
-    result.load_sense_power_threshold = (decode8(
+    result.load_sense_power_threshold = (decode16(
         &message.payload[5]
     ) >> 2) & 0xff;
-    result.load_sense_interval = (decode8(
+    result.load_sense_interval = (decode16(
         &message.payload[6]
     ) >> 2) & 0xff;
     return result;
@@ -2312,7 +2312,7 @@ TrackedTargetData TrackedTargetData::fromMessage(Message const& message) {
         reinterpret_cast<uint32_t const&>(utc_of_fix_raw);
     result.utc_of_fix = utc_of_fix_iraw * 0.0001 + 0.0;
     result.name = decodeString(&message.payload[25],
-                                            256);
+                                            255);
     return result;
 }
 const int PositionRapidUpdate::BYTE_LENGTH;
@@ -2848,14 +2848,14 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
         reinterpret_cast<int16_t const&>(position_reference_from_bow_raw);
     result.position_reference_from_bow = position_reference_from_bow_iraw * 0.1 + 0.0;
     result.name = decodeString(&message.payload[32],
-                                            32);
+                                            20);
     result.dte = (decode8(
         &message.payload[52]
     ) >> 0) & 0x1;
     result.ais_mode = (decode8(
         &message.payload[52]
     ) >> 1) & 0x1;
-    result.ais_transceiver_information = (decode8(
+    result.ais_transceiver_information = (decode16(
         &message.payload[52]
     ) >> 6) & 0x1f;
     return result;
@@ -4403,9 +4403,9 @@ AISClassAStaticAndVoyageRelatedData AISClassAStaticAndVoyageRelatedData::fromMes
         imo_number_raw
     );
     result.callsign = decodeString(&message.payload[9],
-                                            8);
+                                            7);
     result.name = decodeString(&message.payload[16],
-                                            32);
+                                            20);
     result.type_of_ship = (decode8(
         &message.payload[36]
     ) >> 0) & 0xff;
@@ -4449,7 +4449,7 @@ AISClassAStaticAndVoyageRelatedData AISClassAStaticAndVoyageRelatedData::fromMes
         reinterpret_cast<int16_t const&>(draft_raw);
     result.draft = draft_iraw * 0.01 + 0.0;
     result.destination = decodeString(&message.payload[53],
-                                            32);
+                                            20);
     result.ais_version_indicator = (decode8(
         &message.payload[73]
     ) >> 0) & 0x3;
@@ -4758,7 +4758,7 @@ AISAddressedSafetyRelatedMessage AISAddressedSafetyRelatedMessage::fromMessage(M
         &message.payload[10]
     ) >> 6) & 0x1;
     result.safety_related_text = decodeString(&message.payload[11],
-                                            256);
+                                            255);
     return result;
 }
 const int AISSafetyRelatedBroadcastMessage::BYTE_LENGTH;
@@ -4923,7 +4923,7 @@ AISChannelManagement AISChannelManagement::fromMessage(Message const& message) {
     result.channel_a = (decode8(
         &message.payload[6]
     ) >> 0) & 0x7f;
-    result.channel_b = (decode8(
+    result.channel_b = (decode16(
         &message.payload[6]
     ) >> 7) & 0x7f;
     result.power = (decode8(
@@ -5017,10 +5017,10 @@ AISClassBGroupAssignment AISClassBGroupAssignment::fromMessage(Message const& me
     result.ship_and_cargo_filter = (decode8(
         &message.payload[23]
     ) >> 2) & 0x3f;
-    result.reporting_interval = (decode16(
+    result.reporting_interval = (decode24(
         &message.payload[24]
     ) >> 2) & 0xffff;
-    result.quiet_time = (decode16(
+    result.quiet_time = (decode24(
         &message.payload[26]
     ) >> 2) & 0xffff;
     return result;
@@ -5146,7 +5146,7 @@ AISClassBStaticDataMsg24PartA AISClassBStaticDataMsg24PartA::fromMessage(Message
         user_id_raw
     );
     result.name = decodeString(&message.payload[5],
-                                            32);
+                                            20);
     return result;
 }
 const int AISClassBStaticDataMsg24PartB::BYTE_LENGTH;
@@ -5179,9 +5179,9 @@ AISClassBStaticDataMsg24PartB AISClassBStaticDataMsg24PartB::fromMessage(Message
         &message.payload[5]
     ) >> 0) & 0xff;
     result.vendor_id = decodeString(&message.payload[6],
-                                            8);
+                                            7);
     result.callsign = decodeString(&message.payload[13],
-                                            8);
+                                            7);
     auto length_raw = decode16(
         &message.payload[20]
     );
@@ -5353,7 +5353,7 @@ RouteAndWPServiceRouteWPListAttributes RouteAndWPServiceRouteWPListAttributes::f
     result.route_status = (decode8(
         &message.payload[20]
     ) >> 4) & 0x3;
-    result.xte_limit_for_the_route = (decode16(
+    result.xte_limit_for_the_route = (decode24(
         &message.payload[20]
     ) >> 6) & 0xffff;
     return result;
@@ -5936,7 +5936,7 @@ TemperatureExtendedRange TemperatureExtendedRange::fromMessage(Message const& me
     result.temperature_source = (decode8(
         &message.payload[2]
     ) >> 0) & 0xff;
-    auto actual_temperature_raw = decode32(
+    auto actual_temperature_raw = decode24(
         &message.payload[3]
     );
     uint32_t actual_temperature_iraw =
@@ -6499,7 +6499,7 @@ NavicoProductInformation NavicoProductInformation::fromMessage(Message const& me
         &message.payload[38]
     ) >> 0) & 0xff;
     result.firmware_version = decodeString(&message.payload[39],
-                                            16);
+                                            10);
     result.firmware_date = decodeString(&message.payload[49],
                                             32);
     result.firmware_time = decodeString(&message.payload[81],
@@ -6588,7 +6588,7 @@ SimnetReprogramStatus1 SimnetReprogramStatus1::fromMessage(Message const& messag
     result.status = (decode8(
         &message.payload[3]
     ) >> 0) & 0xff;
-    result.reserved2 = (decode32(
+    result.reserved2 = (decode24(
         &message.payload[4]
     ) >> 0) & 0xffffff;
     return result;
@@ -6928,9 +6928,9 @@ SimnetAISClassBStaticDataMsg24PartB SimnetAISClassBStaticDataMsg24PartB::fromMes
         &message.payload[9]
     ) >> 0) & 0xff;
     result.vendor_id = decodeString(&message.payload[10],
-                                            8);
+                                            7);
     result.callsign = decodeString(&message.payload[17],
-                                            8);
+                                            7);
     auto length_raw = decode16(
         &message.payload[24]
     );
@@ -7005,7 +7005,7 @@ SimnetAISClassBStaticDataMsg24PartA SimnetAISClassBStaticDataMsg24PartA::fromMes
         user_id_raw
     );
     result.name = decodeString(&message.payload[9],
-                                            32);
+                                            20);
     return result;
 }
 const int SimnetSonarStatusFrequencyAndDSPVoltage::BYTE_LENGTH;
@@ -7290,7 +7290,7 @@ SimnetAlarmMessage SimnetAlarmMessage::fromMessage(Message const& message) {
         &message.payload[5]
     ) >> 0) & 0xff;
     result.text = decodeString(&message.payload[6],
-                                            256);
+                                            255);
     return result;
 }
 const int AirmarAdditionalWeatherData::BYTE_LENGTH;
@@ -7402,13 +7402,13 @@ AirmarPOST AirmarPOST::fromMessage(Message const& message) {
     result.control = (decode8(
         &message.payload[2]
     ) >> 0) & 0xf;
-    result.reserved1 = (decode8(
+    result.reserved1 = (decode16(
         &message.payload[2]
     ) >> 4) & 0x7f;
-    result.test_id = (decode8(
+    result.test_id = (decode16(
         &message.payload[4]
     ) >> 3) & 0xff;
-    result.test_result = (decode8(
+    result.test_result = (decode16(
         &message.payload[5]
     ) >> 3) & 0xff;
     return result;

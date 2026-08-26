@@ -166,13 +166,89 @@ module PGNDefinitions
             end
         end
 
-        describe 'byte_length' do
+        describe 'integer_decoding_byte_length' do
+            it 'returns the number of bytes above the bit length ' \
+               'if the offset is zero and the bit length is not a multiple of 8' do
+                field = make_field(
+                    <<~XML
+                    <EnumField Name="Bla">
+                        <BitLength>14</BitLength>
+                        <BitOffset>0</BitOffset>
+                    </EnumField>
+                    XML
+                )
+                assert_equal 2, field.integer_decoding_byte_length
+            end
+
+            it 'returns the number of bits divided by 8 if the ' \
+               'if the offset is zero and the bit length is a multiple of 8' do
+                field = make_field(
+                    <<~XML
+                    <EnumField Name="Bla">
+                        <BitLength>16</BitLength>
+                        <BitOffset>0</BitOffset>
+                    </EnumField>
+                    XML
+                )
+                assert_equal 2, field.integer_decoding_byte_length
+            end
+
+            it 'sums the offset and bit length to compute the byte length, ' \
+               'when the result is not a multiple of 8' do
+                field = make_field(
+                    <<~XML
+                    <EnumField Name="Bla">
+                        <BitLength>14</BitLength>
+                        <BitOffset>1</BitOffset>
+                    </EnumField>
+                    XML
+                )
+                assert_equal 2, field.integer_decoding_byte_length
+            end
+
+            it 'sums the offset and bit length to compute the byte length, ' \
+               'when the result is a multiple of 8' do
+                field = make_field(
+                    <<~XML
+                    <EnumField Name="Bla">
+                        <BitLength>14</BitLength>
+                        <BitOffset>2</BitOffset>
+                    </EnumField>
+                    XML
+                )
+                assert_equal 2, field.integer_decoding_byte_length
+            end
+
+            it 'raises if there is no bit length' do
+                field = make_field(
+                    <<~XML
+                    <EnumField Name="Bla">
+                        <BitLength>14</BitLength>
+                    </EnumField>
+                    XML
+                )
+                assert_raises(TypeError) { field.integer_decoding_byte_length }
+            end
+
+            it 'raises if there is no bit offset' do
+                field = make_field(
+                    <<~XML
+                    <EnumField Name="Bla">
+                        <BitOffset>2</BitOffset>
+                    </EnumField>
+                    XML
+                )
+                assert_raises(TypeError) { field.integer_decoding_byte_length }
+            end
+        end
+
+        describe 'field_byte_length' do
             it 'returns the power-of-two byte size that contains the field '\
                'for an exact rounded number' do
                 field = make_field(
                     '<EnumField Name="Bla"><BitLength>16</BitLength></EnumField>'
                 )
-                assert_equal 2, field.byte_length
+                assert_equal 2, field.field_byte_length
             end
 
             it 'returns the power-of-two byte size that contains the field '\
@@ -180,19 +256,19 @@ module PGNDefinitions
                 field = make_field(
                     '<EnumField Name="Bla"><BitLength>17</BitLength></EnumField>'
                 )
-                assert_equal 4, field.byte_length
+                assert_equal 4, field.field_byte_length
             end
 
             it 'handles sizes below 8' do
                 field = make_field(
                     '<EnumField Name="Bla"><BitLength>2</BitLength></EnumField>'
                 )
-                assert_equal 1, field.byte_length
+                assert_equal 1, field.field_byte_length
             end
 
             it 'raises if there is no bit length' do
                 field = make_field('<UDblField Name="Bla" />')
-                assert_raises(TypeError) { field.byte_length }
+                assert_raises(TypeError) { field.field_byte_length }
             end
         end
 
