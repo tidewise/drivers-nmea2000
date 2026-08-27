@@ -1,5 +1,16 @@
 module PGNDefinitions
     # Representation of a field within a single PGN definition
+    #
+    # All fields are defined as a certain length of bits with a bit offset from the start
+    # For integer types and enums, the decoding logic will decode an integer that contains the
+    # field, and then extract the field. The code uses
+    # {#integer_decoding_byte_length} to compute the length of that intermediary integer
+    #
+    # Float types are actually integer on which we apply a scale and offset afterwards for
+    # interpretation. So, they are decoded the same way than integer
+    #
+    # For ASCII fields, it is assumed that the field is byte-aligned. This is verified
+    # by {#raw_byte_length}
     class Field
         def initialize(xml)
             @xml = xml
@@ -25,7 +36,28 @@ module PGNDefinitions
             bit_offset % 8
         end
 
-        def byte_length
+        # The length of bytes that should be decoded at the {#bit_offset} / 8 byte offset
+        # so that the decoding logic can extract it
+        def integer_decoding_byte_length
+            total_field_length_in_bits = relative_bit_offset + bit_length
+            ((total_field_length_in_bits + 7) / 8)
+        end
+
+        # Byte length of a byte-aligned field
+        def raw_byte_length
+            if (relative_bit_offset != 0) || (bit_length % 8 != 0)
+                raise ArgumentError,
+                      "cannot call raw_byte_length on a field whose both beginning " \
+                      "and end are that is not byte-aligne"
+            end
+
+            bit_length / 8
+        end
+
+        # Byte length of the C++ struct field needed to contain this field
+        #
+        # Only applicable if the field is an integer
+        def field_byte_length
             2**Math.log2((bit_length / 8.0).ceil).ceil
         end
 

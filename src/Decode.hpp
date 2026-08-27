@@ -24,6 +24,12 @@ namespace nmea2000 {
                    static_cast<std::uint32_t>(byte[0]) << 0;
         }
 
+        inline std::uint32_t decode24(std::uint8_t const* byte) {
+            return static_cast<std::uint32_t>(byte[2]) << 16 |
+                   static_cast<std::uint32_t>(byte[1]) << 8 |
+                   static_cast<std::uint32_t>(byte[0]) << 0;
+        }
+
         inline std::uint16_t decode16(std::uint8_t const* byte) {
             return static_cast<std::uint16_t>(byte[1]) << 8 |
                    static_cast<std::uint16_t>(byte[0]) << 0;
