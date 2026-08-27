@@ -1,3 +1,4 @@
+#include <base/Float.hpp>
 #include <nmea2000/PGNs.hpp>
 #include <nmea2000/Decode.hpp>
 
@@ -44,7 +45,15 @@ const int <%= cxx_name %>::ID;
 <%              integer_field_type = "#{'u' if field.unsigned?}int#{field.field_byte_length * 8}_t" %>
     <%= integer_field_type %> <%= field_name %>_iraw =
         reinterpret_cast<<%= integer_field_type %> const&>(<%= field_name %>_raw);
+<%              if field.check_unavailable? %>
+    if (<%= field_name %>_iraw > <%= field.unavailable_value_threshold %>) {
+        result.<%= field_name %> = base::unknown<double>();
+    } else {
+        result.<%= field_name %> = <%= field_name %>_iraw * <%= field.scale %> + <%= field.offset %>;
+    }
+<%              else %>
     result.<%= field_name %> = <%= field_name %>_iraw * <%= field.scale %> + <%= field.offset %>;
+<%              end %>
 <%          else %>
     auto <%= field_name %>_raw = decode<%= byte_length_in_bits %>(
         &message.payload[<%= byte_offset %>]

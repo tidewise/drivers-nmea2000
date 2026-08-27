@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PGNDefinitions
     # Representation of a field within a single PGN definition
     #
@@ -17,7 +19,7 @@ module PGNDefinitions
         end
 
         def name
-            @xml.attributes['Name']
+            @xml.attributes["Name"]
         end
 
         def byte_offset
@@ -25,11 +27,25 @@ module PGNDefinitions
         end
 
         def bit_offset
-            Integer(@xml.text('BitOffset'))
+            Integer(@xml.text("BitOffset"))
         end
 
         def bit_length
-            Integer(@xml.text('BitLength'))
+            Integer(@xml.text("BitLength"))
+        end
+
+        def check_unavailable?
+            return unless (value = @xml.text("CheckUnavailable"))
+
+            Integer(value) == 1
+        end
+
+        def unavailable_value_threshold
+            if unsigned?
+                2**bit_length - 3
+            else
+                2**(bit_length - 1) - 3
+            end
         end
 
         def relative_bit_offset
@@ -79,7 +95,7 @@ module PGNDefinitions
         end
 
         def unsigned?
-            @xml.name.start_with?('U') || enum? || instance_field?
+            @xml.name.start_with?("U") || enum? || instance_field?
         end
 
         def ascii?
@@ -91,22 +107,22 @@ module PGNDefinitions
         end
 
         def enum?
-            @xml.name == 'EnumField'
+            @xml.name == "EnumField"
         end
 
         def scale
-            Float(@xml.text('Scale') || 1)
+            Float(@xml.text("Scale") || 1)
         end
 
         def offset
-            Float(@xml.text('Offset') || 0)
+            Float(@xml.text("Offset") || 0)
         end
 
         def each_enum_value
             return enum_for(__method__) unless block_given?
 
-            @xml.each_element('EnumValues/EnumPair') do |value|
-                yield(value.attributes['Name'], Integer(value.attributes['Value']))
+            @xml.each_element("EnumValues/EnumPair") do |value|
+                yield(value.attributes["Name"], Integer(value.attributes["Value"]))
             end
         end
     end

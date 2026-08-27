@@ -2746,12 +2746,14 @@
           <BitOffset>40</BitOffset>
           <BitLength>32</BitLength>
           <FormatAs>Latitude</FormatAs>
+          <CheckUnavailable>1</CheckUnavailable>
           <Scale>1E-07</Scale>
         </DblField>
         <DblField Name="Latitude">
           <BitOffset>72</BitOffset>
           <BitLength>32</BitLength>
           <FormatAs>Longitude</FormatAs>
+          <CheckUnavailable>1</CheckUnavailable>
           <Scale>1E-07</Scale>
         </DblField>
         <EnumField Name="Position Accuracy">
@@ -2785,12 +2787,14 @@
           <BitOffset>112</BitOffset>
           <BitLength>16</BitLength>
           <FormatAs>Heading</FormatAs>
+          <CheckUnavailable>1</CheckUnavailable>
           <Scale>0.0057295779513082332</Scale>
         </UDblField>
         <UDblField Name="SOG">
           <BitOffset>128</BitOffset>
           <BitLength>16</BitLength>
           <FormatAs>Speed</FormatAs>
+          <CheckUnavailable>1</CheckUnavailable>
           <Scale>0.01</Scale>
         </UDblField>
         <Field Name="Communication State">
@@ -2815,6 +2819,7 @@
           <BitOffset>168</BitOffset>
           <BitLength>16</BitLength>
           <FormatAs>Heading</FormatAs>
+          <CheckUnavailable>1</CheckUnavailable>
           <Scale>0.0057295779513082332</Scale>
         </UDblField>
         <UDblField Name="Rate of Turn">
@@ -2873,12 +2878,14 @@
         <DblField Name="Longitude">
           <BitOffset>40</BitOffset>
           <BitLength>32</BitLength>
+          <CheckUnavailable>1</CheckUnavailable>
           <FormatAs>Latitude</FormatAs>
           <Scale>1E-07</Scale>
         </DblField>
         <DblField Name="Latitude">
           <BitOffset>72</BitOffset>
           <BitLength>32</BitLength>
+          <CheckUnavailable>1</CheckUnavailable>
           <FormatAs>Longitude</FormatAs>
           <Scale>1E-07</Scale>
         </DblField>
@@ -2912,6 +2919,7 @@
         <UDblField Name="COG">
           <BitOffset>112</BitOffset>
           <BitLength>16</BitLength>
+          <CheckUnavailable>1</CheckUnavailable>
           <FormatAs>Heading</FormatAs>
           <Scale>0.0057295779513082332</Scale>
         </UDblField>
@@ -2919,6 +2927,7 @@
           <BitOffset>128</BitOffset>
           <BitLength>16</BitLength>
           <FormatAs>Speed</FormatAs>
+          <CheckUnavailable>1</CheckUnavailable>
           <Scale>0.01</Scale>
         </UDblField>
         <Field Name="Communication State">
@@ -2942,6 +2951,7 @@
           <Description>True heading</Description>
           <BitOffset>168</BitOffset>
           <BitLength>16</BitLength>
+          <CheckUnavailable>1</CheckUnavailable>
           <FormatAs>Heading</FormatAs>
           <Scale>0.0057295779513082332</Scale>
         </UDblField>
@@ -3039,12 +3049,14 @@
           <BitOffset>40</BitOffset>
           <BitLength>32</BitLength>
           <FormatAs>Latitude</FormatAs>
+          <CheckUnavailable>1</CheckUnavailable>
           <Scale>1E-07</Scale>
         </DblField>
         <DblField Name="Latitude">
           <BitOffset>72</BitOffset>
           <BitLength>32</BitLength>
           <FormatAs>Longitude</FormatAs>
+          <CheckUnavailable>1</CheckUnavailable>
           <Scale>1E-07</Scale>
         </DblField>
         <EnumField Name="Position Accuracy">
@@ -3078,12 +3090,14 @@
           <BitOffset>112</BitOffset>
           <BitLength>16</BitLength>
           <FormatAs>Heading</FormatAs>
+          <CheckUnavailable>1</CheckUnavailable>
           <Scale>0.0057295779513082332</Scale>
         </UDblField>
         <UDblField Name="SOG">
           <BitOffset>128</BitOffset>
           <BitLength>16</BitLength>
           <FormatAs>Speed</FormatAs>
+          <CheckUnavailable>1</CheckUnavailable>
           <Scale>0.01</Scale>
         </UDblField>
         <UIntField Name="Regional Application">
@@ -3151,6 +3165,7 @@
           <BitOffset>168</BitOffset>
           <BitLength>16</BitLength>
           <FormatAs>Heading</FormatAs>
+          <CheckUnavailable>1</CheckUnavailable>
           <Scale>0.0057295779513082332</Scale>
         </UDblField>
         <Field Name="Reserved">
@@ -3175,21 +3190,25 @@
         <DblField Name="Length">
           <BitOffset>192</BitOffset>
           <BitLength>16</BitLength>
+          <CheckUnavailable>1</CheckUnavailable>
           <Scale>0.1</Scale>
         </DblField>
         <DblField Name="Beam">
           <BitOffset>208</BitOffset>
           <BitLength>16</BitLength>
+          <CheckUnavailable>1</CheckUnavailable>
           <Scale>0.1</Scale>
         </DblField>
         <DblField Name="Position reference from Starboard">
           <BitOffset>224</BitOffset>
           <BitLength>16</BitLength>
+          <CheckUnavailable>1</CheckUnavailable>
           <Scale>0.1</Scale>
         </DblField>
         <DblField Name="Position reference from Bow">
           <BitOffset>240</BitOffset>
           <BitLength>16</BitLength>
+          <CheckUnavailable>1</CheckUnavailable>
           <Scale>0.1</Scale>
         </DblField>
         <ASCIIField Name="Name">
@@ -5279,21 +5298,25 @@
         <DblField Name="Length">
           <BitOffset>296</BitOffset>
           <BitLength>16</BitLength>
+          <CheckUnavailable>1</CheckUnavailable>
           <Scale>0.1</Scale>
         </DblField>
         <DblField Name="Beam">
           <BitOffset>312</BitOffset>
           <BitLength>16</BitLength>
+          <CheckUnavailable>1</CheckUnavailable>
           <Scale>0.1</Scale>
         </DblField>
         <DblField Name="Position reference from Starboard">
           <BitOffset>328</BitOffset>
           <BitLength>16</BitLength>
+          <CheckUnavailable>1</CheckUnavailable>
           <Scale>0.1</Scale>
         </DblField>
         <DblField Name="Position reference from Bow">
           <BitOffset>344</BitOffset>
           <BitLength>16</BitLength>
+          <CheckUnavailable>1</CheckUnavailable>
           <Scale>0.1</Scale>
         </DblField>
         <UIntField Name="ETA Date">

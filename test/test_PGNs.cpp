@@ -1,3 +1,4 @@
+#include <cmath>
 #include <gtest/gtest.h>
 #include <nmea2000/PGNs.hpp>
 
@@ -325,10 +326,10 @@ TEST_F(PGNsTest, it_parses_AISClassAPositionReport)
     ASSERT_EQ(1, parsed.position_accuracy);
     ASSERT_EQ(1, parsed.raim);
     ASSERT_EQ(30, parsed.time_stamp);
-    ASSERT_NEAR(375.4878845, parsed.cog, 1e-6);
+    ASSERT_TRUE(std::isnan(parsed.cog));
     ASSERT_NEAR(0.05, parsed.sog, 1e-6);
     ASSERT_EQ(0, parsed.ais_transceiver_information);
-    ASSERT_NEAR(375.4878845, parsed.heading, 1e-6);
+    ASSERT_TRUE(std::isnan(parsed.heading));
     ASSERT_NEAR(187.7410736084, parsed.rate_of_turn, 1e-6);
     ASSERT_EQ(192, parsed.nav_status);
 }
@@ -373,10 +374,10 @@ TEST_F(PGNsTest, it_parses_AISClassBPositionReport)
     ASSERT_EQ(0, parsed.position_accuracy);
     ASSERT_EQ(0, parsed.raim);
     ASSERT_EQ(31, parsed.time_stamp);
-    ASSERT_NEAR(375.4878845, parsed.cog, 1e-6);
+    ASSERT_TRUE(std::isnan(parsed.cog));
     ASSERT_NEAR(0, parsed.sog, 1e-6);
     ASSERT_EQ(4, parsed.ais_transceiver_information);
-    ASSERT_NEAR(375.4878845, parsed.heading, 1e-6);
+    ASSERT_TRUE(std::isnan(parsed.heading));
     ASSERT_EQ(0, parsed.regional_application);
     ASSERT_EQ(0, parsed.regional_application1);
     ASSERT_EQ(0, parsed.unit_type);
@@ -556,16 +557,16 @@ TEST_F(PGNsTest, it_parses_AISClassBExtendedPositionReport)
     ASSERT_EQ(0, parsed.position_accuracy);
     ASSERT_EQ(0, parsed.ais_raim_flag);
     ASSERT_EQ(31, parsed.time_stamp);
-    ASSERT_NEAR(375.4878845, parsed.cog, 1e-6);
+    ASSERT_TRUE(std::isnan(parsed.cog));
     ASSERT_NEAR(0.0, parsed.sog, 1e-6);
     ASSERT_EQ(52, parsed.type_of_ship);
-    ASSERT_NEAR(375.4878845, parsed.true_heading, 1e-6);
+    ASSERT_TRUE(std::isnan(parsed.true_heading));
     ASSERT_EQ(1, parsed.gnss_type);
     ASSERT_NEAR(32, parsed.length, 1e-2);
     ASSERT_NEAR(12, parsed.beam, 1e-2);
     ASSERT_NEAR(6, parsed.position_reference_from_starboard, 1e-6);
     ASSERT_NEAR(12, parsed.position_reference_from_bow, 1e-6);
-    ASSERT_NEAR(12, parsed.position_reference_from_bow, 1e-6);
+    ASSERT_EQ("SAAM ELECTRAA@@@@@@@", parsed.name);
     ASSERT_EQ(0, parsed.dte);
     ASSERT_EQ(1, parsed.ais_mode);
     ASSERT_EQ(4, parsed.ais_transceiver_information);
