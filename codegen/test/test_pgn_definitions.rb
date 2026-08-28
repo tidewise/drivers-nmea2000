@@ -108,6 +108,35 @@ module PGNDefinitions
             end
         end
 
+        describe 'check_unavailable?' do
+            it 'returns true if CheckUnavailable is 1' do
+                field = make_field('<DblField Name="Bla"><CheckUnavailable>1</CheckUnavailable></DblField>')
+                assert field.check_unavailable?
+            end
+
+            it 'returns false if CheckUnavailable is 0' do
+                field = make_field('<DblField Name="Bla"><CheckUnavailable>0</CheckUnavailable></DblField>')
+                refute field.check_unavailable?
+            end
+
+            it 'returns false if CheckUnavailable is missing' do
+                field = make_field('<DblField Name="Bla" />')
+                refute field.check_unavailable?
+            end
+        end
+
+        describe 'unavailable_value_threshold' do
+            it 'returns the threshold for an unsigned field' do
+                field = make_field('<UDblField Name="Bla"><BitLength>16</BitLength></UDblField>')
+                assert_equal 65533, field.unavailable_value_threshold
+            end
+
+            it 'returns the threshold for a signed field' do
+                field = make_field('<DblField Name="Bla"><BitLength>16</BitLength></DblField>')
+                assert_equal 32765, field.unavailable_value_threshold
+            end
+        end
+
         describe 'each_enum_value' do
             it 'enumerates the enum values' do
                 field = make_field(<<~END_OF_FIELD)

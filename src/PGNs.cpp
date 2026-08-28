@@ -1,3 +1,4 @@
+#include <base/Float.hpp>
 #include <nmea2000/PGNs.hpp>
 #include <nmea2000/Decode.hpp>
 
@@ -2595,13 +2596,21 @@ AISClassAPositionReport AISClassAPositionReport::fromMessage(Message const& mess
     );
     int32_t longitude_iraw =
         reinterpret_cast<int32_t const&>(longitude_raw);
-    result.longitude = longitude_iraw * 1.0e-07 + 0.0;
+    if (longitude_iraw > 2147483645) {
+        result.longitude = base::unknown<double>();
+    } else {
+        result.longitude = longitude_iraw * 1.0e-07 + 0.0;
+    }
     auto latitude_raw = decode32(
         &message.payload[9]
     );
     int32_t latitude_iraw =
         reinterpret_cast<int32_t const&>(latitude_raw);
-    result.latitude = latitude_iraw * 1.0e-07 + 0.0;
+    if (latitude_iraw > 2147483645) {
+        result.latitude = base::unknown<double>();
+    } else {
+        result.latitude = latitude_iraw * 1.0e-07 + 0.0;
+    }
     result.position_accuracy = (decode8(
         &message.payload[13]
     ) >> 0) & 0x1;
@@ -2616,13 +2625,21 @@ AISClassAPositionReport AISClassAPositionReport::fromMessage(Message const& mess
     );
     uint16_t cog_iraw =
         reinterpret_cast<uint16_t const&>(cog_raw);
-    result.cog = cog_iraw * 0.005729577951308233 + 0.0;
+    if (cog_iraw > 65533) {
+        result.cog = base::unknown<double>();
+    } else {
+        result.cog = cog_iraw * 0.005729577951308233 + 0.0;
+    }
     auto sog_raw = decode16(
         &message.payload[16]
     );
     uint16_t sog_iraw =
         reinterpret_cast<uint16_t const&>(sog_raw);
-    result.sog = sog_iraw * 0.01 + 0.0;
+    if (sog_iraw > 65533) {
+        result.sog = base::unknown<double>();
+    } else {
+        result.sog = sog_iraw * 0.01 + 0.0;
+    }
     result.ais_transceiver_information = (decode8(
         &message.payload[20]
     ) >> 3) & 0x1f;
@@ -2631,7 +2648,11 @@ AISClassAPositionReport AISClassAPositionReport::fromMessage(Message const& mess
     );
     uint16_t heading_iraw =
         reinterpret_cast<uint16_t const&>(heading_raw);
-    result.heading = heading_iraw * 0.005729577951308233 + 0.0;
+    if (heading_iraw > 65533) {
+        result.heading = base::unknown<double>();
+    } else {
+        result.heading = heading_iraw * 0.005729577951308233 + 0.0;
+    }
     auto rate_of_turn_raw = decode16(
         &message.payload[23]
     );
@@ -2680,13 +2701,21 @@ AISClassBPositionReport AISClassBPositionReport::fromMessage(Message const& mess
     );
     int32_t longitude_iraw =
         reinterpret_cast<int32_t const&>(longitude_raw);
-    result.longitude = longitude_iraw * 1.0e-07 + 0.0;
+    if (longitude_iraw > 2147483645) {
+        result.longitude = base::unknown<double>();
+    } else {
+        result.longitude = longitude_iraw * 1.0e-07 + 0.0;
+    }
     auto latitude_raw = decode32(
         &message.payload[9]
     );
     int32_t latitude_iraw =
         reinterpret_cast<int32_t const&>(latitude_raw);
-    result.latitude = latitude_iraw * 1.0e-07 + 0.0;
+    if (latitude_iraw > 2147483645) {
+        result.latitude = base::unknown<double>();
+    } else {
+        result.latitude = latitude_iraw * 1.0e-07 + 0.0;
+    }
     result.position_accuracy = (decode8(
         &message.payload[13]
     ) >> 0) & 0x1;
@@ -2701,13 +2730,21 @@ AISClassBPositionReport AISClassBPositionReport::fromMessage(Message const& mess
     );
     uint16_t cog_iraw =
         reinterpret_cast<uint16_t const&>(cog_raw);
-    result.cog = cog_iraw * 0.005729577951308233 + 0.0;
+    if (cog_iraw > 65533) {
+        result.cog = base::unknown<double>();
+    } else {
+        result.cog = cog_iraw * 0.005729577951308233 + 0.0;
+    }
     auto sog_raw = decode16(
         &message.payload[16]
     );
     uint16_t sog_iraw =
         reinterpret_cast<uint16_t const&>(sog_raw);
-    result.sog = sog_iraw * 0.01 + 0.0;
+    if (sog_iraw > 65533) {
+        result.sog = base::unknown<double>();
+    } else {
+        result.sog = sog_iraw * 0.01 + 0.0;
+    }
     result.ais_transceiver_information = (decode8(
         &message.payload[20]
     ) >> 3) & 0x1f;
@@ -2716,7 +2753,11 @@ AISClassBPositionReport AISClassBPositionReport::fromMessage(Message const& mess
     );
     uint16_t heading_iraw =
         reinterpret_cast<uint16_t const&>(heading_raw);
-    result.heading = heading_iraw * 0.005729577951308233 + 0.0;
+    if (heading_iraw > 65533) {
+        result.heading = base::unknown<double>();
+    } else {
+        result.heading = heading_iraw * 0.005729577951308233 + 0.0;
+    }
     result.regional_application = (decode8(
         &message.payload[23]
     ) >> 0) & 0xff;
@@ -2777,13 +2818,21 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     );
     int32_t longitude_iraw =
         reinterpret_cast<int32_t const&>(longitude_raw);
-    result.longitude = longitude_iraw * 1.0e-07 + 0.0;
+    if (longitude_iraw > 2147483645) {
+        result.longitude = base::unknown<double>();
+    } else {
+        result.longitude = longitude_iraw * 1.0e-07 + 0.0;
+    }
     auto latitude_raw = decode32(
         &message.payload[9]
     );
     int32_t latitude_iraw =
         reinterpret_cast<int32_t const&>(latitude_raw);
-    result.latitude = latitude_iraw * 1.0e-07 + 0.0;
+    if (latitude_iraw > 2147483645) {
+        result.latitude = base::unknown<double>();
+    } else {
+        result.latitude = latitude_iraw * 1.0e-07 + 0.0;
+    }
     result.position_accuracy = (decode8(
         &message.payload[13]
     ) >> 0) & 0x1;
@@ -2798,13 +2847,21 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     );
     uint16_t cog_iraw =
         reinterpret_cast<uint16_t const&>(cog_raw);
-    result.cog = cog_iraw * 0.005729577951308233 + 0.0;
+    if (cog_iraw > 65533) {
+        result.cog = base::unknown<double>();
+    } else {
+        result.cog = cog_iraw * 0.005729577951308233 + 0.0;
+    }
     auto sog_raw = decode16(
         &message.payload[16]
     );
     uint16_t sog_iraw =
         reinterpret_cast<uint16_t const&>(sog_raw);
-    result.sog = sog_iraw * 0.01 + 0.0;
+    if (sog_iraw > 65533) {
+        result.sog = base::unknown<double>();
+    } else {
+        result.sog = sog_iraw * 0.01 + 0.0;
+    }
     result.regional_application = (decode8(
         &message.payload[18]
     ) >> 0) & 0xff;
@@ -2819,7 +2876,11 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     );
     uint16_t true_heading_iraw =
         reinterpret_cast<uint16_t const&>(true_heading_raw);
-    result.true_heading = true_heading_iraw * 0.005729577951308233 + 0.0;
+    if (true_heading_iraw > 65533) {
+        result.true_heading = base::unknown<double>();
+    } else {
+        result.true_heading = true_heading_iraw * 0.005729577951308233 + 0.0;
+    }
     result.gnss_type = (decode8(
         &message.payload[23]
     ) >> 4) & 0xf;
@@ -2828,25 +2889,41 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     );
     int16_t length_iraw =
         reinterpret_cast<int16_t const&>(length_raw);
-    result.length = length_iraw * 0.1 + 0.0;
+    if (length_iraw > 32765) {
+        result.length = base::unknown<double>();
+    } else {
+        result.length = length_iraw * 0.1 + 0.0;
+    }
     auto beam_raw = decode16(
         &message.payload[26]
     );
     int16_t beam_iraw =
         reinterpret_cast<int16_t const&>(beam_raw);
-    result.beam = beam_iraw * 0.1 + 0.0;
+    if (beam_iraw > 32765) {
+        result.beam = base::unknown<double>();
+    } else {
+        result.beam = beam_iraw * 0.1 + 0.0;
+    }
     auto position_reference_from_starboard_raw = decode16(
         &message.payload[28]
     );
     int16_t position_reference_from_starboard_iraw =
         reinterpret_cast<int16_t const&>(position_reference_from_starboard_raw);
-    result.position_reference_from_starboard = position_reference_from_starboard_iraw * 0.1 + 0.0;
+    if (position_reference_from_starboard_iraw > 32765) {
+        result.position_reference_from_starboard = base::unknown<double>();
+    } else {
+        result.position_reference_from_starboard = position_reference_from_starboard_iraw * 0.1 + 0.0;
+    }
     auto position_reference_from_bow_raw = decode16(
         &message.payload[30]
     );
     int16_t position_reference_from_bow_iraw =
         reinterpret_cast<int16_t const&>(position_reference_from_bow_raw);
-    result.position_reference_from_bow = position_reference_from_bow_iraw * 0.1 + 0.0;
+    if (position_reference_from_bow_iraw > 32765) {
+        result.position_reference_from_bow = base::unknown<double>();
+    } else {
+        result.position_reference_from_bow = position_reference_from_bow_iraw * 0.1 + 0.0;
+    }
     result.name = decodeString(&message.payload[32],
                                             20);
     result.dte = (decode8(
@@ -4414,25 +4491,41 @@ AISClassAStaticAndVoyageRelatedData AISClassAStaticAndVoyageRelatedData::fromMes
     );
     int16_t length_iraw =
         reinterpret_cast<int16_t const&>(length_raw);
-    result.length = length_iraw * 0.1 + 0.0;
+    if (length_iraw > 32765) {
+        result.length = base::unknown<double>();
+    } else {
+        result.length = length_iraw * 0.1 + 0.0;
+    }
     auto beam_raw = decode16(
         &message.payload[39]
     );
     int16_t beam_iraw =
         reinterpret_cast<int16_t const&>(beam_raw);
-    result.beam = beam_iraw * 0.1 + 0.0;
+    if (beam_iraw > 32765) {
+        result.beam = base::unknown<double>();
+    } else {
+        result.beam = beam_iraw * 0.1 + 0.0;
+    }
     auto position_reference_from_starboard_raw = decode16(
         &message.payload[41]
     );
     int16_t position_reference_from_starboard_iraw =
         reinterpret_cast<int16_t const&>(position_reference_from_starboard_raw);
-    result.position_reference_from_starboard = position_reference_from_starboard_iraw * 0.1 + 0.0;
+    if (position_reference_from_starboard_iraw > 32765) {
+        result.position_reference_from_starboard = base::unknown<double>();
+    } else {
+        result.position_reference_from_starboard = position_reference_from_starboard_iraw * 0.1 + 0.0;
+    }
     auto position_reference_from_bow_raw = decode16(
         &message.payload[43]
     );
     int16_t position_reference_from_bow_iraw =
         reinterpret_cast<int16_t const&>(position_reference_from_bow_raw);
-    result.position_reference_from_bow = position_reference_from_bow_iraw * 0.1 + 0.0;
+    if (position_reference_from_bow_iraw > 32765) {
+        result.position_reference_from_bow = base::unknown<double>();
+    } else {
+        result.position_reference_from_bow = position_reference_from_bow_iraw * 0.1 + 0.0;
+    }
     result.eta_date = (decode16(
         &message.payload[45]
     ) >> 0) & 0xffff;
