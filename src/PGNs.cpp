@@ -2596,7 +2596,7 @@ AISClassAPositionReport AISClassAPositionReport::fromMessage(Message const& mess
     );
     int32_t longitude_iraw =
         reinterpret_cast<int32_t const&>(longitude_raw);
-    if (longitude_iraw > 2147483645) {
+    if (longitude_iraw >= 2147483645) {
         result.longitude = base::unknown<double>();
     } else {
         result.longitude = longitude_iraw * 1.0e-07 + 0.0;
@@ -2606,7 +2606,7 @@ AISClassAPositionReport AISClassAPositionReport::fromMessage(Message const& mess
     );
     int32_t latitude_iraw =
         reinterpret_cast<int32_t const&>(latitude_raw);
-    if (latitude_iraw > 2147483645) {
+    if (latitude_iraw >= 2147483645) {
         result.latitude = base::unknown<double>();
     } else {
         result.latitude = latitude_iraw * 1.0e-07 + 0.0;
@@ -2625,7 +2625,7 @@ AISClassAPositionReport AISClassAPositionReport::fromMessage(Message const& mess
     );
     uint16_t cog_iraw =
         reinterpret_cast<uint16_t const&>(cog_raw);
-    if (cog_iraw > 65533) {
+    if (cog_iraw >= 65533) {
         result.cog = base::unknown<double>();
     } else {
         result.cog = cog_iraw * 0.005729577951308233 + 0.0;
@@ -2635,7 +2635,7 @@ AISClassAPositionReport AISClassAPositionReport::fromMessage(Message const& mess
     );
     uint16_t sog_iraw =
         reinterpret_cast<uint16_t const&>(sog_raw);
-    if (sog_iraw > 65533) {
+    if (sog_iraw >= 65533) {
         result.sog = base::unknown<double>();
     } else {
         result.sog = sog_iraw * 0.01 + 0.0;
@@ -2648,7 +2648,7 @@ AISClassAPositionReport AISClassAPositionReport::fromMessage(Message const& mess
     );
     uint16_t heading_iraw =
         reinterpret_cast<uint16_t const&>(heading_raw);
-    if (heading_iraw > 65533) {
+    if (heading_iraw >= 65533) {
         result.heading = base::unknown<double>();
     } else {
         result.heading = heading_iraw * 0.005729577951308233 + 0.0;
@@ -2701,7 +2701,7 @@ AISClassBPositionReport AISClassBPositionReport::fromMessage(Message const& mess
     );
     int32_t longitude_iraw =
         reinterpret_cast<int32_t const&>(longitude_raw);
-    if (longitude_iraw > 2147483645) {
+    if (longitude_iraw >= 2147483645) {
         result.longitude = base::unknown<double>();
     } else {
         result.longitude = longitude_iraw * 1.0e-07 + 0.0;
@@ -2711,7 +2711,7 @@ AISClassBPositionReport AISClassBPositionReport::fromMessage(Message const& mess
     );
     int32_t latitude_iraw =
         reinterpret_cast<int32_t const&>(latitude_raw);
-    if (latitude_iraw > 2147483645) {
+    if (latitude_iraw >= 2147483645) {
         result.latitude = base::unknown<double>();
     } else {
         result.latitude = latitude_iraw * 1.0e-07 + 0.0;
@@ -2730,7 +2730,7 @@ AISClassBPositionReport AISClassBPositionReport::fromMessage(Message const& mess
     );
     uint16_t cog_iraw =
         reinterpret_cast<uint16_t const&>(cog_raw);
-    if (cog_iraw > 65533) {
+    if (cog_iraw >= 65533) {
         result.cog = base::unknown<double>();
     } else {
         result.cog = cog_iraw * 0.005729577951308233 + 0.0;
@@ -2740,7 +2740,7 @@ AISClassBPositionReport AISClassBPositionReport::fromMessage(Message const& mess
     );
     uint16_t sog_iraw =
         reinterpret_cast<uint16_t const&>(sog_raw);
-    if (sog_iraw > 65533) {
+    if (sog_iraw >= 65533) {
         result.sog = base::unknown<double>();
     } else {
         result.sog = sog_iraw * 0.01 + 0.0;
@@ -2753,7 +2753,7 @@ AISClassBPositionReport AISClassBPositionReport::fromMessage(Message const& mess
     );
     uint16_t heading_iraw =
         reinterpret_cast<uint16_t const&>(heading_raw);
-    if (heading_iraw > 65533) {
+    if (heading_iraw >= 65533) {
         result.heading = base::unknown<double>();
     } else {
         result.heading = heading_iraw * 0.005729577951308233 + 0.0;
@@ -2818,7 +2818,7 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     );
     int32_t longitude_iraw =
         reinterpret_cast<int32_t const&>(longitude_raw);
-    if (longitude_iraw > 2147483645) {
+    if (longitude_iraw >= 2147483645) {
         result.longitude = base::unknown<double>();
     } else {
         result.longitude = longitude_iraw * 1.0e-07 + 0.0;
@@ -2828,7 +2828,7 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     );
     int32_t latitude_iraw =
         reinterpret_cast<int32_t const&>(latitude_raw);
-    if (latitude_iraw > 2147483645) {
+    if (latitude_iraw >= 2147483645) {
         result.latitude = base::unknown<double>();
     } else {
         result.latitude = latitude_iraw * 1.0e-07 + 0.0;
@@ -2847,7 +2847,7 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     );
     uint16_t cog_iraw =
         reinterpret_cast<uint16_t const&>(cog_raw);
-    if (cog_iraw > 65533) {
+    if (cog_iraw >= 65533) {
         result.cog = base::unknown<double>();
     } else {
         result.cog = cog_iraw * 0.005729577951308233 + 0.0;
@@ -2857,7 +2857,7 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     );
     uint16_t sog_iraw =
         reinterpret_cast<uint16_t const&>(sog_raw);
-    if (sog_iraw > 65533) {
+    if (sog_iraw >= 65533) {
         result.sog = base::unknown<double>();
     } else {
         result.sog = sog_iraw * 0.01 + 0.0;
@@ -2876,7 +2876,7 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     );
     uint16_t true_heading_iraw =
         reinterpret_cast<uint16_t const&>(true_heading_raw);
-    if (true_heading_iraw > 65533) {
+    if (true_heading_iraw >= 65533) {
         result.true_heading = base::unknown<double>();
     } else {
         result.true_heading = true_heading_iraw * 0.005729577951308233 + 0.0;
@@ -2889,7 +2889,7 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     );
     int16_t length_iraw =
         reinterpret_cast<int16_t const&>(length_raw);
-    if (length_iraw > 32765) {
+    if (length_iraw >= 32765) {
         result.length = base::unknown<double>();
     } else {
         result.length = length_iraw * 0.1 + 0.0;
@@ -2899,7 +2899,7 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     );
     int16_t beam_iraw =
         reinterpret_cast<int16_t const&>(beam_raw);
-    if (beam_iraw > 32765) {
+    if (beam_iraw >= 32765) {
         result.beam = base::unknown<double>();
     } else {
         result.beam = beam_iraw * 0.1 + 0.0;
@@ -2909,7 +2909,7 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     );
     int16_t position_reference_from_starboard_iraw =
         reinterpret_cast<int16_t const&>(position_reference_from_starboard_raw);
-    if (position_reference_from_starboard_iraw > 32765) {
+    if (position_reference_from_starboard_iraw >= 32765) {
         result.position_reference_from_starboard = base::unknown<double>();
     } else {
         result.position_reference_from_starboard = position_reference_from_starboard_iraw * 0.1 + 0.0;
@@ -2919,7 +2919,7 @@ AISClassBExtendedPositionReport AISClassBExtendedPositionReport::fromMessage(Mes
     );
     int16_t position_reference_from_bow_iraw =
         reinterpret_cast<int16_t const&>(position_reference_from_bow_raw);
-    if (position_reference_from_bow_iraw > 32765) {
+    if (position_reference_from_bow_iraw >= 32765) {
         result.position_reference_from_bow = base::unknown<double>();
     } else {
         result.position_reference_from_bow = position_reference_from_bow_iraw * 0.1 + 0.0;
@@ -4491,7 +4491,7 @@ AISClassAStaticAndVoyageRelatedData AISClassAStaticAndVoyageRelatedData::fromMes
     );
     int16_t length_iraw =
         reinterpret_cast<int16_t const&>(length_raw);
-    if (length_iraw > 32765) {
+    if (length_iraw >= 32765) {
         result.length = base::unknown<double>();
     } else {
         result.length = length_iraw * 0.1 + 0.0;
@@ -4501,7 +4501,7 @@ AISClassAStaticAndVoyageRelatedData AISClassAStaticAndVoyageRelatedData::fromMes
     );
     int16_t beam_iraw =
         reinterpret_cast<int16_t const&>(beam_raw);
-    if (beam_iraw > 32765) {
+    if (beam_iraw >= 32765) {
         result.beam = base::unknown<double>();
     } else {
         result.beam = beam_iraw * 0.1 + 0.0;
@@ -4511,7 +4511,7 @@ AISClassAStaticAndVoyageRelatedData AISClassAStaticAndVoyageRelatedData::fromMes
     );
     int16_t position_reference_from_starboard_iraw =
         reinterpret_cast<int16_t const&>(position_reference_from_starboard_raw);
-    if (position_reference_from_starboard_iraw > 32765) {
+    if (position_reference_from_starboard_iraw >= 32765) {
         result.position_reference_from_starboard = base::unknown<double>();
     } else {
         result.position_reference_from_starboard = position_reference_from_starboard_iraw * 0.1 + 0.0;
@@ -4521,7 +4521,7 @@ AISClassAStaticAndVoyageRelatedData AISClassAStaticAndVoyageRelatedData::fromMes
     );
     int16_t position_reference_from_bow_iraw =
         reinterpret_cast<int16_t const&>(position_reference_from_bow_raw);
-    if (position_reference_from_bow_iraw > 32765) {
+    if (position_reference_from_bow_iraw >= 32765) {
         result.position_reference_from_bow = base::unknown<double>();
     } else {
         result.position_reference_from_bow = position_reference_from_bow_iraw * 0.1 + 0.0;

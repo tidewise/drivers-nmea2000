@@ -40,7 +40,7 @@ module PGNDefinitions
             Integer(value) == 1
         end
 
-        def unavailable_value_threshold
+        def first_unavailable_value
             if unsigned?
                 2**bit_length - 3
             else
