@@ -2656,9 +2656,13 @@ AISClassAPositionReport AISClassAPositionReport::fromMessage(Message const& mess
     auto rate_of_turn_raw = decode16(
         &message.payload[23]
     );
-    uint16_t rate_of_turn_iraw =
-        reinterpret_cast<uint16_t const&>(rate_of_turn_raw);
-    result.rate_of_turn = rate_of_turn_iraw * 0.005729577951308233 + 0.0;
+    int16_t rate_of_turn_iraw =
+        reinterpret_cast<int16_t const&>(rate_of_turn_raw);
+    if (rate_of_turn_iraw >= 32765) {
+        result.rate_of_turn = base::unknown<double>();
+    } else {
+        result.rate_of_turn = rate_of_turn_iraw * 0.005729577951308233 + 0.0;
+    }
     result.nav_status = (decode8(
         &message.payload[25]
     ) >> 0) & 0xff;

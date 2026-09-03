@@ -330,7 +330,7 @@ TEST_F(PGNsTest, it_parses_AISClassAPositionReport)
     ASSERT_NEAR(0.05, parsed.sog, 1e-6);
     ASSERT_EQ(0, parsed.ais_transceiver_information);
     ASSERT_TRUE(std::isnan(parsed.heading));
-    ASSERT_NEAR(187.7410736084, parsed.rate_of_turn, 1e-6);
+    ASSERT_TRUE(std::isnan(parsed.rate_of_turn));
     ASSERT_EQ(192, parsed.nav_status);
 }
 
