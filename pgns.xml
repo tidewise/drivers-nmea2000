@@ -2822,12 +2822,13 @@
           <CheckUnavailable>1</CheckUnavailable>
           <Scale>0.0057295779513082332</Scale>
         </UDblField>
-        <UDblField Name="Rate of Turn">
+        <DblField Name="Rate of Turn">
           <BitOffset>184</BitOffset>
           <BitLength>16</BitLength>
           <FormatAs>Heading</FormatAs>
+          <CheckUnavailable>1</CheckUnavailable>
           <Scale>0.0057295779513082332</Scale>
-        </UDblField>
+        </DblField>
         <EnumField Name="Nav Status">
           <BitOffset>200</BitOffset>
           <BitLength>8</BitLength>

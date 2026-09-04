@@ -128,12 +128,12 @@ module PGNDefinitions
         describe 'unavailable_value_threshold' do
             it 'returns the threshold for an unsigned field' do
                 field = make_field('<UDblField Name="Bla"><BitLength>16</BitLength></UDblField>')
-                assert_equal 65533, field.unavailable_value_threshold
+                assert_equal 65533, field.first_unavailable_value
             end
 
             it 'returns the threshold for a signed field' do
                 field = make_field('<DblField Name="Bla"><BitLength>16</BitLength></DblField>')
-                assert_equal 32765, field.unavailable_value_threshold
+                assert_equal 32765, field.first_unavailable_value
             end
         end
 
